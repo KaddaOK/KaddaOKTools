@@ -75,14 +75,14 @@ Please find the latest win-x64 release [in the releases section](https://github.
      - Audition the phrase timespan on the Narrow tab
      - Option to transform text to all-caps
      - Page/paragraph grouping and options
-     - Full manual timing process from scratch (Edit Line Timing Dialog continuously for the whole song)
-     - Mac OSX, MidiCo and Kanto Syncro support?
+     - Full manual timing process from scratch (basically the Edit Line Timing Dialog continuously for the whole song)
+     - Mac OSX, MidiCo and Kanto Syncro support, eventually, maybe?
 
 ## Need Help?
 
 If you discover a bug (don't be shy, there are many right now I'm sure!), and it's not mentioned in the above couple sections, please [create a bug report](https://github.com/KaddaOK/KaddaOKTools/issues).
 
-Otherwise, for questions or comments, give me a shout in the (#kadda-ok)(https://discord.com/channels/918644502128885760/1055115584007835668) channel on the diveBar discord.
+Otherwise, for questions or comments, give me a shout in the [#kadda-ok](https://discord.com/channels/918644502128885760/1055115584007835668) channel on the diveBar discord.
   
 ## Contribute
 
