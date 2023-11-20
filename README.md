@@ -7,7 +7,6 @@ A desktop application to speed up, streamline, and simplify the process of creat
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/e2580711-a1f0-4bed-ab7f-6c50bbfa17cb" width="170"/>
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/3f1aeb61-17e6-46a0-9b79-251bd83c21ff" width="170"/>
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8b1e0c15-c267-43a3-b8b6-a25d7f8ebfdf" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/1c08cf38-ab45-4fcd-ae29-1a0e73745a88" width="170"/>
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8ab3548d-ac7e-47c6-b833-4c17c5a79904" width="170"/>
 
 
@@ -39,7 +38,7 @@ A desktop application to speed up, streamline, and simplify the process of creat
 
 Kadda OK Tools currently targets YTMM and KBS, which are both Windows-only apps, and as such is only available for win-x64.  (Support for Mac OSX, and import/export to MidiCo and/or Kanto Syncro, are possible future features.)
 
-The latest win-x64 release should be available to the right.  No installation should be required, just unzip and run.
+Please find the latest win-x64 release [in the releases section](https://github.com/KaddaOK/KaddaOKTools/releases).  No installation should be required, just unzip and run.
 
 ## Known Issues:
 
@@ -87,4 +86,4 @@ Otherwise, for questions or comments, give me a shout in the (#kadda-ok)(https:/
   
 ## Contribute
 
-Once the code has stabilized and gone through a cleanup pass (think tidying up your house because guests is coming over), the source will be open in this repository, and pull requests will be welcome.  Thank you for your patience!
+Once the code has stabilized and gone through a cleanup pass (think, like, tidying up your house because guests are coming over), the source will be open in this repository, and pull requests will be welcome.  Thank you for your patience!
