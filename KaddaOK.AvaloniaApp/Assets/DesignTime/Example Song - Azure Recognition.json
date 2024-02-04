@@ -1,0 +1,2692 @@
+[
+  [
+    {
+      "Confidence": 0.83219886,
+      "Display": "This is a song.",
+      "Lexical": "this is a song",
+      "ITN": "this is a song",
+      "MaskedITN": "this is a song",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.89710873,
+          "Duration": 4000000,
+          "Offset": 39700000,
+          "Word": "this",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.58616465,
+          "Duration": 4400000,
+          "Offset": 43700000,
+          "Word": "is",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8658606,
+          "Duration": 400000,
+          "Offset": 48100000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9796616,
+          "Duration": 6000000,
+          "Offset": 48500000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.6109804,
+      "Display": "this is the song",
+      "Lexical": "this is the song",
+      "ITN": "this is the song",
+      "MaskedITN": "this is the song",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.89710873,
+          "Duration": 4000000,
+          "Offset": 39700000,
+          "Word": "this",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.58616465,
+          "Duration": 4000000,
+          "Offset": 43700000,
+          "Word": "is",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0021336745,
+          "Duration": 1200000,
+          "Offset": 47700000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9585146,
+          "Duration": 5600000,
+          "Offset": 48900000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.56322473,
+      "Display": "this is a song for devs",
+      "Lexical": "this is a song for devs",
+      "ITN": "this is a song for devs",
+      "MaskedITN": "this is a song for devs",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.89710873,
+          "Duration": 4000000,
+          "Offset": 39700000,
+          "Word": "this",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.58616465,
+          "Duration": 4400000,
+          "Offset": 43700000,
+          "Word": "is",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8658606,
+          "Duration": 400000,
+          "Offset": 48100000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9796616,
+          "Duration": 5600000,
+          "Offset": 48500000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0003195996,
+          "Duration": 2800000,
+          "Offset": 54100000,
+          "Word": "for",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.05023321,
+          "Duration": 5100000,
+          "Offset": 56900000,
+          "Word": "devs",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.66582304,
+      "Display": "this is a song for",
+      "Lexical": "this is a song for",
+      "ITN": "this is a song for",
+      "MaskedITN": "this is a song for",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.89710873,
+          "Duration": 4000000,
+          "Offset": 39700000,
+          "Word": "this",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.58616465,
+          "Duration": 4400000,
+          "Offset": 43700000,
+          "Word": "is",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8658606,
+          "Duration": 400000,
+          "Offset": 48100000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9796616,
+          "Duration": 5600000,
+          "Offset": 48500000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0003195996,
+          "Duration": 2800000,
+          "Offset": 54100000,
+          "Word": "for",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.7830447,
+      "Display": "this is a",
+      "Lexical": "this is a",
+      "ITN": "this is a",
+      "MaskedITN": "this is a",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.89710873,
+          "Duration": 4000000,
+          "Offset": 39700000,
+          "Word": "this",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.58616465,
+          "Duration": 18300000,
+          "Offset": 43700000,
+          "Word": "is",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8658606,
+          "Duration": 100000,
+          "Offset": 62000000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.80008996,
+      "Display": "It's got words and lyrics and phrases.",
+      "Lexical": "it's got words and lyrics and phrases",
+      "ITN": "it's got words and lyrics and phrases",
+      "MaskedITN": "it's got words and lyrics and phrases",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.68007255,
+          "Duration": 3600000,
+          "Offset": 72300000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7446099,
+          "Duration": 3600000,
+          "Offset": 75900000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.80702937,
+          "Duration": 6000000,
+          "Offset": 79500000,
+          "Word": "words",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7818208,
+          "Duration": 1600000,
+          "Offset": 85500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.67770326,
+          "Duration": 6400000,
+          "Offset": 87100000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92923236,
+          "Duration": 2400000,
+          "Offset": 93500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98016137,
+          "Duration": 8800000,
+          "Offset": 95900000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.68634766,
+      "Display": "it's got words in lyrics and phrases",
+      "Lexical": "it's got words in lyrics and phrases",
+      "ITN": "it's got words in lyrics and phrases",
+      "MaskedITN": "it's got words in lyrics and phrases",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.68007255,
+          "Duration": 3600000,
+          "Offset": 72300000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7446099,
+          "Duration": 3600000,
+          "Offset": 75900000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.80702937,
+          "Duration": 6000000,
+          "Offset": 79500000,
+          "Word": "words",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0036181945,
+          "Duration": 1600000,
+          "Offset": 85500000,
+          "Word": "in",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.66479987,
+          "Duration": 6400000,
+          "Offset": 87100000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9241424,
+          "Duration": 2400000,
+          "Offset": 93500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98016137,
+          "Duration": 8800000,
+          "Offset": 95900000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.6961913,
+      "Display": "its got words and lyrics and phrases",
+      "Lexical": "its got words and lyrics and phrases",
+      "ITN": "its got words and lyrics and phrases",
+      "MaskedITN": "its got words and lyrics and phrases",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.002587004,
+          "Duration": 3600000,
+          "Offset": 72300000,
+          "Word": "its",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7133055,
+          "Duration": 3600000,
+          "Offset": 75900000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7929487,
+          "Duration": 6000000,
+          "Offset": 79500000,
+          "Word": "words",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.77735764,
+          "Duration": 1600000,
+          "Offset": 85500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6777465,
+          "Duration": 6400000,
+          "Offset": 87100000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92923236,
+          "Duration": 2400000,
+          "Offset": 93500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98016137,
+          "Duration": 8800000,
+          "Offset": 95900000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.73541856,
+      "Display": "it's got words and lyrics",
+      "Lexical": "it's got words and lyrics",
+      "ITN": "it's got words and lyrics",
+      "MaskedITN": "it's got words and lyrics",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.68007255,
+          "Duration": 3600000,
+          "Offset": 72300000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.74461013,
+          "Duration": 3600000,
+          "Offset": 75900000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.80702937,
+          "Duration": 6000000,
+          "Offset": 79500000,
+          "Word": "words",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7714147,
+          "Duration": 10400000,
+          "Offset": 85500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.67396593,
+          "Duration": 8800000,
+          "Offset": 95900000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.7081557,
+      "Display": "it's got words and lyrics phrases",
+      "Lexical": "it's got words and lyrics phrases",
+      "ITN": "it's got words and lyrics phrases",
+      "MaskedITN": "it's got words and lyrics phrases",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.68007255,
+          "Duration": 3600000,
+          "Offset": 72300000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.74461013,
+          "Duration": 3600000,
+          "Offset": 75900000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.80702937,
+          "Duration": 6000000,
+          "Offset": 79500000,
+          "Word": "words",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7818209,
+          "Duration": 1600000,
+          "Offset": 85500000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6777033,
+          "Duration": 6800000,
+          "Offset": 87100000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.5576977,
+          "Duration": 8800000,
+          "Offset": 95900000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.7785337,
+      "Display": "An original song.",
+      "Lexical": "an original song",
+      "ITN": "an original song",
+      "MaskedITN": "an original song",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.5315256,
+          "Duration": 3600000,
+          "Offset": 114900000,
+          "Word": "an",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9230219,
+          "Duration": 9600000,
+          "Offset": 118500000,
+          "Word": "original",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.88105375,
+          "Duration": 6000000,
+          "Offset": 128100000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.28106278,
+      "Display": "unoriginal song",
+      "Lexical": "unoriginal song",
+      "ITN": "unoriginal song",
+      "MaskedITN": "unoriginal song",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.0008269084,
+          "Duration": 11600000,
+          "Offset": 116500000,
+          "Word": "unoriginal",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.56129867,
+          "Duration": 6000000,
+          "Offset": 128100000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.4854316,
+      "Display": "an original songs",
+      "Lexical": "an original songs",
+      "ITN": "an original songs",
+      "MaskedITN": "an original songs",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.5315256,
+          "Duration": 3600000,
+          "Offset": 114900000,
+          "Word": "an",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9230219,
+          "Duration": 9600000,
+          "Offset": 118500000,
+          "Word": "original",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0017473678,
+          "Duration": 14700000,
+          "Offset": 128100000,
+          "Word": "songs",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.002759121,
+      "Display": "unoriginal song for",
+      "Lexical": "unoriginal song for",
+      "ITN": "unoriginal song for",
+      "MaskedITN": "unoriginal song for",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.0008269084,
+          "Duration": 11600000,
+          "Offset": 116500000,
+          "Word": "unoriginal",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0067046885,
+          "Duration": 6000000,
+          "Offset": 128100000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0007457657,
+          "Duration": 8000000,
+          "Offset": 134100000,
+          "Word": "for",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.014555464,
+      "Display": "unoriginal song for devs",
+      "Lexical": "unoriginal song for devs",
+      "ITN": "unoriginal song for devs",
+      "MaskedITN": "unoriginal song for devs",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.0008269084,
+          "Duration": 11600000,
+          "Offset": 116500000,
+          "Word": "unoriginal",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0067046885,
+          "Duration": 6000000,
+          "Offset": 128100000,
+          "Word": "song",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0007457657,
+          "Duration": 2400000,
+          "Offset": 134100000,
+          "Word": "for",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.049944494,
+          "Duration": 6300000,
+          "Offset": 136500000,
+          "Word": "devs",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.71833366,
+      "Display": "It's got lyrics and I'm gonna say.",
+      "Lexical": "it's got lyrics and i'm gonna say",
+      "ITN": "it's got lyrics and i'm gonna say",
+      "MaskedITN": "it's got lyrics and i'm gonna say",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.74409866,
+          "Duration": 3600000,
+          "Offset": 153100000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.72495013,
+          "Duration": 2800000,
+          "Offset": 156700000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98370254,
+          "Duration": 6400000,
+          "Offset": 159500000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.83709526,
+          "Duration": 2400000,
+          "Offset": 165900000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8889519,
+          "Duration": 2400000,
+          "Offset": 169100000,
+          "Word": "i'm",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.49820477,
+          "Duration": 4800000,
+          "Offset": 171500000,
+          "Word": "gonna",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.3513324,
+          "Duration": 4800000,
+          "Offset": 176300000,
+          "Word": "say",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.7795006,
+      "Display": "it's got lyrics and i'm gonna",
+      "Lexical": "it's got lyrics and i'm gonna",
+      "ITN": "it's got lyrics and i'm gonna",
+      "MaskedITN": "it's got lyrics and i'm gonna",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.74409866,
+          "Duration": 3600000,
+          "Offset": 153100000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.72495013,
+          "Duration": 2800000,
+          "Offset": 156700000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98370254,
+          "Duration": 6400000,
+          "Offset": 159500000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.83709526,
+          "Duration": 2400000,
+          "Offset": 165900000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8889519,
+          "Duration": 2400000,
+          "Offset": 169100000,
+          "Word": "i'm",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.49820477,
+          "Duration": 10400000,
+          "Offset": 171500000,
+          "Word": "gonna",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.5684303,
+      "Display": "it's got lyrics and i'm going to say",
+      "Lexical": "it's got lyrics and i'm going to say",
+      "ITN": "it's got lyrics and i'm going to say",
+      "MaskedITN": "it's got lyrics and i'm going to say",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.74409866,
+          "Duration": 3600000,
+          "Offset": 153100000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.72495013,
+          "Duration": 2800000,
+          "Offset": 156700000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98370254,
+          "Duration": 6400000,
+          "Offset": 159500000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.83709526,
+          "Duration": 2400000,
+          "Offset": 165900000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8889519,
+          "Duration": 2400000,
+          "Offset": 169100000,
+          "Word": "i'm",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.018626543,
+          "Duration": 4000000,
+          "Offset": 171500000,
+          "Word": "going",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.012284675,
+          "Duration": 800000,
+          "Offset": 175500000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.3377329,
+          "Duration": 4800000,
+          "Offset": 176300000,
+          "Word": "say",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.6013871,
+      "Display": "it's got lyrics and i'm going to",
+      "Lexical": "it's got lyrics and i'm going to",
+      "ITN": "it's got lyrics and i'm going to",
+      "MaskedITN": "it's got lyrics and i'm going to",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.74409866,
+          "Duration": 3600000,
+          "Offset": 153100000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.72495013,
+          "Duration": 2800000,
+          "Offset": 156700000,
+          "Word": "got",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98370254,
+          "Duration": 6400000,
+          "Offset": 159500000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.83709526,
+          "Duration": 2400000,
+          "Offset": 165900000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8889519,
+          "Duration": 2400000,
+          "Offset": 169100000,
+          "Word": "i'm",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.018626543,
+          "Duration": 11600000,
+          "Offset": 171500000,
+          "Word": "going",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.012284675,
+          "Duration": 800000,
+          "Offset": 183100000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.613891,
+      "Display": "it's called lyrics and i'm gonna say",
+      "Lexical": "it's called lyrics and i'm gonna say",
+      "ITN": "it's called lyrics and i'm gonna say",
+      "MaskedITN": "it's called lyrics and i'm gonna say",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.74409866,
+          "Duration": 3600000,
+          "Offset": 153100000,
+          "Word": "it's",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.004955298,
+          "Duration": 5200000,
+          "Offset": 156700000,
+          "Word": "called",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9777931,
+          "Duration": 4000000,
+          "Offset": 161900000,
+          "Word": "lyrics",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8319008,
+          "Duration": 2400000,
+          "Offset": 165900000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8889519,
+          "Duration": 2400000,
+          "Offset": 169100000,
+          "Word": "i'm",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.49820477,
+          "Duration": 4800000,
+          "Offset": 171500000,
+          "Word": "gonna",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.3513324,
+          "Duration": 4800000,
+          "Offset": 176300000,
+          "Word": "say",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.9174194,
+      "Display": "And some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit.",
+      "Lexical": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "ITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "MaskedITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.6847029,
+          "Duration": 3200000,
+          "Offset": 196200000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9813044,
+          "Duration": 3200000,
+          "Offset": 199400000,
+          "Word": "some",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7017994,
+          "Duration": 800000,
+          "Offset": 202600000,
+          "Word": "of",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9873877,
+          "Duration": 1200000,
+          "Offset": 203400000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9774615,
+          "Duration": 4400000,
+          "Offset": 204600000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9602277,
+          "Duration": 1200000,
+          "Offset": 209000000,
+          "Word": "are",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98357695,
+          "Duration": 3200000,
+          "Offset": 210200000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9472086,
+          "Duration": 2000000,
+          "Offset": 213400000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9899548,
+          "Duration": 5200000,
+          "Offset": 215400000,
+          "Word": "reasonable",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.935889,
+          "Duration": 3600000,
+          "Offset": 220600000,
+          "Word": "simply",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9823814,
+          "Duration": 1200000,
+          "Offset": 224200000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9895754,
+          "Duration": 2800000,
+          "Offset": 225400000,
+          "Word": "check",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98484313,
+          "Duration": 2400000,
+          "Offset": 228200000,
+          "Word": "what",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93777233,
+          "Duration": 800000,
+          "Offset": 230600000,
+          "Word": "it",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97028214,
+          "Duration": 2400000,
+          "Offset": 231400000,
+          "Word": "looks",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9731312,
+          "Duration": 1600000,
+          "Offset": 233800000,
+          "Word": "like",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9714854,
+          "Duration": 1600000,
+          "Offset": 235400000,
+          "Word": "when",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92830133,
+          "Duration": 1600000,
+          "Offset": 237000000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9907693,
+          "Duration": 3600000,
+          "Offset": 238600000,
+          "Word": "stretch",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9519087,
+          "Duration": 1200000,
+          "Offset": 242200000,
+          "Word": "out",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97957695,
+          "Duration": 3600000,
+          "Offset": 243400000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8715851,
+          "Duration": 1600000,
+          "Offset": 247000000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8140401,
+          "Duration": 400000,
+          "Offset": 248600000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.972354,
+          "Duration": 5600000,
+          "Offset": 249000000,
+          "Word": "screen",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.63806814,
+          "Duration": 4800000,
+          "Offset": 254600000,
+          "Word": "can",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.74731874,
+          "Duration": 5400000,
+          "Offset": 259400000,
+          "Word": "fit",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.9006366,
+      "Display": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "Lexical": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "ITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "MaskedITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.6847029,
+          "Duration": 3200000,
+          "Offset": 196200000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9813044,
+          "Duration": 3200000,
+          "Offset": 199400000,
+          "Word": "some",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7017994,
+          "Duration": 800000,
+          "Offset": 202600000,
+          "Word": "of",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9873877,
+          "Duration": 1200000,
+          "Offset": 203400000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9774615,
+          "Duration": 4400000,
+          "Offset": 204600000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9602277,
+          "Duration": 1200000,
+          "Offset": 209000000,
+          "Word": "are",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98357695,
+          "Duration": 3200000,
+          "Offset": 210200000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9472086,
+          "Duration": 2000000,
+          "Offset": 213400000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9899548,
+          "Duration": 5200000,
+          "Offset": 215400000,
+          "Word": "reasonable",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.935889,
+          "Duration": 3600000,
+          "Offset": 220600000,
+          "Word": "simply",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9823814,
+          "Duration": 1200000,
+          "Offset": 224200000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9895754,
+          "Duration": 2800000,
+          "Offset": 225400000,
+          "Word": "check",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98484313,
+          "Duration": 2400000,
+          "Offset": 228200000,
+          "Word": "what",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93777233,
+          "Duration": 800000,
+          "Offset": 230600000,
+          "Word": "it",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97028214,
+          "Duration": 2400000,
+          "Offset": 231400000,
+          "Word": "looks",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9731312,
+          "Duration": 1600000,
+          "Offset": 233800000,
+          "Word": "like",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9714854,
+          "Duration": 1600000,
+          "Offset": 235400000,
+          "Word": "when",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92830133,
+          "Duration": 1600000,
+          "Offset": 237000000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9907693,
+          "Duration": 3600000,
+          "Offset": 238600000,
+          "Word": "stretch",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9519087,
+          "Duration": 1200000,
+          "Offset": 242200000,
+          "Word": "out",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.5287048,
+          "Duration": 3600000,
+          "Offset": 243400000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.89582735,
+          "Duration": 1600000,
+          "Offset": 247000000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.82056445,
+          "Duration": 400000,
+          "Offset": 248600000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9603346,
+          "Duration": 5600000,
+          "Offset": 249000000,
+          "Word": "screen",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6319751,
+          "Duration": 4800000,
+          "Offset": 254600000,
+          "Word": "can",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7491858,
+          "Duration": 5400000,
+          "Offset": 259400000,
+          "Word": "fit",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.90268594,
+      "Display": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "Lexical": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "ITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "MaskedITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.6847029,
+          "Duration": 3200000,
+          "Offset": 196200000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9813044,
+          "Duration": 3200000,
+          "Offset": 199400000,
+          "Word": "some",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7017994,
+          "Duration": 800000,
+          "Offset": 202600000,
+          "Word": "of",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9873877,
+          "Duration": 1200000,
+          "Offset": 203400000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6087389,
+          "Duration": 4400000,
+          "Offset": 204600000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9556998,
+          "Duration": 1200000,
+          "Offset": 209000000,
+          "Word": "are",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9827943,
+          "Duration": 3200000,
+          "Offset": 210200000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9398478,
+          "Duration": 2000000,
+          "Offset": 213400000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.988278,
+          "Duration": 5200000,
+          "Offset": 215400000,
+          "Word": "reasonable",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.935889,
+          "Duration": 3600000,
+          "Offset": 220600000,
+          "Word": "simply",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9823814,
+          "Duration": 1200000,
+          "Offset": 224200000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9895754,
+          "Duration": 2800000,
+          "Offset": 225400000,
+          "Word": "check",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98484313,
+          "Duration": 2400000,
+          "Offset": 228200000,
+          "Word": "what",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93777233,
+          "Duration": 800000,
+          "Offset": 230600000,
+          "Word": "it",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97028214,
+          "Duration": 2400000,
+          "Offset": 231400000,
+          "Word": "looks",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9731312,
+          "Duration": 1600000,
+          "Offset": 233800000,
+          "Word": "like",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9714854,
+          "Duration": 1600000,
+          "Offset": 235400000,
+          "Word": "when",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92830133,
+          "Duration": 1600000,
+          "Offset": 237000000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9907693,
+          "Duration": 3600000,
+          "Offset": 238600000,
+          "Word": "stretch",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9519087,
+          "Duration": 1200000,
+          "Offset": 242200000,
+          "Word": "out",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97957695,
+          "Duration": 3600000,
+          "Offset": 243400000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8715851,
+          "Duration": 1600000,
+          "Offset": 247000000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8140401,
+          "Duration": 400000,
+          "Offset": 248600000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.972354,
+          "Duration": 5600000,
+          "Offset": 249000000,
+          "Word": "screen",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.63806814,
+          "Duration": 4800000,
+          "Offset": 254600000,
+          "Word": "can",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.74731874,
+          "Duration": 5400000,
+          "Offset": 259400000,
+          "Word": "fit",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.9110615,
+      "Display": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "Lexical": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "ITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "MaskedITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.6847029,
+          "Duration": 3200000,
+          "Offset": 196200000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9813044,
+          "Duration": 3200000,
+          "Offset": 199400000,
+          "Word": "some",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7017994,
+          "Duration": 800000,
+          "Offset": 202600000,
+          "Word": "of",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9873877,
+          "Duration": 1200000,
+          "Offset": 203400000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9774615,
+          "Duration": 4400000,
+          "Offset": 204600000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9602277,
+          "Duration": 1200000,
+          "Offset": 209000000,
+          "Word": "are",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.836521,
+          "Duration": 3200000,
+          "Offset": 210200000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93150645,
+          "Duration": 2000000,
+          "Offset": 213400000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9875042,
+          "Duration": 5200000,
+          "Offset": 215400000,
+          "Word": "reasonable",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9409742,
+          "Duration": 3600000,
+          "Offset": 220600000,
+          "Word": "simply",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.977197,
+          "Duration": 1200000,
+          "Offset": 224200000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9895754,
+          "Duration": 2800000,
+          "Offset": 225400000,
+          "Word": "check",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98484313,
+          "Duration": 2400000,
+          "Offset": 228200000,
+          "Word": "what",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93777233,
+          "Duration": 800000,
+          "Offset": 230600000,
+          "Word": "it",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97028214,
+          "Duration": 2400000,
+          "Offset": 231400000,
+          "Word": "looks",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9731312,
+          "Duration": 1600000,
+          "Offset": 233800000,
+          "Word": "like",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9714854,
+          "Duration": 1600000,
+          "Offset": 235400000,
+          "Word": "when",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92830133,
+          "Duration": 1600000,
+          "Offset": 237000000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9907693,
+          "Duration": 3600000,
+          "Offset": 238600000,
+          "Word": "stretch",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9519087,
+          "Duration": 1200000,
+          "Offset": 242200000,
+          "Word": "out",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97957695,
+          "Duration": 3600000,
+          "Offset": 243400000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8715851,
+          "Duration": 1600000,
+          "Offset": 247000000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8140401,
+          "Duration": 400000,
+          "Offset": 248600000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.972354,
+          "Duration": 5600000,
+          "Offset": 249000000,
+          "Word": "screen",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.63806814,
+          "Duration": 4800000,
+          "Offset": 254600000,
+          "Word": "can",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.74731874,
+          "Duration": 5400000,
+          "Offset": 259400000,
+          "Word": "fit",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.8859032,
+      "Display": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "Lexical": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "ITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "MaskedITN": "and some of the phrases are longer than reasonable simply to check what it looks like when they stretch out longer than a screen can fit",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.6847029,
+          "Duration": 3200000,
+          "Offset": 196200000,
+          "Word": "and",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9813044,
+          "Duration": 3200000,
+          "Offset": 199400000,
+          "Word": "some",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7017994,
+          "Duration": 800000,
+          "Offset": 202600000,
+          "Word": "of",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9873877,
+          "Duration": 1200000,
+          "Offset": 203400000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6087389,
+          "Duration": 4400000,
+          "Offset": 204600000,
+          "Word": "phrases",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9556998,
+          "Duration": 1200000,
+          "Offset": 209000000,
+          "Word": "are",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9827943,
+          "Duration": 3200000,
+          "Offset": 210200000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9398478,
+          "Duration": 2000000,
+          "Offset": 213400000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.988278,
+          "Duration": 5200000,
+          "Offset": 215400000,
+          "Word": "reasonable",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.935889,
+          "Duration": 3600000,
+          "Offset": 220600000,
+          "Word": "simply",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9823814,
+          "Duration": 1200000,
+          "Offset": 224200000,
+          "Word": "to",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9895754,
+          "Duration": 2800000,
+          "Offset": 225400000,
+          "Word": "check",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.98484313,
+          "Duration": 2400000,
+          "Offset": 228200000,
+          "Word": "what",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.93777233,
+          "Duration": 800000,
+          "Offset": 230600000,
+          "Word": "it",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.97028214,
+          "Duration": 2400000,
+          "Offset": 231400000,
+          "Word": "looks",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9731312,
+          "Duration": 1600000,
+          "Offset": 233800000,
+          "Word": "like",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9714854,
+          "Duration": 1600000,
+          "Offset": 235400000,
+          "Word": "when",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.92830133,
+          "Duration": 1600000,
+          "Offset": 237000000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9907693,
+          "Duration": 3600000,
+          "Offset": 238600000,
+          "Word": "stretch",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9519087,
+          "Duration": 1200000,
+          "Offset": 242200000,
+          "Word": "out",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.5287048,
+          "Duration": 3600000,
+          "Offset": 243400000,
+          "Word": "longer",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.89582735,
+          "Duration": 1600000,
+          "Offset": 247000000,
+          "Word": "than",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.82056445,
+          "Duration": 400000,
+          "Offset": 248600000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.9603346,
+          "Duration": 5600000,
+          "Offset": 249000000,
+          "Word": "screen",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.6319751,
+          "Duration": 4800000,
+          "Offset": 254600000,
+          "Word": "can",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7491858,
+          "Duration": 5400000,
+          "Offset": 259400000,
+          "Word": "fit",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.8192642,
+      "Display": "Or also they?",
+      "Lexical": "or also they",
+      "ITN": "or also they",
+      "MaskedITN": "or also they",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.7854593,
+          "Duration": 4800000,
+          "Offset": 274400000,
+          "Word": "or",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.888215,
+          "Duration": 7600000,
+          "Offset": 279200000,
+          "Word": "also",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.78411835,
+          "Duration": 4800000,
+          "Offset": 289600000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.5276545,
+      "Display": "for also they",
+      "Lexical": "for also they",
+      "ITN": "for also they",
+      "MaskedITN": "for also they",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.001737502,
+          "Duration": 4800000,
+          "Offset": 274400000,
+          "Word": "for",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.8652603,
+          "Duration": 7600000,
+          "Offset": 279200000,
+          "Word": "also",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7159658,
+          "Duration": 4800000,
+          "Offset": 289600000,
+          "Word": "they",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.5580644,
+      "Display": "or also play",
+      "Lexical": "or also play",
+      "ITN": "or also play",
+      "MaskedITN": "or also play",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.7854593,
+          "Duration": 4800000,
+          "Offset": 274400000,
+          "Word": "or",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.888215,
+          "Duration": 7600000,
+          "Offset": 279200000,
+          "Word": "also",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.00051887904,
+          "Duration": 4800000,
+          "Offset": 289600000,
+          "Word": "play",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.5580329,
+      "Display": "or also the",
+      "Lexical": "or also the",
+      "ITN": "or also the",
+      "MaskedITN": "or also the",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.7854593,
+          "Duration": 4800000,
+          "Offset": 274400000,
+          "Word": "or",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.888215,
+          "Duration": 7600000,
+          "Offset": 279200000,
+          "Word": "also",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.00042437113,
+          "Duration": 4800000,
+          "Offset": 289600000,
+          "Word": "the",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.5580571,
+      "Display": "or also a",
+      "Lexical": "or also a",
+      "ITN": "or also a",
+      "MaskedITN": "or also a",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.7854593,
+          "Duration": 4800000,
+          "Offset": 274400000,
+          "Word": "or",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.888215,
+          "Duration": 7600000,
+          "Offset": 279200000,
+          "Word": "also",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.00049714115,
+          "Duration": 400000,
+          "Offset": 293200000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ],
+  [
+    {
+      "Confidence": 0.64705735,
+      "Display": "Might be.",
+      "Lexical": "might be",
+      "ITN": "might be",
+      "MaskedITN": "might be",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.5462472,
+          "Duration": 6400000,
+          "Offset": 298700000,
+          "Word": "might",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7478675,
+          "Duration": 5600000,
+          "Offset": 309100000,
+          "Word": "be",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.4315102,
+      "Display": "might be a",
+      "Lexical": "might be a",
+      "ITN": "might be a",
+      "MaskedITN": "might be a",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.5462472,
+          "Duration": 6400000,
+          "Offset": 298700000,
+          "Word": "might",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7478675,
+          "Duration": 5600000,
+          "Offset": 309100000,
+          "Word": "be",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0004159082,
+          "Duration": 400000,
+          "Offset": 321500000,
+          "Word": "a",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    },
+    {
+      "Confidence": 0.43171096,
+      "Display": "might be short.",
+      "Lexical": "might be short",
+      "ITN": "might be short",
+      "MaskedITN": "might be short",
+      "PronunciationAssessment": null,
+      "Words": [
+        {
+          "Confidence": 0.5462472,
+          "Duration": 6400000,
+          "Offset": 298700000,
+          "Word": "might",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.7478675,
+          "Duration": 5600000,
+          "Offset": 309100000,
+          "Word": "be",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        },
+        {
+          "Confidence": 0.0010181965,
+          "Duration": 6400000,
+          "Offset": 317900000,
+          "Word": "short.",
+          "PronunciationAssessment": null,
+          "Phonemes": null,
+          "Syllables": null
+        }
+      ],
+      "DisplayWords": null
+    }
+  ]
+]

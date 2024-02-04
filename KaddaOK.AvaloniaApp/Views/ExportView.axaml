@@ -1,0 +1,701 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    xmlns:colorpicker="clr-namespace:AvaloniaColorPicker;assembly=AvaloniaColorPicker"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.ExportView"
+    x:DataType="vm:ExportViewModel">
+    <UserControl.Styles>
+        <Style Selector="colorpicker|ColorButton > ToggleButton">
+            <Setter
+                Property="Height"
+                Value="40" />
+            <Setter
+                Property="Width"
+                Value="80" />
+        </Style>
+    </UserControl.Styles>
+    <Design.DataContext>
+        <designTime:DesignTimeExportViewModel />
+    </Design.DataContext>
+    <ScrollViewer>
+        <StackPanel>
+            <Label Content="Colors for Output" />
+            <Grid
+                x:Name="FullColorGrid"
+                ColumnDefinitions="120,120,120,*"
+                Margin="10,5"
+                RowDefinitions="150">
+
+                <StackPanel>
+                    <Label
+                        Content="Background:"
+                        HorizontalAlignment="Center" />
+                    <colorpicker:ColorButton
+                        HorizontalAlignment="Center"
+                        Color="{Binding CurrentProcess.BackgroundColor}"
+                        Name="BackgroundColorButton"
+                        PropertyChanged="BackgroundColorButton_PropertyChanged">
+                    </colorpicker:ColorButton>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1">
+                    <Label
+                        Content="Unsung Text:"
+                        HorizontalAlignment="Center" />
+                    <colorpicker:ColorButton
+                        HorizontalAlignment="Center"
+                        Color="{Binding CurrentProcess.UnsungTextColor}"
+                        Name="UnsungTextColorButton"
+                        PropertyChanged="UnsungTextColorButton_PropertyChanged">
+                    </colorpicker:ColorButton>
+                    <Label
+                        Content="Outline:"
+                        HorizontalAlignment="Center" />
+                    <colorpicker:ColorButton
+                        HorizontalAlignment="Center"
+                        Color="{Binding CurrentProcess.UnsungOutlineColor}"
+                        Name="UnsungOutlineColorButton"
+                        PropertyChanged="UnsungOutlineColorButton_PropertyChanged">
+                    </colorpicker:ColorButton>
+                </StackPanel>
+
+                <StackPanel Grid.Column="2">
+                    <Label
+                        Content="Sung Text:"
+                        HorizontalAlignment="Center" />
+                    <colorpicker:ColorButton
+                        HorizontalAlignment="Center"
+                        Color="{Binding CurrentProcess.SungTextColor}"
+                        Name="SungTextColorButton"
+                        PropertyChanged="SungTextColorButton_PropertyChanged">
+                    </colorpicker:ColorButton>
+                    <Label
+                        Content="Outline:"
+                        HorizontalAlignment="Center" />
+                    <colorpicker:ColorButton
+                        HorizontalAlignment="Center"
+                        Color="{Binding CurrentProcess.SungOutlineColor}"
+                        Name="SungOutlineColorButton"
+                        PropertyChanged="SungOutlineColorButton_PropertyChanged">
+                    </colorpicker:ColorButton>
+                </StackPanel>
+                <Grid
+                    Grid.Column="3"
+                    Margin="20"
+                    Width="310"
+                    ColumnDefinitions="143,167">
+                    <Grid.Background>
+                        <SolidColorBrush Color="{Binding CurrentProcess.BackgroundColor}" />
+                    </Grid.Background>
+                    <Grid.Styles>
+                        <Style Selector="Canvas > Label">
+                            <Setter
+                                Property="FontFamily"
+                                Value="Arial" />
+                            <Setter
+                                Property="FontSize"
+                                Value="30" />
+                        </Style>
+                    </Grid.Styles>
+                    <Canvas Margin="15,30,0,10">
+                        <Canvas.Styles>
+                            <Style Selector="Label">
+                                <Setter
+                                    Property="Content"
+                                    Value="This is ex" />
+                            </Style>
+                            <Style Selector="Label.sungOutline">
+                                <Setter Property="Foreground">
+                                    <SolidColorBrush Color="{Binding CurrentProcess.SungOutlineColor}" />
+                                </Setter>
+                            </Style>
+                            <Style Selector="Label.sungForeground">
+                                <Setter Property="Foreground">
+                                    <SolidColorBrush Color="{Binding CurrentProcess.SungTextColor}" />
+                                </Setter>
+                            </Style>
+                        </Canvas.Styles>
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="1"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="2"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="3"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="1" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="2" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="3" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="1" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="2" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="3" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="1"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="2"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="3"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="sungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="sungForeground"
+                            Canvas.Left="2"
+                            Canvas.Top="2" />
+                    </Canvas>
+                    <Canvas
+                        Grid.Column="1"
+                        Margin="0,30,15,10">
+                        <Canvas.Styles>
+                            <Style Selector="Label">
+                                <Setter
+                                    Property="Content"
+                                    Value="ample text" />
+                            </Style>
+                            <Style Selector="Label.unsungOutline">
+                                <Setter Property="Foreground">
+                                    <SolidColorBrush Color="{Binding CurrentProcess.UnsungOutlineColor}" />
+                                </Setter>
+                            </Style>
+                            <Style Selector="Label.unsungForeground">
+                                <Setter Property="Foreground">
+                                    <SolidColorBrush Color="{Binding CurrentProcess.UnsungTextColor}" />
+                                </Setter>
+                            </Style>
+                        </Canvas.Styles>
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="1"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="2"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="3"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="0" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="1" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="2" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="3" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="1" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="2" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="3" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="0"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="1"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="2"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="3"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="unsungOutline"
+                            Canvas.Left="4"
+                            Canvas.Top="4" />
+                        <Label
+                            Classes="unsungForeground"
+                            Canvas.Left="2"
+                            Canvas.Top="2" />
+                    </Canvas>
+                </Grid>
+
+            </Grid>
+
+            <StackPanel x:Name="ExportOptionsOuterPanel">
+                <StackPanel.Styles>
+                    <Style Selector="TextBlock.detailText">
+                        <Setter
+                            Property="FontSize"
+                            Value="12" />
+                    </Style>
+                </StackPanel.Styles>
+                <Label Content="Export Options" />
+                <TextBlock
+                    TextWrapping="Wrap" Classes="detailText"
+                    Margin="5,2,5,0">
+                    This app doesn't generate any actual karaoke animation itself, it's designed to
+                    just easily create timing data and pass it to other apps that specialize in
+                    generating the animation. It currently speaks these formats:
+                </TextBlock>
+
+				<TabControl>
+					<TabControl.Styles>
+						<Style Selector="StackPanel.exportTypeTabOptions TextBlock,
+							               StackPanel.exportTypeTabOptions NumericUpDown,
+							               StackPanel.exportTypeTabOptions CheckBox,
+							               StackPanel.exportTypeTabOptions Label,
+							               StackPanel.exportTypeTabOptions RadioButton">
+							<Setter Property="VerticalAlignment" Value="Center" />
+                        </Style>
+                    </TabControl.Styles>
+                    <TabItem Header="YouTube Movie Maker">
+						<StackPanel Margin="5,10">
+							<Expander Header="About YouTube Movie Maker"
+                                      Background="Transparent" HorizontalAlignment="Center">
+                                <Grid
+                                        ColumnDefinitions="*,*"
+                                        RowDefinitions="*, *,*">
+									    <Grid.Styles>
+                                            <Style Selector="TextBlock">
+                                                <Setter
+                                                    Property="FontSize"
+                                                    Value="12" />
+                                            </Style>
+									    </Grid.Styles>
+                                        <StackPanel>
+                                            <Label Content="Pros:" />
+                                            <Grid
+                                                x:Name="ytmmProsGrid"
+                                                ColumnDefinitions="20,*"
+                                                RowDefinitions="*,*,*">
+                                                <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                                <TextBlock Grid.Column="1">
+                                                    Modern sharp visual quality
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Center">
+                                                    •</TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    Grid.Column="1">
+                                                    Can mix in video, create graphics, etc.
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="2"
+                                                    HorizontalAlignment="Center">
+                                                    •</TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="2"
+                                                    Grid.Column="1">
+                                                    Free for 480p under 5 min
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                        <StackPanel Grid.Column="1">
+                                            <Label Content="Cons:" />
+                                            <Grid
+                                                x:Name="ytmmConsGrid"
+                                                ColumnDefinitions="20,*"
+                                                RowDefinitions="*,*,*">
+                                                <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                                <TextBlock Grid.Column="1">
+                                                    More difficult to use
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Center">
+                                                    •</TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    Grid.Column="1">
+                                                    Can't burn karaoke CDs
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="2"
+                                                    HorizontalAlignment="Center">
+                                                    •</TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="2"
+                                                    Grid.Column="1">
+                                                    Larger file output size (full video file)
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                        <StackPanel
+                                            Grid.Column="0"
+                                            Grid.Row="1"
+                                            Grid.ColumnSpan="3">
+                                            <Label
+                                                Content="Notes:"
+                                                Margin="0,5,0,0" />
+                                            <Grid
+                                                x:Name="ytmmNotesGrid"
+                                                ColumnDefinitions="20,*"
+                                                RowDefinitions="*,*">
+                                                <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    TextWrapping="Wrap">
+                                                    YTMM currently doesn't have a line splitting tool/function, so
+                                                    it's difficult to break up lines once you've exported. (This is
+                                                    actually the main reason the Edit screen of this app exists.)
+                                                    Try to finish all the splits you're going to need before doing
+                                                    the export.
+                                                </TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    HorizontalAlignment="Center">
+                                                    •</TextBlock>
+                                                <TextBlock
+                                                    Grid.Row="1"
+                                                    Grid.Column="1"
+                                                    TextWrapping="Wrap">
+                                                    This app will create the karaoke show in 2-line mode just to
+                                                    simplify the export process, but you can easily switch to
+                                                    Paragraphs mode once you're in the YTMM lyric editor.
+                                                </TextBlock>
+                                            </Grid>
+                                        </StackPanel>
+                                </Grid>
+                            </Expander>
+
+                            <Label
+                                Content="Options"
+                                Margin="5,10,0,0" />
+							<StackPanel Classes="exportTypeTabOptions" Margin="15,0,0,0">
+                                <RadioButton GroupName="GenType" IsChecked="{Binding !CurrentProcess.GenerateRzProject}" Margin="0,0,0,5">
+                                    Only generate an .RZLRC (lyrics timing) file
+                                </RadioButton>
+                                <RadioButton GroupName="GenType" IsChecked="{Binding CurrentProcess.GenerateRzProject}">
+                                    Also create a .RZMMPJ (video project) file
+                                </RadioButton>
+								<TextBlock TextWrapping="Wrap" FontSize="11" Margin="25,0,0,10">
+                                    (Note: This feature is designed for 1080p, which is available to paid YTMM users only. 
+                                    If you are a free user, you will likely experience strange results.)
+                                </TextBlock>
+								<StackPanel x:Name="projectOptions" Margin="25,5,0,0" IsEnabled="{Binding CurrentProcess.GenerateRzProject}">
+                                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
+                                        <CheckBox Content="Insert progress bars during lyric gaps longer than:" IsChecked="{Binding CurrentProcess.InsertProgressBars}" />
+                                        <NumericUpDown Increment="1" Margin="10,0" Value="{Binding CurrentProcess.ProgressBarGapLength}" />
+                                        <TextBlock>
+                                            seconds
+                                        </TextBlock>
+                                    </StackPanel>
+                                    <StackPanel Margin="25,0,0,0" x:Name="progressBarOptions" Orientation="Horizontal" IsEnabled="{Binding CurrentProcess.InsertProgressBars}">
+                                        <Label Content="Height:" />
+                                        <NumericUpDown Increment="1" Margin="5,0,10,0" Value="{Binding CurrentProcess.ProgressBarHeight}" />
+                                        <Label Content="Outline:" />
+                                        <colorpicker:ColorButton Margin="0,0,10,0"
+                                            HorizontalAlignment="Center"
+                                            Color="{Binding CurrentProcess.ProgressBarOutlineColor}"
+                                            Name="ProgressBarOutlineColorButton"
+                                            PropertyChanged="ProgressBarOutlineColorButton_PropertyChanged">
+                                        </colorpicker:ColorButton>
+                                        <Label Content="Fill:" />
+                                        <colorpicker:ColorButton
+                                            HorizontalAlignment="Center"
+                                            Color="{Binding CurrentProcess.ProgressBarFillColor}"
+                                            Name="ProgressBarFillColorButton"
+                                            PropertyChanged="ProgressBarFillColorButton_PropertyChanged">
+                                        </colorpicker:ColorButton>
+                                        <Label Content="Width:" Margin="20,0,0,0" />
+                                        <NumericUpDown Increment="1" Margin="5,0,10,0" Value="{Binding CurrentProcess.ProgressBarWidth}" />
+                                        <Label Content="Y Position:" />
+                                        <NumericUpDown Increment="1" Margin="5,0,10,0" Value="{Binding CurrentProcess.ProgressBarYPosition}" />
+                                    </StackPanel>
+									<Grid Margin="30,15,0,0" ColumnDefinitions="80, 350, 350">
+                                        <Label Content="Preview:" />
+                                        <Rectangle Grid.Column="1"
+                                                   Height="{Binding CurrentProcess.ProgressBarHeight}">
+											<Rectangle.Fill>
+												<SolidColorBrush Color="{Binding CurrentProcess.ProgressBarFillColor}" />
+                                            </Rectangle.Fill>
+                                        </Rectangle>
+                                        <Rectangle x:Name="ProgressBarOutlinePreviewRect"
+                                                   Grid.Column="1" Grid.ColumnSpan="2"
+                                                   Height="{Binding CurrentProcess.ProgressBarHeight}"
+                                                   StrokeThickness="2">
+                                            <Rectangle.Stroke>
+                                                <SolidColorBrush Color="{Binding CurrentProcess.ProgressBarOutlineColor}" />
+                                            </Rectangle.Stroke>
+                                        </Rectangle>
+                                    </Grid>
+                                    <StackPanel Margin="0,20,0,10">
+										<StackPanel Orientation="Horizontal">
+                                            <CheckBox Content="Use a template:" IsChecked="{Binding CurrentProcess.UseRzProjectTemplate}" />
+                                            <TextBlock Margin="10,0" Text="{Binding CurrentProcess.RzProjectTemplatePath}" />
+										    <Button Content="Select..." Command="{Binding SelectRzTemplateCommand}" 
+                                                    IsEnabled="{Binding CurrentProcess.UseRzProjectTemplate}" />
+										</StackPanel>
+										<TextBlock TextWrapping="Wrap" FontSize="11" Margin="30,5,80,0">
+                                            Existing items in the selected .rzmmpj file will be included in the generated project. 
+                                            Items that occur within the first 60 will be left as-is.  Items appearing after the first 
+                                            60 seconds will be moved so that the last item's end is synchronized with the end of the audio.
+                                        </TextBlock>
+                                    </StackPanel>
+
+                                    <StackPanel Margin="0,20,0,10">
+                                        <StackPanel Orientation="Horizontal">
+                                            <CheckBox Content="Include a video:" IsChecked="{Binding CurrentProcess.UseRzVideo}" />
+                                            <TextBlock Margin="10,0" Text="{Binding CurrentProcess.RzVideoPath}" />
+                                            <Button Content="Select..." Command="{Binding SelectRzVideoCommand}" 
+                                                    IsEnabled="{Binding CurrentProcess.UseRzVideo}" />
+                                        </StackPanel>
+                                        <TextBlock TextWrapping="Wrap" FontSize="11" Margin="30,5,80,0">
+                                            Selected video file will be inserted on the video line with audio disabled, and its audio 
+                                            inserted on a muted Audio line. "Create Waveform Data" and line up the peaks with the 
+                                            original audio track to determine the right offset for the video to be in sync.
+                                        </TextBlock>
+										<Grid Margin="30,5" ColumnDefinitions="*,*">
+											<StackPanel>
+                                                <RadioButton GroupName="VideoType" IsChecked="{Binding !CurrentProcess.RzVideoAsOverlay}"
+                                                             IsEnabled="{Binding CurrentProcess.UseRzVideo}">
+                                                    On the main Video track
+                                                </RadioButton>
+												<TextBlock TextWrapping="Wrap" FontSize="11" Margin="30,0">
+                                                    Video will center and fill the screen, and the fill modes (keep ratio, stretch, and fill by blurring) can be used.
+                                                </TextBlock>
+                                            </StackPanel>
+											<StackPanel Grid.Column="1">
+                                                <RadioButton GroupName="VideoType" IsChecked="{Binding CurrentProcess.RzVideoAsOverlay}"
+                                                             IsEnabled="{Binding CurrentProcess.UseRzVideo}">
+                                                    On the first Overlay track
+                                                </RadioButton>
+                                                <TextBlock TextWrapping="Wrap" FontSize="11" Margin="30,0">
+                                                    Video can be explicitly positioned and sized as desired. (Initial output will just be a 500x500 cube you'll need to adjust manually.)
+                                                </TextBlock>
+                                            </StackPanel>
+                                            
+                                        </Grid>
+                                        
+                                    </StackPanel>
+                                    <CheckBox Margin="0,30,0,0" Content="Open the exported result in YTMM" IsChecked="{Binding CurrentProcess.LaunchResult}" />
+                                </StackPanel>
+
+                            </StackPanel>
+                            <Button
+                                Margin="0,20,0,0"
+                                Classes="accent"
+                                HorizontalAlignment="Center"
+                                Command="{Binding ExportToRzlrcCommand}">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="18"
+                                        HorizontalAlignment="Center">
+                                        Export
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </TabItem>
+					<TabItem Header="Karaoke Builder Studio">
+						<StackPanel Margin="5,10">
+
+                            <Expander Header="About Karaoke Builder Studio"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Center">
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    RowDefinitions="*, *,*">
+                                    <Grid.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Setter
+                                                Property="FontSize"
+                                                Value="12" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <StackPanel>
+                                        <Label Content="Pros:" />
+                                        <Grid
+                                            x:Name="kbpProsGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock Grid.Column="1">
+                                                Easier editing of timing
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1">
+                                                Can create discs for karaoke machines
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="1">
+                                                Small output file size (.cdg + .mp3)
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <Label Content="Cons:" />
+                                        <Grid
+                                            x:Name="kbpConsGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock Grid.Column="1">
+                                                The "blocky" classic karaoke visual quality
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1">
+                                                No video input, limited graphics capability
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="1">
+                                                No free option
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3">
+                                        <Label
+                                            Content="Notes:"
+                                            Margin="0,5,0,0" />
+                                        <Grid
+                                            x:Name="kbpNotesGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                TextWrapping="Wrap">
+                                                KBS is limited to a 12-bit color palette as per CD+G specs, so
+                                                the output colors selected above will be rounded to the nearest
+                                                representable color. (4,096 is still plenty of colors though and
+                                                you probably won't notice.)
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                TextWrapping="Wrap">
+                                                Pages are a fundamental part of the .kbp file structure, meaning
+                                                this app has to set them during export. So it just blindly
+                                                throws 4 lines per page at it, which will almost definitely not
+                                                be what you want. Once you're in KBS, you'll want to use the
+                                                Pages Split and Join buttons to fix the paging, then hit the
+                                                "Reset" button to correct the display/remove timing.
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Expander>
+
+                            <CheckBox Margin="0,30,0,0" HorizontalAlignment="Center" Content="Open the exported result in KBS" IsChecked="{Binding CurrentProcess.LaunchResult}" />
+
+                            <Button
+                                Margin="0,20,0,0"
+                                Classes="accent"
+                                HorizontalAlignment="Center"
+                                Command="{Binding ExportToKbpCommand}">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="18"
+                                        HorizontalAlignment="Center">
+                                        Export
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </TabItem>
+                </TabControl>
+
+
+            </StackPanel>
+
+
+        </StackPanel>
+    </ScrollViewer>
+
+
+</UserControl>

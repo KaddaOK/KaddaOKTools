@@ -1,0 +1,165 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    xmlns:avalonia="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.MainView"
+    x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <designTime:DesignTimeMainViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="TabItem">
+            <Setter
+                Property="CornerRadius"
+                Value="10,10,0,0" />
+            <Setter
+                Property="Margin"
+                Value="0,0,1,0" />
+            <Setter
+                Property="Background"
+                Value="#FF0C0D10" />
+            <Setter
+                Property="BorderThickness"
+                Value="1,1,1,0" />
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemRegionColor}" />
+            <Setter
+                Property="Margin"
+                Value="0,0,1,-2" />
+            <Setter
+                Property="Padding"
+                Value="12,0,12,2" />
+            <Setter
+                Property="BorderThickness"
+                Value="1,1,1,0" />
+            <Setter
+                Property="BorderBrush"
+                Value="#FFABE1FF" />
+        </Style>
+        <Style Selector="TabItem:selected:pointerover /template/ Border">
+            <Setter
+                Property="TextElement.Foreground"
+                Value="{DynamicResource TabItemHeaderForegroundSelected}" />
+        </Style>
+        <Style Selector="TabItem:pointerover /template/ Border">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemRegionColor}" />
+        </Style>
+        <Style Selector="TabItem:disabled /template/ Border">
+            <Setter
+                Property="Background"
+                Value="#801B1F26" />
+            <Setter
+                Property="TextElement.Foreground"
+                Value="#FF6F6F6F" />
+        </Style>
+        <Style Selector="views|AudioView, views|LyricsView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
+            <Setter
+                Property="Background"
+                Value="{DynamicResource SystemRegionColor}" />
+            <Setter
+                Property="Padding"
+                Value="10" />
+            <Setter
+                Property="CornerRadius"
+                Value="0,10,5,5" />
+            <Setter
+                Property="BorderThickness"
+                Value="1,0,1,1" />
+            <Setter
+                Property="BorderBrush"
+                Value="#FFABE1FF" />
+        </Style>
+    </UserControl.Styles>
+    <Grid RowDefinitions="32,*">
+        <StackPanel
+            Orientation="Horizontal"
+            HorizontalAlignment="Center">
+            <Image
+                Source="/Assets/KaddaOKIcon.png"
+                HorizontalAlignment="Center" />
+            <Label
+                Content="KaddaOK Tools"
+                HorizontalAlignment="Center"
+                Margin="2"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False" />
+        </StackPanel>
+
+
+        <TabControl
+            Grid.Row="1"
+            Margin="10"
+            Padding="0"
+            x:Name="MainViewTabControl"
+            SelectedIndex="{Binding CurrentProcess.SelectedTabIndex, Mode=TwoWay}">
+            <TabItem
+                x:Name="AudioTab"
+                Header="Audio">
+                <views:AudioView />
+            </TabItem>
+            <TabItem
+                x:Name="LyricsTab"
+                Header="Lyrics"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonAudioStepIsIncomplete}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.AudioStepIsComplete}">
+                <views:LyricsView />
+            </TabItem>
+            <TabItem
+                x:Name="RecognizeTab"
+                Header="Recognize"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}">
+                <views:RecognizeView />
+            </TabItem>
+            <TabItem
+                x:Name="NarrowTab"
+                Header="Narrow"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonRecognizeStepIsIncomplete}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.RecognizeStepIsComplete}">
+                <views:NarrowingView />
+            </TabItem>
+            <TabItem
+                Margin="30,0,1,0"
+                x:Name="EditLinesTab"
+                Header="Edit"
+                ToolTip.Tip="{Binding
+                                CurrentProcess.ReasonEditTabIsDisabled}"
+				avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+				IsEnabled="{Binding CurrentProcess.EditTabIsEnabled}">
+
+                <views:EditLinesView />
+            </TabItem>
+            <TabItem
+                x:Name="ExportTab"
+                Header="Export"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonCantExport}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.CanExport}">
+                <views:ExportView />
+            </TabItem>
+
+            <TabItem
+                Margin="30,0,1,0"
+                x:Name="AboutTab"
+                Header="About">
+                <views:AboutView />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</UserControl>

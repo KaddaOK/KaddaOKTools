@@ -1,0 +1,46 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="800"
+    d:DesignHeight="200"
+    x:Class="KaddaOK.AvaloniaApp.Controls.DrawnWaveformControl"
+    >
+    <Grid
+        x:Name="WaveformOverlayGrid"
+        DataContext="{Binding $parent[UserControl]}"
+        x:DataType="controls:DrawnWaveformControl">
+        <controls:WaveformImage
+            WaveStream="{Binding WaveStream}"
+            WaveformData="{Binding WaveFloats}"
+            IsVertical="{Binding Waveform.VerticalImage}"
+        />
+        <Label
+            x:Name="WaveformDrawingIndicator"
+            Content="Loading..."
+            VerticalAlignment="Center"
+            Padding="5"
+            HorizontalAlignment="Center"
+            IsVisible="{Binding Loading}"
+            Background="#AA000000" />
+        <Button
+            x:Name="WaveformSelectButton"
+            Content="Click to select a file..."
+            VerticalAlignment="Center"
+            Padding="5"
+            HorizontalAlignment="Center"
+            Click="WaveformSelectButton_Clicked">
+            <Button.IsVisible>
+                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                    <Binding
+                        Path="WaveformFilePath"
+                        Converter="{x:Static StringConverters.IsNullOrEmpty}" />
+                    <Binding Path="CanSelectIfEmpty" />
+                </MultiBinding>
+            </Button.IsVisible>
+        </Button>
+    </Grid>
+</UserControl>

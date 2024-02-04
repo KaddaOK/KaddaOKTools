@@ -1,0 +1,286 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+    xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="740"
+    x:Class="KaddaOK.AvaloniaApp.Views.EditLinesView"
+    x:DataType="vm:EditLinesViewModel"
+    KeyDown="EditLinesView_OnKeyDown">
+    <Design.DataContext>
+        <designTime:DesignTimeEditLinesViewModel />
+    </Design.DataContext>
+    <UserControl.Resources>
+        <local:WaveformToPointConverter x:Key="WaveformToPointConverter" />
+        <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
+        <SolidColorBrush
+            x:Key="NeedsAttentionFill"
+            Color="#56FFD800" />
+        <SolidColorBrush
+            x:Key="NeedsAttentionStroke"
+            Color="#B0FFD800" />
+        <SolidColorBrush
+            x:Key="HasSelectedFill"
+            Color="#5600AA00" />
+        <SolidColorBrush
+            x:Key="HasSelectedStroke"
+            Color="#B000FF00" />
+        <SolidColorBrush
+            x:Key="IsIgnoredFill"
+            Color="#56808080" />
+        <SolidColorBrush
+            x:Key="IsIgnoredStroke"
+            Color="#B0AAAAAA" />
+
+        <MenuFlyout
+            x:Key="WordButtonFlyout"
+            x:DataType="library:LyricWord">
+            <MenuItem
+                Header="Split Line Before This Syllable"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NewLineBeforeCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Split Line After This Syllable"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NewLineAfterCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Change Syllable Text..."
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).EditWordTextCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Delete Syllable"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DeleteWordCommand}"
+                CommandParameter="{Binding}" />
+        </MenuFlyout>
+    </UserControl.Resources>
+    <dialogHost:DialogHost
+        Identifier="EditLinesViewDialogHost"
+        DialogClosingCallback="EditLinesViewDialog_Closing">
+        <dialogHost:DialogHost.DataTemplates>
+            <DataTemplate DataType="vm:EditLinesViewModel">
+                <dialogs:EditSyllableTextDialog DataContext="{Binding EditingTextOfWord}" />
+            </DataTemplate>
+            <DataTemplate DataType="models:EditingLine">
+                <dialogs:EditLineTimingDialog
+                    Name="EditLineTimingDialog"
+                    DataContext="{Binding}"
+                    EditLinesViewModel="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext)}" />
+            </DataTemplate>
+            <DataTemplate DataType="models:AddingLine">
+                <dialogs:InsertNewLineDialog DataContext="{Binding}" />
+            </DataTemplate>
+        </dialogHost:DialogHost.DataTemplates>
+        <Grid
+            x:Name="EditLinesViewOuterGrid"
+            ColumnDefinitions="*, 100"
+            RowDefinitions="40, *">
+            <StackPanel
+                x:Name="UndoRedoButtons"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Grid.Column="1">
+                <StackPanel.Styles>
+                    <Style Selector="Button">
+                        <Setter
+                            Property="Padding"
+                            Value="6,7" />
+                    </Style>
+                </StackPanel.Styles>
+                <Button
+                    Content="Undo"
+                    HorizontalAlignment="Right"
+                    Command="{Binding UndoCommand}"
+                    IsEnabled="{Binding UndoStack.Count}"
+                    HotKey="Ctrl+Z" />
+                <Button
+                    Content="Redo"
+                    HorizontalAlignment="Right"
+                    Command="{Binding RedoCommand}"
+                    IsEnabled="{Binding RedoStack.Count}"
+                    HotKey="Ctrl+Y" />
+            </StackPanel>
+            <ScrollViewer
+                x:Name="SelectionsScrollViewer"
+                Grid.RowSpan="2">
+                <StackPanel>
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Margin="10"
+                        FontSize="12">
+                        On this screen you can make direct changes to the words and lines.
+                        Click the ⤴ button to make a line part of its preceeding line.
+                        Click a word to create a new line before or after it, change its text, or
+                        delete it.
+                        Click the ⏱ button to re-time a line.
+                        Undo and Redo are available if you make a mistake.
+                        When you're satisfied, you can switch to the Export tab.
+                    </TextBlock>
+                    <ItemsRepeater
+                        x:Name="SelectionsItems"
+                        ItemsSource="{Binding CurrentProcess.ChosenLines}"
+                        Margin="0,10,10,10">
+                        <ItemsRepeater.Styles>
+                            <Style Selector="Label">
+                                <Setter
+                                    Property="FontFamily"
+                                    Value="Arial" />
+                                <Setter
+                                    Property="VerticalAlignment"
+                                    Value="Top" />
+                                <Setter
+                                    Property="HorizontalAlignment"
+                                    Value="Center" />
+                                <Setter
+                                    Property="FontSize"
+                                    Value="10" />
+                            </Style>
+                            <Style Selector="Button">
+                                <Setter
+                                    Property="Background"
+                                    Value="{StaticResource HasSelectedFill}" />
+                                <Setter
+                                    Property="Padding"
+                                    Value="0,5" />
+                            </Style>
+                        </ItemsRepeater.Styles>
+                        <ItemsRepeater.ItemTemplate>
+                            <DataTemplate x:DataType="library:LyricLine">
+                                <StackPanel>
+                                    <Border
+                                        ZIndex="5"
+                                        BorderBrush="{DynamicResource ListMediumColor}"
+                                        Background="Black"
+                                        BorderThickness="0,0,1,1"
+                                        Margin="13,3,0,0"
+                                        Padding="0,0,0,3"
+                                        CornerRadius="3">
+                                        <Grid
+                                            Classes="lineStack"
+                                            ColumnDefinitions="20,36,*,36,25">
+                                            <Button
+                                                Classes="lineMergeButton"
+                                                Grid.Column="0"
+                                                Content="⤴"
+                                                ToolTip.Tip="Move these words to previous line"
+                                                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToPreviousCommand}"
+                                                CommandParameter="{Binding}" />
+                                            <Label
+                                                Classes="startSecond"
+                                                Content="{Binding StartSecond}"
+                                                Grid.Column="1" />
+                                            <ItemsRepeater
+                                                ItemsSource="{Binding Words}"
+                                                Grid.Column="2">
+                                                <ItemsRepeater.Layout>
+                                                    <WrapLayout Orientation="Horizontal" />
+                                                </ItemsRepeater.Layout>
+                                                <ItemsRepeater.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <Button
+                                                            Classes="wordButton"
+                                                            Content="{Binding Text}"
+                                                            Flyout="{StaticResource WordButtonFlyout}"
+                                                            ContextFlyout="{StaticResource WordButtonFlyout}" />
+                                                    </DataTemplate>
+                                                </ItemsRepeater.ItemTemplate>
+                                            </ItemsRepeater>
+                                            <Label
+                                                Content="{Binding EndSecond}"
+                                                HorizontalAlignment="Right"
+                                                Grid.Column="3" />
+                                            <Button
+                                                Classes="lineEditButton"
+                                                Grid.Column="4"
+                                                Content="⏱"
+                                                ToolTip.Tip="Edit timing"
+                                                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).EditLineCommand}"
+                                                CommandParameter="{Binding}" />
+                                        </Grid>
+                                    </Border>
+                                    <Button
+                                        Content="+"
+                                        Padding="0,0,100,0"
+                                        Margin="0,-10"
+                                        ToolTip.Tip="Add New Line Here"
+                                        Background="Transparent"
+                                        Foreground="DarkGray"
+                                        ZIndex="0"
+                                        Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).AddNewLineCommand}"
+                                        CommandParameter="{Binding}" />
+                                </StackPanel>
+
+
+                            </DataTemplate>
+                        </ItemsRepeater.ItemTemplate>
+                    </ItemsRepeater>
+                </StackPanel>
+
+            </ScrollViewer>
+            <Grid
+                x:Name="EditLinesWaveMapGrid"
+                Grid.Column="1"
+                Grid.Row="1"
+                SizeChanged="LayoutSizeChanged">
+                <controls:DrawnWaveformControl
+                    CanSelectIfEmpty="False"
+                    Waveform="{Binding FullLengthVocalsDraw}"
+                    WaveFloats="{Binding CurrentProcess.VocalsAudioFloats}"
+                    WaveStream="{Binding CurrentProcess.VocalsAudioStream}"
+                    WaveformFilePath="{Binding CurrentProcess.VocalsAudioFilePath}" />
+
+                <ItemsControl
+                    x:Name="LineRectanglesItems"
+                    ItemsSource="{Binding CurrentProcess.ChosenLines}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Styles>
+                        <Style
+                            x:DataType="library:LyricLine"
+                            Selector="ItemsControl > ContentPresenter">
+                            <Setter Property="Canvas.Top">
+                                <Setter.Value>
+                                    <MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+                                        <Binding Path="StartSecond" />
+                                        <Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).FullLengthVocalsDraw.WaveformLengthSeconds" />
+                                        <Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).FullLengthVocalsDraw.DesiredImageWidth" />
+                                    </MultiBinding>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter
+                                Property="Canvas.Left"
+                                Value="0" />
+                        </Style>
+                    </ItemsControl.Styles>
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate x:DataType="library:LyricLine">
+                            <controls:OverlayRectangle
+                                IsVertical="True"
+                                Stroke="{StaticResource HasSelectedStroke}"
+                                Fill="{StaticResource HasSelectedFill}"
+                                Width="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).FullLengthVocalsDraw.DesiredPeakHeight}"
+                                StartSecond="{Binding StartSecond}"
+                                EndSecond="{Binding EndSecond}"
+                                WaveformDraw="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).FullLengthVocalsDraw}" />
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+
+            </Grid>
+        </Grid>
+    </dialogHost:DialogHost>
+
+</UserControl>

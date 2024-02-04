@@ -1,0 +1,44 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.InsertNewLineDialog"
+             x:DataType="models:AddingLine">
+	<dialogs:ModalDialogChrome Title="Insert a New Line">
+		<StackPanel>
+			<TextBlock TextWrapping="Wrap">
+				Enter the text for the new line.
+			</TextBlock>
+			<TextBlock TextWrapping="Wrap">
+				(To separate syllables, use a | (pipe) character.)
+			</TextBlock>
+			<Grid ColumnDefinitions="36,*,36" RowDefinitions="*,*,*,*">
+				<Label FontSize="10" Content="{Binding PreviousLine.StartSecond}" />
+				<Label Grid.Column="1" HorizontalAlignment="Center" Content="{Binding PreviousLine.Text}" />
+				<Label FontSize="10" Grid.Column="2" HorizontalAlignment="Right" Content="{Binding PreviousLine.EndSecond}" />
+
+				<TextBox HorizontalContentAlignment="Center" Grid.Row="1" Grid.Column="1" Text="{Binding EnteredText}" Margin="0, 10" />
+
+				<Label Grid.Row="2" FontSize="10" Content="{Binding NextLine.StartSecond}" />
+				<Label Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Content="{Binding NextLine.Text}" />
+				<Label Grid.Row="2" FontSize="10" Grid.Column="2" HorizontalAlignment="Right" Content="{Binding NextLine.EndSecond}" />
+			</Grid>
+			<StackPanel Orientation="Horizontal" HorizontalAlignment="Right"
+						Margin="0,10,0,0">
+				<Button
+					Content="Create"
+					Classes="accent"
+					Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+					CommandParameter="{Binding}" />
+
+				<Button
+					Content="Cancel"
+					Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}" />
+			</StackPanel>
+		</StackPanel>
+	</dialogs:ModalDialogChrome>
+</UserControl>

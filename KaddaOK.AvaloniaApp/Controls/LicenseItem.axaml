@@ -1,0 +1,35 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KaddaOK.AvaloniaApp.Controls.LicenseItem">
+	<UserControl.Resources>
+		<SolidColorBrush Color="#FF3C4043" x:Key="LicenseItemColor" />
+    </UserControl.Resources>
+    <UserControl.Template>
+        <ControlTemplate>
+			<Expander HorizontalAlignment="Stretch" Background="{StaticResource LicenseItemColor}" BorderBrush="{StaticResource LicenseItemColor}"
+                      MinHeight="32" Padding="0" Margin="15,5">
+				<Expander.Styles>
+                    <Style Selector="Expander /template/ ToggleButton">
+                        <Setter Property="Background" Value="{StaticResource LicenseItemColor}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource LicenseItemColor}" />
+						<Setter Property="MinHeight" Value="32" />
+						<Setter Property="Cursor" Value="Hand" />
+						<Setter Property="FontSize" Value="12" />
+                    </Style>
+                    <Style Selector="Expander /template/ ToggleButton Border:pointerover">
+                        <Setter Property="Background" Value="{StaticResource LicenseItemColor}" />
+                        <Setter Property="BorderBrush" Value="{StaticResource LicenseItemColor}" />
+                    </Style>
+                </Expander.Styles>
+                <Expander.Header>
+					<TextBlock FontWeight="Bold" Text="{TemplateBinding PackageName}" />
+                </Expander.Header>
+                <TextBlock Padding="10,0" FontFamily="Consolas,Courier New" TextWrapping="Wrap" Text="{TemplateBinding Content}" xml:space="preserve" />
+            </Expander>
+        </ControlTemplate>
+    </UserControl.Template>
+</UserControl>

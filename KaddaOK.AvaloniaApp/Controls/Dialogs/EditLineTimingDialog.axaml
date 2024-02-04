@@ -1,0 +1,467 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+             xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+             xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+             xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+             xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.EditLineTimingDialog"
+             x:DataType="models:EditingLine">
+	<dialogs:ModalDialogChrome Title="Edit Line Timing">
+		<Grid
+		RowDefinitions="50,85,100,85,90,50"
+		ColumnDefinitions="800">
+			<StackPanel
+				x:Name="ShuttleControls"
+				Orientation="Horizontal"
+				HorizontalAlignment="Center">
+				<Button
+					Content="⏵"
+					Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).PlayCommand}"
+					CommandParameter="{Binding}" />
+				<Button
+					Content="⏺"
+					Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).RecordCommand}"
+					CommandParameter="{Binding}" />
+				<Button
+					x:Name="StopButton"
+					Content="⏹"
+					Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).StopCommand}"
+					CommandParameter="{Binding}" />
+			</StackPanel>
+			<ItemsRepeater
+				x:Name="OldWordsRepeater"
+				Grid.Row="1"
+				ItemsSource="{Binding OriginalLine.Words}"
+				Margin="10,0"
+				HorizontalAlignment="Center">
+				<ItemsRepeater.Styles>
+					<Style Selector="Border">
+						<Setter
+							Property="BorderThickness"
+							Value="1" />
+						<Setter
+							Property="BorderBrush"
+							Value="#FF555555" />
+						<Setter
+							Property="Background"
+							Value="#FF333333" />
+						<Setter
+							Property="Margin"
+							Value="2,2,2,8" />
+						<Setter
+							Property="CornerRadius"
+							Value="2" />
+					</Style>
+					<Style Selector="Label">
+						<Setter
+							Property="FontSize"
+							Value="22" />
+						<Setter
+							Property="FontFamily"
+							Value="Arial" />
+						<Setter
+							Property="HorizontalAlignment"
+							Value="Center" />
+					</Style>
+					<Style Selector="Label.timeDetail">
+						<Setter
+							Property="FontSize"
+							Value="10" />
+					</Style>
+				</ItemsRepeater.Styles>
+				<ItemsRepeater.Layout>
+					<StackLayout Orientation="Horizontal" />
+				</ItemsRepeater.Layout>
+				<ItemsRepeater.ItemTemplate>
+					<DataTemplate DataType="library:LyricWord">
+						<Border>
+							<StackPanel>
+								<Label
+									Classes="timeDetail"
+									Content="{Binding StartSecond, Converter={StaticResource RoundingConverter}}" />
+								<Label Content="{Binding Text}" />
+								<Label
+									Classes="timeDetail"
+									Content="{Binding EndSecond, Converter={StaticResource RoundingConverter}}" />
+							</StackPanel>
+
+						</Border>
+					</DataTemplate>
+				</ItemsRepeater.ItemTemplate>
+			</ItemsRepeater>
+			<Grid
+				Grid.Row="2"
+				x:Name="WaveformOverlayGrid"
+				ColumnDefinitions="800"
+				RowDefinitions="50,50">
+				<Grid.Styles>
+					<Style Selector="Label.readoutIsRecording">
+						<Setter
+							Property="Foreground"
+							Value="Red" />
+					</Style>
+				</Grid.Styles>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth}"/>
+				</Grid.ColumnDefinitions>
+				<controls:WaveformImage
+					Grid.RowSpan="2"
+					WaveStream="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream}"
+					WaveformData="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveFloats}"
+                        />
+				<Label
+					x:Name="PlaybackPositionReadout"
+					Classes.readoutIsRecording="{Binding IsRecording}"
+					Content="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentCaretPositionSecondsInFile, Converter={StaticResource RoundingConverter}}" />
+				<Canvas
+					x:Name="CaretCanvas"
+					Grid.RowSpan="2">
+					<Canvas.Styles>
+						<Style Selector="Rectangle#PlaybackPositionCaret">
+							<Setter Property="Canvas.Left">
+								<Setter.Value>
+									<MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentCaretPositionSecondsInFile" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream.TotalTime.TotalSeconds" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds" />
+									</MultiBinding>
+								</Setter.Value>
+							</Setter>
+						</Style>
+						<Style Selector="Rectangle.caretIsPlaying">
+							<Setter
+								Property="Fill"
+								Value="Green" />
+						</Style>
+						<Style Selector="Rectangle.caretIsRecording">
+							<Setter
+								Property="Fill"
+								Value="Red" />
+						</Style>
+					</Canvas.Styles>
+					<Rectangle
+						x:Name="PlaybackPositionCaret"
+						IsVisible="{Binding IsPlaying}"
+						Width="2"
+						Height="100"
+						Canvas.Top="0"
+						Classes.caretIsPlaying="{Binding !IsRecording}"
+						Classes.caretIsRecording="{Binding IsRecording}">
+					</Rectangle>
+					<Label Canvas.Bottom="0" Canvas.Left="0" 
+                           Content="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds, Converter={StaticResource RoundingConverter}}" />
+                    <Label Canvas.Bottom="0" Canvas.Right="0"
+                           Content="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineRightEdgeSeconds, Converter={StaticResource RoundingConverter}}" />
+				</Canvas>
+
+
+				<ItemsControl
+					Grid.Row="0"
+					x:Name="OriginalWordRectangles"
+					ItemsSource="{Binding OriginalLine.Words}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Canvas />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.Styles>
+						<Style
+							x:DataType="library:LyricWord"
+							Selector="ItemsControl > ContentPresenter">
+							<Setter Property="Canvas.Left">
+								<Setter.Value>
+									<MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+										<Binding Path="StartSecond" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream.TotalTime.TotalSeconds" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds" />
+									</MultiBinding>
+								</Setter.Value>
+							</Setter>
+							<Setter
+								Property="Canvas.Top"
+								Value="0" />
+						</Style>
+						<Style Selector="Rectangle">
+							<Setter
+								Property="Stroke"
+								Value="#CCFFFFFF" />
+							<Setter
+								Property="Fill"
+								Value="#56DFDFDF" />
+						</Style>
+					</ItemsControl.Styles>
+					<ItemsControl.DataTemplates>
+						<DataTemplate x:DataType="library:LyricWord">
+							<Rectangle
+								StrokeThickness="1"
+								Height="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DesiredOverlayRectangleHeight}">
+								<Rectangle.Width>
+									<MultiBinding Converter="{StaticResource WaveformToLengthConverter}">
+										<Binding Path="StartSecond" />
+										<Binding Path="EndSecond" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream.TotalTime.TotalSeconds" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds" />
+									</MultiBinding>
+								</Rectangle.Width>
+							</Rectangle>
+						</DataTemplate>
+					</ItemsControl.DataTemplates>
+				</ItemsControl>
+				<ItemsControl
+					Grid.Row="1"
+					x:Name="NewTimingWordRectangles"
+					PointerPressed="NewRectanglesItemsControl_PointerPressed"
+					PointerMoved="NewRectanglesItemsControl_PointerMoved"
+					PointerReleased="NewRectanglesItemsControl_PointerReleased"
+					ItemsSource="{Binding NewTiming}">
+					<ItemsControl.ItemsPanel>
+						<ItemsPanelTemplate>
+							<Canvas />
+						</ItemsPanelTemplate>
+					</ItemsControl.ItemsPanel>
+					<ItemsControl.Styles>
+						<Style
+							x:DataType="models:TimingWord"
+							Selector="ItemsControl > ContentPresenter">
+							<Setter Property="Canvas.Left">
+								<Setter.Value>
+									<MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+										<Binding Path="StartSecond" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream.TotalTime.TotalSeconds" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds" />
+									</MultiBinding>
+								</Setter.Value>
+							</Setter>
+							<Setter
+								Property="Canvas.Top"
+								Value="0" />
+						</Style>
+						<Style Selector="controls|OverlayRectangle">
+							<Setter
+								Property="Stroke"
+								Value="#CCFFFFFF" />
+                            <Setter
+								Property="Fill"
+								Value="#56DFDFDF" />
+							<Setter Property="StrokeThickness" Value="1" />
+						</Style>
+                        <Style Selector="controls|OverlayRectangle:pointerover">
+
+                        </Style>
+						<Style Selector="controls|OverlayRectangle.IsRunning">
+							<Setter
+								Property="Stroke"
+								Value="#CCDFA100" />
+							<Setter
+								Property="Fill"
+								Value="#56DFA100" />
+						</Style>
+					</ItemsControl.Styles>
+					<ItemsControl.DataTemplates>
+						<DataTemplate x:DataType="models:TimingWord">
+                            <controls:OverlayRectangle
+                                Height="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DesiredOverlayRectangleHeight}"
+                                StartSecond="{Binding StartSecond}"
+                                EndSecond="{Binding EndSecond}"
+                                WaveformDraw="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform}"
+								StartOffsetSecond="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds}"
+								AllowDrag="True"
+                                Classes.isRunning="{Binding IsRunning}"
+                                Classes.isNext="{Binding IsNext}"
+                                Classes.hasFinished="{Binding HasFinished}"
+                            />
+							<!--<Rectangle
+								StrokeThickness="1"
+								Height="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DesiredOverlayRectangleHeight}"
+								Classes.isRunning="{Binding IsRunning}"
+								Classes.isNext="{Binding IsNext}"
+								Classes.hasFinished="{Binding HasFinished}">
+								<Rectangle.Width>
+									<MultiBinding Converter="{StaticResource WaveformToLengthConverter}">
+										<Binding Path="StartSecond" />
+										<Binding Path="EndSecond" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveStream.TotalTime.TotalSeconds" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineClipWaveform.DesiredImageWidth" />
+										<Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CurrentLineOffsetSeconds" />
+									</MultiBinding>
+								</Rectangle.Width>
+							</Rectangle>-->
+						</DataTemplate>
+					</ItemsControl.DataTemplates>
+				</ItemsControl>
+			</Grid>
+			<ItemsRepeater
+				x:Name="NewWordsRepeater"
+				Grid.Row="3"
+				ItemsSource="{Binding NewTiming}"
+				Margin="10,0"
+				HorizontalAlignment="Center">
+				<ItemsRepeater.Styles>
+					<Style Selector="Border">
+						<Setter
+							Property="BorderThickness"
+							Value="1" />
+						<Setter
+							Property="BorderBrush"
+							Value="#FF555555" />
+						<Setter
+							Property="Background"
+							Value="#FF333333" />
+						<Setter
+							Property="Margin"
+							Value="2,8,2,2" />
+						<Setter
+							Property="CornerRadius"
+							Value="2" />
+					</Style>
+					<Style Selector="Label">
+						<Setter
+							Property="FontSize"
+							Value="22" />
+						<Setter
+							Property="FontFamily"
+							Value="Arial" />
+						<Setter
+							Property="HorizontalAlignment"
+							Value="Center" />
+					</Style>
+					<Style Selector="Label.timeDetail">
+						<Setter
+							Property="FontSize"
+							Value="10" />
+					</Style>
+					<Style Selector="Border.hasFinished">
+						<Setter
+							Property="BorderBrush"
+							Value="Transparent" />
+						<Setter
+							Property="Background"
+							Value="Transparent" />
+					</Style>
+					<Style Selector="Border.hasFinished > Label">
+						<Setter
+							Property="Foreground"
+							Value="Green" />
+					</Style>
+					<Style Selector="Border.isRunning">
+						<Setter
+							Property="BorderBrush"
+							Value="Orange" />
+						<Setter
+							Property="Background"
+							Value="DarkOrange" />
+					</Style>
+					<Style Selector="Border.isRunning > Label">
+						<Setter
+							Property="Foreground"
+							Value="White" />
+						<Setter
+							Property="FontWeight"
+							Value="Bold" />
+					</Style>
+					<Style Selector="Border.isNext">
+						<Setter
+							Property="BorderBrush"
+							Value="Teal" />
+						<Setter
+							Property="Background"
+							Value="DarkBlue" />
+					</Style>
+					<Style Selector="Border.isNext > Label">
+						<Setter
+							Property="Foreground"
+							Value="Teal" />
+						<Setter
+							Property="FontWeight"
+							Value="Bold" />
+					</Style>
+				</ItemsRepeater.Styles>
+				<ItemsRepeater.Layout>
+					<StackLayout Orientation="Horizontal" />
+				</ItemsRepeater.Layout>
+				<ItemsRepeater.ItemTemplate>
+					<DataTemplate DataType="models:TimingWord">
+						<Border
+							Classes.hasFinished="{Binding HasFinished}"
+							Classes.isRunning="{Binding IsRunning}"
+							Classes.isNext="{Binding IsNext}">
+							<Grid RowDefinitions="18,*,18">
+								<Label
+									Classes="timeDetail"
+									Content="{Binding StartSecond, Converter={StaticResource RoundingConverter}}">
+									<Label.IsVisible>
+										<MultiBinding Converter="{x:Static BoolConverters.Or}">
+											<Binding Path="!$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineBeingEdited.IsRecording" />
+											<Binding Path="IsRunning" />
+											<Binding Path="HasFinished" />
+										</MultiBinding>
+									</Label.IsVisible>
+								</Label>
+								<Label
+									Grid.Row="1"
+									HorizontalAlignment="Center"
+									Content="{Binding Text}" />
+								<Label
+									Grid.Row="2"
+									Classes="timeDetail"
+									Content="{Binding EndSecond, Converter={StaticResource RoundingConverter}}">
+									<Label.IsVisible>
+										<MultiBinding Converter="{x:Static BoolConverters.Or}">
+											<Binding Path="!$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LineBeingEdited.IsRecording" />
+											<Binding Path="HasFinished" />
+										</MultiBinding>
+									</Label.IsVisible>
+								</Label>
+							</Grid>
+
+						</Border>
+					</DataTemplate>
+				</ItemsRepeater.ItemTemplate>
+			</ItemsRepeater>
+
+			<TextBlock
+				Grid.Row="4"
+				TextWrapping="Wrap"
+				Margin="10"
+				FontSize="12">
+				The current timing is on the top and the new timing is on the bottom.
+				Preview the new timing by pushing the ⏵ button.
+				Record new timing by pushing the ⏺ button.
+				While recording, hit the → arrow key when a word begins.
+				To stop a word earlier than the start of the next word, hit the ↓ arrow key.
+				Recording will stop automatically when → or ↓ are pressed on the last word.
+				You can re-record as many times as you want.
+				Press Apply to use your new timing, or Cancel to keep the existing timing.
+			</TextBlock>
+
+			<StackPanel
+				x:Name="ActionButtons"
+				Grid.Row="5"
+				Orientation="Horizontal"
+				HorizontalAlignment="Right"
+				Margin="0,10,0,0">
+				<Button
+					Content="Apply"
+					Classes="accent"
+					IsEnabled="{Binding !IsRecording}"
+					Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+					CommandParameter="{Binding}" />
+
+				<Button
+					Content="Cancel"
+					IsEnabled="{Binding !IsRecording}"
+					Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}" />
+			</StackPanel>
+		</Grid>
+	</dialogs:ModalDialogChrome>
+</UserControl>

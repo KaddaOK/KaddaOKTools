@@ -1,0 +1,51 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.EditSyllableTextDialog"
+             x:DataType="library:LyricWord">
+    <dialogs:ModalDialogChrome Title="Edit Text of Syllable">
+        <Grid RowDefinitions="*,*,*,*" MaxWidth="500">
+            <Label
+                Content="{Binding StartSecond}"
+                HorizontalAlignment="Left" />
+            <Label
+                Content="{Binding Text}"
+                HorizontalAlignment="Center" />
+            <Label
+                Content="{Binding EndSecond}"
+                HorizontalAlignment="Right" />
+			<TextBlock Grid.Row="1" TextWrapping="Wrap">
+                Enter the new text for this timed syllable. (You may break it up into multiple words or syllables by using space or | characters, 
+                and the timing dialog will open automatically for you to check the new distribution.)
+            </TextBlock>
+            <TextBox
+                Grid.Row="2"
+                Margin="0 8 0 0"
+                HorizontalAlignment="Stretch"
+                x:Name="EditWordTextBox"
+                Text="{Binding Text, Mode=OneWay}" />
+            <StackPanel
+                Grid.Row="3"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
+                <Button
+                    Content="Apply"
+                    Classes="accent"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                    CommandParameter="{Binding #EditWordTextBox.Text}" />
+
+                <Button
+                    Content="Cancel"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}" />
+            </StackPanel>
+
+        </Grid>
+
+    </dialogs:ModalDialogChrome>
+</UserControl>

@@ -1,0 +1,37 @@
+name: Publish Release
+
+on:
+  push:
+    branches: ["release"]
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Set version number
+        shell: pwsh
+        run: |
+          $version = "0.0.7"
+          echo $version
+          echo "VERSION_NUMBER=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Publish for win-x64
+        run: dotnet publish KaddaOK.AvaloniaApp.Windows/KaddaOK.AvaloniaApp.Windows.csproj /p:Version=${{ env.VERSION_NUMBER }}.0 /p:Configuration=Release /p:RuntimeIdentifier=win-x64 /p:PublishSingleFile=true /p:PublishDir=${{ github.workspace }}/publish
+      - name: Zip for win-x64
+        shell: pwsh
+        run: Compress-Archive -Path ${{ github.workspace }}/publish/* -DestinationPath KaddaOKTools_win-x64_${{ env.VERSION_NUMBER }}.zip
+      - name: Upload win-x64 Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: KaddaOKTools_win-x64_${{ env.VERSION_NUMBER }}
+          path: KaddaOKTools_win-x64_${{ env.VERSION_NUMBER }}.zip
+      - name: Create Release
+        uses: ncipollo/release-action@v1.13.0
+        with:
+          artifacts: "KaddaOKTools_win-x64_${{ env.VERSION_NUMBER }}.zip"
+          tag: ${{ env.VERSION_NUMBER }}

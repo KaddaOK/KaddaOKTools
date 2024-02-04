@@ -1,0 +1,40 @@
+<Window
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:vm="using:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.MainWindow"
+    Icon="/Assets/KaddaOKIcon.png"
+    Title="KaddaOK Tools"
+    Background="Transparent"
+    SystemDecorations="Full"
+    Position="0,0"
+    Width="1000"
+    MinWidth="800"
+    Height="800"
+    WindowState="Normal"
+    WindowStartupLocation="CenterScreen"
+    x:Name="Main"
+    x:CompileBindings="True"
+    x:DataType="vm:MainViewModel"
+    TransparencyLevelHint="AcrylicBlur"
+    ExtendClientAreaToDecorationsHint="True"
+    RequestedThemeVariant="Dark">
+    <Panel>
+        <ExperimentalAcrylicBorder CornerRadius="16">
+            <ExperimentalAcrylicBorder.Material>
+                <ExperimentalAcrylicMaterial
+                    BackgroundSource="Digger"
+                    TintColor="Black"
+                    TintOpacity="1"
+                    MaterialOpacity="0.5" />
+            </ExperimentalAcrylicBorder.Material>
+            <views:MainView />
+        </ExperimentalAcrylicBorder>
+    </Panel>
+</Window>

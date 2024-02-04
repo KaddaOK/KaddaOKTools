@@ -1,0 +1,132 @@
+<Application
+        xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+        xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+        x:Class="KaddaOK.AvaloniaApp.App"
+        RequestedThemeVariant="Dark"
+        >
+    <!-- "Default" ThemeVariant follows system theme variant. "Dark" or "Light" are other available
+    options. -->
+
+    <Application.Styles>
+        <FluentTheme>
+            <FluentTheme.Palettes>
+                <ColorPaletteResources
+                        x:Key="Light"
+                        Accent="#ffff6e94"
+                        AltHigh="White"
+                        AltLow="White"
+                        AltMedium="White"
+                        AltMediumHigh="White"
+                        AltMediumLow="White"
+                        BaseHigh="Black"
+                        BaseLow="#ff5cdaed"
+                        BaseMedium="#ff2599ac"
+                        BaseMediumHigh="#ff006d81"
+                        BaseMediumLow="#ff128397"
+                        ChromeAltLow="#ff006d81"
+                        ChromeBlackHigh="Black"
+                        ChromeBlackLow="#ff5cdaed"
+                        ChromeBlackMedium="#ff006d81"
+                        ChromeBlackMediumLow="#ff2599ac"
+                        ChromeDisabledHigh="#ff5cdaed"
+                        ChromeDisabledLow="#ff2599ac"
+                        ChromeGray="#ff128397"
+                        ChromeHigh="#ff5cdaed"
+                        ChromeLow="#ffb1f4fe"
+                        ChromeMedium="#ffa0effb"
+                        ChromeMediumLow="#ffb1f4fe"
+                        ChromeWhite="White"
+                        ListLow="#ffa0effb"
+                        ListMedium="#ff5cdaed"
+                        RegionColor="White"
+                        />
+                <ColorPaletteResources
+                        x:Key="Dark"
+                        Accent="#ffef3b6b"
+                        AltHigh="Black"
+                        AltLow="Black"
+                        AltMedium="Black"
+                        AltMediumHigh="Black"
+                        AltMediumLow="Black"
+                        BaseHigh="White"
+                        BaseLow="#ff048ca1"
+                        BaseMedium="#ff73c8d5"
+                        BaseMediumHigh="#ff8fd7e2"
+                        BaseMediumLow="#ff3caabb"
+                        ChromeAltLow="#ff8fd7e2"
+                        ChromeBlackHigh="Black"
+                        ChromeBlackLow="#ff8fd7e2"
+                        ChromeBlackMedium="Black"
+                        ChromeBlackMediumLow="Black"
+                        ChromeDisabledHigh="#ff048ca1"
+                        ChromeDisabledLow="#ff73c8d5"
+                        ChromeGray="#ff57b9c8"
+                        ChromeHigh="#ff57b9c8"
+                        ChromeLow="#ff014963"
+                        ChromeMedium="#ff025a72"
+                        ChromeMediumLow="#ff037b91"
+                        ChromeWhite="White"
+                        ListLow="#ff025a72"
+                        ListMedium="#ff048ca1"
+                        RegionColor="#ff030a12"
+                        />
+            </FluentTheme.Palettes>
+        </FluentTheme>
+        <dialogHost:DialogHostStyles />
+        <Style Selector="Button.inline">
+            <Setter
+                    Property="Background"
+                    Value="Transparent"
+                    />
+            <Setter
+                    Property="Margin"
+                    Value="0,-1,0,0"
+                    />
+            <Setter
+                    Property="Padding"
+                    Value="0"
+                    />
+        </Style>
+        <Style Selector="Button.inline > AccessText">
+            <Setter
+                    Property="TextDecorations"
+                    Value="Underline"
+                    />
+        </Style>
+        <Style Selector="Button.inline:pointerover > AccessText">
+            <Setter
+                    Property="Foreground"
+                    Value="#FF86FFFD"
+                    />
+        </Style>
+        <Style Selector="Button">
+            <Setter
+                    Property="Cursor"
+                    Value="Hand"
+                    />
+        </Style>
+        <Style Selector="Button:pointerover">
+            <Setter
+                    Property="Cursor"
+                    Value="Hand"
+                    />
+        </Style>
+        <Style Selector="Expander /template/ ToggleButton">
+            <Setter
+                Property="Cursor"
+                Value="Hand"
+            />
+        </Style>
+		<Style Selector="dialogHost|DialogHost">
+			<Setter Property="DialogMargin" Value="0" />
+			<Setter Property="dialogHost:DialogHostStyle.CornerRadius" Value="10" />
+		</Style>
+    </Application.Styles>
+	<Application.Resources>
+        <local:WaveformToPointConverter x:Key="WaveformToPointConverter" />
+        <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
+        <local:RoundingConverter x:Key="RoundingConverter" />
+    </Application.Resources>
+</Application>

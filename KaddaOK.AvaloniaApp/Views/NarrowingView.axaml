@@ -1,0 +1,286 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.NarrowingView"
+    x:DataType="vm:NarrowingViewModel">
+    <UserControl.Resources>
+        <SolidColorBrush
+            x:Key="NeedsAttentionFill"
+            Color="#56FFD800" />
+        <SolidColorBrush
+            x:Key="NeedsAttentionStroke"
+            Color="#B0FFD800" />
+        <SolidColorBrush
+            x:Key="HasSelectedFill"
+            Color="#5600AA00" />
+        <SolidColorBrush
+            x:Key="HasSelectedStroke"
+            Color="#B000FF00" />
+        <SolidColorBrush
+            x:Key="IsIgnoredFill"
+            Color="#56808080" />
+        <SolidColorBrush
+            x:Key="IsIgnoredStroke"
+            Color="#B0AAAAAA" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style
+            x:DataType="library:LinePossibilities"
+            Selector="ItemsControl > ContentPresenter">
+            <Setter Property="Canvas.Top">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+                        <Binding Path="StartSecond" />
+                        <Binding Path="$parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).FullLengthVocalsDraw.WaveformLengthSeconds" />
+                        <Binding Path="$parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).FullLengthVocalsDraw.DesiredImageWidth" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="Canvas.Left"
+                Value="0" />
+        </Style>
+    </UserControl.Styles>
+    <Design.DataContext>
+        <designTime:DesignTimeNarrowingViewModel />
+    </Design.DataContext>
+    <Grid
+        x:Name="NarrowingOuterGrid"
+        ColumnDefinitions="*, 100">
+        <ScrollViewer x:Name="PossibilitiesScrollViewer">
+            <StackPanel>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    Margin="10,10,10,0"
+                    FontSize="12">
+                    Each phrase detected by the speech-to-text service has a number of possible
+                    wordings. On this screen, touch the wording for each phrase that is the most
+                    correct (or has the most useful timed syllables). If you don't want to use a
+                    phrase at all, you can ignore it by clicking its speaker icon. When you have
+                    selected a wording or ignored every phrase, you can continue to the next screen.
+                </TextBlock>
+                <ItemsControl
+                    x:Name="PossibilitiesItems"
+                    Margin="15"
+                    ItemsSource="{Binding CurrentProcess.DetectedLinePossibilities}">
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate x:DataType="library:LinePossibilities">
+                            <Expander
+                                IsExpanded="True"
+                                Margin="0,5"
+                                HorizontalAlignment="Stretch"
+                                Classes.isIgnored="{Binding IsIgnored}"
+                                Classes.hasSelected="{Binding HasSelected}">
+                                <Classes.needsAttention>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!IsIgnored" />
+                                        <Binding Path="!HasSelected" />
+                                    </MultiBinding>
+                                </Classes.needsAttention>
+                                <Expander.Styles>
+                                    <Style Selector="Expander.needsAttention /template/ ToggleButton, Expander.needsAttention:pointerover /template/ ToggleButton Border">
+                                        <Setter
+                                            Property="Border.Background"
+                                            Value="{StaticResource NeedsAttentionFill}" />
+                                        <Setter
+                                            Property="Border.BorderBrush"
+                                            Value="{StaticResource NeedsAttentionStroke}" />
+                                    </Style>
+                                    <Style Selector="Expander.hasSelected /template/ ToggleButton, Expander.hasSelected:pointerover /template/ ToggleButton Border">
+                                        <Setter
+                                            Property="Border.Background"
+                                            Value="{StaticResource HasSelectedFill}" />
+                                        <Setter
+                                            Property="Border.BorderBrush"
+                                            Value="{StaticResource HasSelectedStroke}" />
+                                    </Style>
+                                    <Style Selector="Expander.isIgnored /template/ ToggleButton, Expander.isIgnored:pointerover /template/ ToggleButton Border">
+                                        <Setter
+                                            Property="Border.Background"
+                                            Value="{StaticResource IsIgnoredFill}" />
+                                        <Setter
+                                            Property="Border.BorderBrush"
+                                            Value="{StaticResource IsIgnoredStroke}" />
+                                    </Style>
+                                </Expander.Styles>
+                                <Expander.Header>
+                                    <Grid
+                                        ColumnDefinitions="60,23,*,60"
+                                        Classes.isIgnored="{Binding IsIgnored}"
+                                        Classes.hasSelected="{Binding HasSelected}">
+                                        <Label Content="{Binding StartSecond}" />
+                                        <Button
+                                            Grid.Column="1"
+                                            Background="Transparent"
+                                            Command="{Binding $parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).SetLineIgnoredCommand}">
+                                            <Button.CommandParameter>
+                                                <MultiBinding>
+                                                    <Binding />
+                                                    <Binding Path="$parent[Expander]" />
+                                                </MultiBinding>
+                                            </Button.CommandParameter>
+                                            <Image
+                                                Width="16"
+                                                Height="16"
+                                                Source="{SvgImage /Assets/Speaker_Icon.svg}"
+                                                ToolTip.Tip="Ignore"
+                                                Classes.isIgnored="{Binding IsIgnored}"
+                                                Classes.hasSelected="{Binding HasSelected}">
+                                                <Image.Styles>
+                                                    <Style Selector="Image.isIgnored">
+                                                        <Setter
+                                                            Property="Source"
+                                                            Value="{SvgImage /Assets/Speaker_Icon.svg}" />
+                                                        <Setter
+                                                            Property="ToolTip.Tip"
+                                                            Value="Unignore" />
+                                                    </Style>
+                                                </Image.Styles>
+                                            </Image>
+                                        </Button>
+
+                                        <Label
+                                            Grid.Column="2"
+                                            IsVisible="{Binding IsIgnored}"
+                                            Content="(ignored)" />
+                                        <Label
+                                            Grid.Column="2"
+                                            Content="{Binding SelectedLyric.Text}">
+                                            <Label.IsVisible>
+                                                <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                                    <Binding Path="HasSelected" />
+                                                    <Binding Path="!IsIgnored" />
+                                                </MultiBinding>
+                                            </Label.IsVisible>
+                                        </Label>
+                                        <Label
+                                            Content="{Binding EndSecond}"
+                                            Grid.Column="3"
+                                            HorizontalAlignment="Right" />
+                                    </Grid>
+                                </Expander.Header>
+                                <ItemsRepeater ItemsSource="{Binding Lyrics}">
+                                    <ItemsRepeater.ItemTemplate>
+                                        <DataTemplate x:DataType="library:LyricLine">
+                                            <Grid ColumnDefinitions="70,*,70">
+                                                <Label Content="{Binding StartSecond}" />
+                                                <Button
+                                                    HorizontalAlignment="Stretch"
+                                                    Grid.Column="1"
+                                                    Command="{Binding $parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).SetPossibleLineSelectedCommand}">
+                                                    <Button.CommandParameter>
+                                                        <MultiBinding>
+                                                            <Binding />
+                                                            <Binding Path="$parent[Expander]" />
+                                                        </MultiBinding>
+                                                    </Button.CommandParameter>
+													<TextBlock Text="{Binding Text}" TextWrapping="Wrap" />
+                                                </Button>
+                                                <Label
+                                                    Content="{Binding EndSecond}"
+                                                    Grid.Column="2"
+                                                    HorizontalAlignment="Right" />
+                                            </Grid>
+
+                                        </DataTemplate>
+                                    </ItemsRepeater.ItemTemplate>
+                                </ItemsRepeater>
+                            </Expander>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </StackPanel>
+
+        </ScrollViewer>
+        <Grid
+            RowDefinitions="*,50"
+            x:Name="NarrowingWaveMapGrid"
+            Grid.Column="1">
+            <Grid SizeChanged="LayoutSizeChanged">
+                <controls:DrawnWaveformControl
+                    CanSelectIfEmpty="False"
+                    Waveform="{Binding FullLengthVocalsDraw}"
+                    WaveFloats="{Binding CurrentProcess.VocalsAudioFloats}"
+                    WaveStream="{Binding CurrentProcess.VocalsAudioStream}"
+                    WaveformFilePath="{Binding CurrentProcess.VocalsAudioFilePath}" />
+                <ItemsControl
+                    x:Name="LineRectanglesItems"
+                    ItemsSource="{Binding CurrentProcess.DetectedLinePossibilities}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.DataTemplates>
+                        <DataTemplate x:DataType="library:LinePossibilities">
+                            <controls:OverlayRectangle
+                                IsVertical="True"
+                                Classes.hasSelected="{Binding HasSelected}"
+                                Classes.isIgnored="{Binding IsIgnored}"
+                                Width="{Binding $parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).FullLengthVocalsDraw.DesiredPeakHeight}"
+                                StartSecond="{Binding StartSecond}"
+                                EndSecond="{Binding EndSecond}"
+                                WaveformDraw="{Binding $parent[views:NarrowingView].((vm:NarrowingViewModel)DataContext).FullLengthVocalsDraw}">
+                                <Classes.needsAttention>
+                                    <MultiBinding Converter="{x:Static BoolConverters.And}">
+                                        <Binding Path="!HasSelected" />
+                                        <Binding Path="!IsIgnored" />
+                                    </MultiBinding>
+                                </Classes.needsAttention>
+                                <controls:OverlayRectangle.Styles>
+                                    <Style Selector="controls|OverlayRectangle.needsAttention">
+                                        <Setter
+                                            Property="Fill"
+                                            Value="#56FFD800" />
+                                        <Setter
+                                            Property="Stroke"
+                                            Value="#B0FFD800" />
+                                    </Style>
+                                    <Style Selector="controls|OverlayRectangle.hasSelected">
+                                        <Setter
+                                            Property="Fill"
+                                            Value="#5600AA00" />
+                                        <Setter
+                                            Property="Stroke"
+                                            Value="#B000FF00" />
+                                    </Style>
+                                    <Style Selector="controls|OverlayRectangle.isIgnored">
+                                        <Setter
+                                            Property="Fill"
+                                            Value="#56808080" />
+                                        <Setter
+                                            Property="Stroke"
+                                            Value="#B0AAAAAA" />
+                                    </Style>
+                                </controls:OverlayRectangle.Styles>
+                            </controls:OverlayRectangle>
+                        </DataTemplate>
+                    </ItemsControl.DataTemplates>
+                </ItemsControl>
+            </Grid>
+
+
+            <Button
+                Content="Next Step"
+                Classes="accent"
+                Grid.Row="1"
+                Margin="5"
+                Padding="10"
+                Command="{Binding GoToNextStepCommand}"
+                local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonNarrowingStepIsIncomplete}"
+                IsEnabled="{Binding CurrentProcess.NarrowingStepIsComplete}" />
+        </Grid>
+    </Grid>
+</UserControl>

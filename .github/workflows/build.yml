@@ -1,0 +1,36 @@
+name: Build and test
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set version number
+        shell: pwsh
+        run: |
+          $version = "0.0.$(Get-Date -Format "yyMM.dd")$(($Env:GITHUB_RUN_NUMBER % 100).ToString("00"))"
+          echo $version
+          echo "VERSION_NUMBER=$version" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
+      - uses: actions/checkout@v4
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 7.0.x
+      - name: Restore dependencies
+        run: dotnet restore -property:Version=${{ env.VERSION_NUMBER }}
+      - name: Build
+        run: dotnet build --no-restore -property:Version=${{ env.VERSION_NUMBER }}
+      - name: Test
+        run: dotnet test --no-build --verbosity normal --logger trx
+      - name: Report Tests
+        uses: dorny/test-reporter@v1.8.0
+        with:
+          reporter: dotnet-trx
+          path: "${{ github.workspace }}/**/*.trx"
+          name: Unit Tests

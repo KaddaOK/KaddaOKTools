@@ -1,0 +1,704 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    xmlns:system="clr-namespace:System;assembly=System.Runtime"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.RecognizeView"
+    x:DataType="vm:RecognizeViewModel"
+    Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}">
+    <UserControl.Resources>
+        <local:WaveformToPointConverter x:Key="WaveformToPointConverter" />
+        <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
+    </UserControl.Resources>
+    <UserControl.Styles>
+        <Style
+            x:DataType="library:LinePossibilities"
+            Selector="ItemsControl.linePossibilities > ContentPresenter">
+            <Setter Property="Canvas.Left">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+                        <Binding Path="StartSecond" />
+                        <Binding Path="$parent[views:RecognizeView].((vm:RecognizeViewModel)DataContext).FullLengthVocalsDraw.WaveformLengthSeconds" />
+                        <Binding Path="$parent[views:RecognizeView].((vm:RecognizeViewModel)DataContext).FullLengthVocalsDraw.DesiredImageWidth" />
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+            <Setter
+                Property="Canvas.Top"
+                Value="0" />
+        </Style>
+        <Style Selector="views|RecognizeView.isRunning">
+            <Setter
+                Property="Cursor"
+                Value="AppStarting" />
+        </Style>
+    </UserControl.Styles>
+    <Design.DataContext>
+        <designTime:DesignTimeRecognizeViewModel />
+    </Design.DataContext>
+    <Grid
+        Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
+        RowDefinitions="60,60,35,200,25,*">
+        <StackPanel
+            x:Name="RecognizeInstructionsPanel"
+            Margin="5">
+            <TextBlock
+                TextWrapping="Wrap"
+                FontSize="12"> This step uses <InlineUIContainer>
+                    <Button
+                        Classes="inline"
+                        Content="Azure Speech Service"
+                        Command="{Binding LinkToAzureSpeechServiceCommand}" />
+                </InlineUIContainer>
+                to interpret the vocals as text and get timing for each word. It will try to take
+                the lyrics provided into account while recognizing. </TextBlock>
+            <TextBlock
+                TextWrapping="Wrap"
+                FontSize="12">
+                You will need to create a Speech resource in an Azure account. (Currently a free
+                Azure account provides 5 free hours per month of speech-to-text.)
+                The Key and Location/Region values needed below can be found on the Overview tab of
+                the Speech resource. This app will hang on to these values
+                after you've used them once.
+            </TextBlock>
+        </StackPanel>
+        <Grid
+            Grid.Row="1"
+            x:Name="AzureSettingsGrid"
+            ColumnDefinitions="310, 140, 180, 140, *"
+            RowDefinitions="20,*">
+
+            <Label
+                Content="Key"
+                Padding="5,0" />
+            <TextBox
+                Margin="5"
+                Grid.Row="1"
+                Text="{Binding RecognizeSettings.AzureSpeechKey, Mode=TwoWay}"
+                Watermark="Key 1 or 2 from Speech Service"
+                PasswordChar="•"
+                IsEnabled="{Binding !CurrentProcess.RecognitionIsRunning}"
+                MinWidth="300" />
+
+            <Label
+                Grid.Column="1"
+                Content="Location/Region"
+                Padding="5,0" />
+            <TextBox
+                Margin="5"
+                Grid.Column="1"
+                Grid.Row="1"
+                IsEnabled="{Binding !CurrentProcess.RecognitionIsRunning}"
+                Text="{Binding RecognizeSettings.AzureSpeechRegion, Mode=TwoWay}"
+                Watermark="i.e. westus" />
+
+            <Label
+                Grid.Column="2"
+                Content="Language"
+                Padding="5,0" />
+            <ComboBox
+                Grid.Column="2"
+                Grid.Row="1"
+                Margin="5"
+                SelectedItem="{Binding RecognizeSettings.RecognitionLanguage}">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:SupportedLanguage">
+                        <TextBlock Text="{Binding DisplayName}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                <ComboBox.Items>
+					<models:SupportedLanguage
+                        Bcp47="af-ZA"
+                       DisplayName="Afrikaans (South Africa)" />
+					<models:SupportedLanguage
+                        Bcp47="sq-AL"
+                       DisplayName="Albanian (Albania)" />
+					<models:SupportedLanguage
+                        Bcp47="am-ET"
+                       DisplayName="Amharic (Ethiopia)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-DZ"
+                       DisplayName="Arabic (Algeria)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-BH"
+                       DisplayName="Arabic (Bahrain)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-EG"
+                       DisplayName="Arabic (Egypt)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-IQ"
+                       DisplayName="Arabic (Iraq)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-IL"
+                       DisplayName="Arabic (Israel)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-JO"
+                       DisplayName="Arabic (Jordan)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-KW"
+                       DisplayName="Arabic (Kuwait)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-LB"
+                       DisplayName="Arabic (Lebanon)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-LY"
+                       DisplayName="Arabic (Libya)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-MA"
+                       DisplayName="Arabic (Morocco)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-OM"
+                       DisplayName="Arabic (Oman)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-PS"
+                       DisplayName="Arabic (Palestinian Authority)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-QA"
+                       DisplayName="Arabic (Qatar)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-SA"
+                       DisplayName="Arabic (Saudi Arabia)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-SY"
+                       DisplayName="Arabic (Syria)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-TN"
+                       DisplayName="Arabic (Tunisia)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-AE"
+                       DisplayName="Arabic (United Arab Emirates)" />
+					<models:SupportedLanguage
+                        Bcp47="ar-YE"
+                       DisplayName="Arabic (Yemen)" />
+					<models:SupportedLanguage
+                        Bcp47="hy-AM"
+                       DisplayName="Armenian (Armenia)" />
+					<models:SupportedLanguage
+                        Bcp47="az-AZ"
+                       DisplayName="Azerbaijani (Latin, Azerbaijan)" />
+					<models:SupportedLanguage
+                        Bcp47="eu-ES"
+                       DisplayName="Basque" />
+					<models:SupportedLanguage
+                        Bcp47="bn-IN"
+                       DisplayName="Bengali (India)" />
+					<models:SupportedLanguage
+                        Bcp47="bs-BA"
+                       DisplayName="Bosnian (Bosnia and Herzegovina)" />
+					<models:SupportedLanguage
+                        Bcp47="bg-BG"
+                       DisplayName="Bulgarian (Bulgaria)" />
+					<models:SupportedLanguage
+                        Bcp47="my-MM"
+                       DisplayName="Burmese (Myanmar)" />
+					<models:SupportedLanguage
+                        Bcp47="ca-ES"
+                       DisplayName="Catalan" />
+					<models:SupportedLanguage
+                        Bcp47="yue-CN"
+                       DisplayName="Chinese (Cantonese, Simplified)" />
+					<models:SupportedLanguage
+                        Bcp47="zh-HK"
+                       DisplayName="Chinese (Cantonese, Traditional)" />
+					<models:SupportedLanguage
+                        Bcp47="zh-CN-shandong"
+                       DisplayName="Chinese (Jilu Mandarin, Simplified)" />
+					<models:SupportedLanguage
+                        Bcp47="zh-CN"
+                       DisplayName="Chinese (Mandarin, Simplified)" />
+					<models:SupportedLanguage
+                        Bcp47="zh-CN-sichuan"
+                       DisplayName="Chinese (Southwestern Mandarin, Simplified)" />
+					<models:SupportedLanguage
+                        Bcp47="zh-TW"
+                       DisplayName="Chinese (Taiwanese Mandarin, Traditional)" />
+					<models:SupportedLanguage
+                        Bcp47="wuu-CN"
+                       DisplayName="Chinese (Wu, Simplified)" />
+					<models:SupportedLanguage
+                        Bcp47="hr-HR"
+                       DisplayName="Croatian (Croatia)" />
+					<models:SupportedLanguage
+                        Bcp47="cs-CZ"
+                       DisplayName="Czech (Czechia)" />
+					<models:SupportedLanguage
+                        Bcp47="da-DK"
+                       DisplayName="Danish (Denmark)" />
+					<models:SupportedLanguage
+                        Bcp47="nl-BE"
+                       DisplayName="Dutch (Belgium)" />
+					<models:SupportedLanguage
+                        Bcp47="nl-NL"
+                       DisplayName="Dutch (Netherlands)" />
+					<models:SupportedLanguage
+                        Bcp47="en-AU"
+                       DisplayName="English (Australia)" />
+					<models:SupportedLanguage
+                        Bcp47="en-CA"
+                       DisplayName="English (Canada)" />
+					<models:SupportedLanguage
+                        Bcp47="en-GH"
+                       DisplayName="English (Ghana)" />
+					<models:SupportedLanguage
+                        Bcp47="en-HK"
+                       DisplayName="English (Hong Kong SAR)" />
+					<models:SupportedLanguage
+                        Bcp47="en-IN"
+                       DisplayName="English (India)" />
+					<models:SupportedLanguage
+                        Bcp47="en-IE"
+                       DisplayName="English (Ireland)" />
+					<models:SupportedLanguage
+                        Bcp47="en-KE"
+                       DisplayName="English (Kenya)" />
+					<models:SupportedLanguage
+                        Bcp47="en-NZ"
+                       DisplayName="English (New Zealand)" />
+					<models:SupportedLanguage
+                        Bcp47="en-NG"
+                       DisplayName="English (Nigeria)" />
+					<models:SupportedLanguage
+                        Bcp47="en-PH"
+                       DisplayName="English (Philippines)" />
+					<models:SupportedLanguage
+                        Bcp47="en-SG"
+                       DisplayName="English (Singapore)" />
+					<models:SupportedLanguage
+                        Bcp47="en-ZA"
+                       DisplayName="English (South Africa)" />
+					<models:SupportedLanguage
+                        Bcp47="en-TZ"
+                       DisplayName="English (Tanzania)" />
+					<models:SupportedLanguage
+                        Bcp47="en-GB"
+                       DisplayName="English (United Kingdom)" />
+					<models:SupportedLanguage
+                        Bcp47="en-US"
+                       DisplayName="English (United States)" />
+					<models:SupportedLanguage
+                        Bcp47="et-EE"
+                       DisplayName="Estonian (Estonia)" />
+					<models:SupportedLanguage
+                        Bcp47="fil-PH"
+                       DisplayName="Filipino (Philippines)" />
+					<models:SupportedLanguage
+                        Bcp47="fi-FI"
+                       DisplayName="Finnish (Finland)" />
+					<models:SupportedLanguage
+                        Bcp47="fr-BE"
+                       DisplayName="French (Belgium)" />
+					<models:SupportedLanguage
+                        Bcp47="fr-CA"
+                       DisplayName="French (Canada)" />
+					<models:SupportedLanguage
+                        Bcp47="fr-FR"
+                       DisplayName="French (France)" />
+					<models:SupportedLanguage
+                        Bcp47="fr-CH"
+                       DisplayName="French (Switzerland)" />
+					<models:SupportedLanguage
+                        Bcp47="gl-ES"
+                       DisplayName="Galician" />
+					<models:SupportedLanguage
+                        Bcp47="ka-GE"
+                       DisplayName="Georgian (Georgia)" />
+					<models:SupportedLanguage
+                        Bcp47="de-AT"
+                       DisplayName="German (Austria)" />
+					<models:SupportedLanguage
+                        Bcp47="de-DE"
+                       DisplayName="German (Germany)" />
+					<models:SupportedLanguage
+                        Bcp47="de-CH"
+                       DisplayName="German (Switzerland)" />
+					<models:SupportedLanguage
+                        Bcp47="el-GR"
+                       DisplayName="Greek (Greece)" />
+					<models:SupportedLanguage
+                        Bcp47="gu-IN"
+                       DisplayName="Gujarati (India)" />
+					<models:SupportedLanguage
+                        Bcp47="he-IL"
+                       DisplayName="Hebrew (Israel)" />
+					<models:SupportedLanguage
+                        Bcp47="hi-IN"
+                       DisplayName="Hindi (India)" />
+					<models:SupportedLanguage
+                        Bcp47="hu-HU"
+                       DisplayName="Hungarian (Hungary)" />
+					<models:SupportedLanguage
+                        Bcp47="is-IS"
+                       DisplayName="Icelandic (Iceland)" />
+					<models:SupportedLanguage
+                        Bcp47="id-ID"
+                       DisplayName="Indonesian (Indonesia)" />
+					<models:SupportedLanguage
+                        Bcp47="ga-IE"
+                       DisplayName="Irish (Ireland)" />
+					<models:SupportedLanguage
+                        Bcp47="it-IT"
+                       DisplayName="Italian (Italy)" />
+					<models:SupportedLanguage
+                        Bcp47="it-CH"
+                       DisplayName="Italian (Switzerland)" />
+					<models:SupportedLanguage
+                        Bcp47="ja-JP"
+                       DisplayName="Japanese (Japan)" />
+					<models:SupportedLanguage
+                        Bcp47="jv-ID"
+                       DisplayName="Javanese (Latin, Indonesia)" />
+					<models:SupportedLanguage
+                        Bcp47="kn-IN"
+                       DisplayName="Kannada (India)" />
+					<models:SupportedLanguage
+                        Bcp47="kk-KZ"
+                       DisplayName="Kazakh (Kazakhstan)" />
+					<models:SupportedLanguage
+                        Bcp47="km-KH"
+                       DisplayName="Khmer (Cambodia)" />
+					<models:SupportedLanguage
+                        Bcp47="ko-KR"
+                       DisplayName="Korean (Korea)" />
+					<models:SupportedLanguage
+                        Bcp47="lo-LA"
+                       DisplayName="Lao (Laos)" />
+					<models:SupportedLanguage
+                        Bcp47="lv-LV"
+                       DisplayName="Latvian (Latvia)" />
+					<models:SupportedLanguage
+                        Bcp47="lt-LT"
+                       DisplayName="Lithuanian (Lithuania)" />
+					<models:SupportedLanguage
+                        Bcp47="mk-MK"
+                       DisplayName="Macedonian (North Macedonia)" />
+					<models:SupportedLanguage
+                        Bcp47="ms-MY"
+                       DisplayName="Malay (Malaysia)" />
+					<models:SupportedLanguage
+                        Bcp47="ml-IN"
+                       DisplayName="Malayalam (India)" />
+					<models:SupportedLanguage
+                        Bcp47="mt-MT"
+                       DisplayName="Maltese (Malta)" />
+					<models:SupportedLanguage
+                        Bcp47="mr-IN"
+                       DisplayName="Marathi (India)" />
+					<models:SupportedLanguage
+                        Bcp47="mn-MN"
+                       DisplayName="Mongolian (Mongolia)" />
+					<models:SupportedLanguage
+                        Bcp47="ne-NP"
+                       DisplayName="Nepali (Nepal)" />
+					<models:SupportedLanguage
+                        Bcp47="nb-NO"
+                       DisplayName="Norwegian Bokmål (Norway)" />
+					<models:SupportedLanguage
+                        Bcp47="ps-AF"
+                       DisplayName="Pashto (Afghanistan)" />
+					<models:SupportedLanguage
+                        Bcp47="fa-IR"
+                       DisplayName="Persian (Iran)" />
+					<models:SupportedLanguage
+                        Bcp47="pl-PL"
+                       DisplayName="Polish (Poland)" />
+					<models:SupportedLanguage
+                        Bcp47="pt-BR"
+                       DisplayName="Portuguese (Brazil)" />
+					<models:SupportedLanguage
+                        Bcp47="pt-PT"
+                       DisplayName="Portuguese (Portugal)" />
+					<models:SupportedLanguage
+                        Bcp47="pa-IN"
+                       DisplayName="Punjabi (India)" />
+					<models:SupportedLanguage
+                        Bcp47="ro-RO"
+                       DisplayName="Romanian (Romania)" />
+					<models:SupportedLanguage
+                        Bcp47="ru-RU"
+                       DisplayName="Russian (Russia)" />
+					<models:SupportedLanguage
+                        Bcp47="sr-RS"
+                       DisplayName="Serbian (Cyrillic, Serbia)" />
+					<models:SupportedLanguage
+                        Bcp47="si-LK"
+                       DisplayName="Sinhala (Sri Lanka)" />
+					<models:SupportedLanguage
+                        Bcp47="sk-SK"
+                       DisplayName="Slovak (Slovakia)" />
+					<models:SupportedLanguage
+                        Bcp47="sl-SI"
+                       DisplayName="Slovenian (Slovenia)" />
+					<models:SupportedLanguage
+                        Bcp47="so-SO"
+                       DisplayName="Somali (Somalia)" />
+					<models:SupportedLanguage
+                        Bcp47="es-AR"
+                       DisplayName="Spanish (Argentina)" />
+					<models:SupportedLanguage
+                        Bcp47="es-BO"
+                       DisplayName="Spanish (Bolivia)" />
+					<models:SupportedLanguage
+                        Bcp47="es-CL"
+                       DisplayName="Spanish (Chile)" />
+					<models:SupportedLanguage
+                        Bcp47="es-CO"
+                       DisplayName="Spanish (Colombia)" />
+					<models:SupportedLanguage
+                        Bcp47="es-CR"
+                       DisplayName="Spanish (Costa Rica)" />
+					<models:SupportedLanguage
+                        Bcp47="es-CU"
+                       DisplayName="Spanish (Cuba)" />
+					<models:SupportedLanguage
+                        Bcp47="es-DO"
+                       DisplayName="Spanish (Dominican Republic)" />
+					<models:SupportedLanguage
+                        Bcp47="es-EC"
+                       DisplayName="Spanish (Ecuador)" />
+					<models:SupportedLanguage
+                        Bcp47="es-SV"
+                       DisplayName="Spanish (El Salvador)" />
+					<models:SupportedLanguage
+                        Bcp47="es-GQ"
+                       DisplayName="Spanish (Equatorial Guinea)" />
+					<models:SupportedLanguage
+                        Bcp47="es-GT"
+                       DisplayName="Spanish (Guatemala)" />
+					<models:SupportedLanguage
+                        Bcp47="es-HN"
+                       DisplayName="Spanish (Honduras)" />
+					<models:SupportedLanguage
+                        Bcp47="es-MX"
+                       DisplayName="Spanish (Mexico)" />
+					<models:SupportedLanguage
+                        Bcp47="es-NI"
+                       DisplayName="Spanish (Nicaragua)" />
+					<models:SupportedLanguage
+                        Bcp47="es-PA"
+                       DisplayName="Spanish (Panama)" />
+					<models:SupportedLanguage
+                        Bcp47="es-PY"
+                       DisplayName="Spanish (Paraguay)" />
+					<models:SupportedLanguage
+                        Bcp47="es-PE"
+                       DisplayName="Spanish (Peru)" />
+					<models:SupportedLanguage
+                        Bcp47="es-PR"
+                       DisplayName="Spanish (Puerto Rico)" />
+					<models:SupportedLanguage
+                        Bcp47="es-ES"
+                       DisplayName="Spanish (Spain)" />
+					<models:SupportedLanguage
+                        Bcp47="es-US"
+                       DisplayName="Spanish (United States)" />
+					<models:SupportedLanguage
+                        Bcp47="es-UY"
+                       DisplayName="Spanish (Uruguay)" />
+					<models:SupportedLanguage
+                        Bcp47="es-VE"
+                       DisplayName="Spanish (Venezuela)" />
+					<models:SupportedLanguage
+                        Bcp47="sw-KE"
+                       DisplayName="Swahili (Kenya)" />
+					<models:SupportedLanguage
+                        Bcp47="sw-TZ"
+                       DisplayName="Swahili (Tanzania)" />
+					<models:SupportedLanguage
+                        Bcp47="sv-SE"
+                       DisplayName="Swedish (Sweden)" />
+					<models:SupportedLanguage
+                        Bcp47="ta-IN"
+                       DisplayName="Tamil (India)" />
+					<models:SupportedLanguage
+                        Bcp47="te-IN"
+                       DisplayName="Telugu (India)" />
+					<models:SupportedLanguage
+                        Bcp47="th-TH"
+                       DisplayName="Thai (Thailand)" />
+					<models:SupportedLanguage
+                        Bcp47="tr-TR"
+                       DisplayName="Turkish (Türkiye)" />
+					<models:SupportedLanguage
+                        Bcp47="uk-UA"
+                       DisplayName="Ukrainian (Ukraine)" />
+					<models:SupportedLanguage
+                        Bcp47="ur-IN"
+                       DisplayName="Urdu (India)" />
+					<models:SupportedLanguage
+                        Bcp47="uz-UZ"
+                       DisplayName="Uzbek (Latin, Uzbekistan)" />
+					<models:SupportedLanguage
+                        Bcp47="vi-VN"
+                       DisplayName="Vietnamese (Vietnam)" />
+					<models:SupportedLanguage
+                        Bcp47="cy-GB"
+                       DisplayName="Welsh (United Kingdom)" />
+					<models:SupportedLanguage
+                        Bcp47="zu-ZA"
+                       DisplayName="Zulu (South Africa)" />
+                </ComboBox.Items>
+            </ComboBox>
+            <Button
+                Grid.Column="3"
+                Grid.Row="1"
+                x:Name="GoBtn"
+                Classes="accent"
+                Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
+                Content="Start Recognizing"
+                Command="{Binding RecognizeCommand}"
+                IsVisible="{Binding !CurrentProcess.RecognitionIsRunning}"
+                HorizontalAlignment="Center"
+                local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                ToolTip.Tip="{Binding $self.((local:RelayCommandWithReason)Command).ReasonCantExecute}">
+                <Button.CommandParameter>
+                    <MultiBinding>
+                        <Binding Path="CurrentProcess.VocalsAudioFilePath" />
+                        <Binding Path="CurrentProcess.KnownOriginalLyrics" />
+                        <Binding Path="CurrentProcess.RecognitionIsRunning" />
+                        <Binding Path="RecognizeSettings.AzureSpeechKey" />
+                        <Binding Path="RecognizeSettings.AzureSpeechRegion" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+            <Button
+                Grid.Column="3"
+                Grid.Row="1"
+                Content="Cancel"
+                Command="{Binding CancelRecognitionCommand}"
+                IsVisible="{Binding CurrentProcess.RecognitionIsRunning}" />
+
+            <Button
+                Grid.Column="4"
+                Grid.Row="1"
+                HorizontalAlignment="Right"
+                Content="Next Step"
+                Classes="accent"
+                Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
+                Command="{Binding GoToNextStepCommand}"
+                local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonRecognizeStepIsIncomplete}"
+                IsEnabled="{Binding CurrentProcess.RecognizeStepIsComplete}"
+                IsVisible="{Binding !CurrentProcess.RecognitionIsRunning}">
+                <Button.CommandParameter>
+                    <MultiBinding>
+                        <Binding Path="HasEverBeenStarted" />
+                        <Binding Path="CurrentProcess.DetectedLinePossibilities" />
+                    </MultiBinding>
+                </Button.CommandParameter>
+            </Button>
+        </Grid>
+        <Label
+            Grid.Row="2"
+            x:Name="ResultsLabel"
+            IsVisible="{Binding HasEverBeenStarted}"
+            Content="Results"
+            VerticalAlignment="Bottom" />
+        <Grid
+            Grid.Row="3"
+            x:Name="ResultsGrid"
+            SizeChanged="LayoutSizeChanged"
+            IsVisible="{Binding HasEverBeenStarted}">
+
+            <controls:DrawnWaveformControl
+                CanSelectIfEmpty="True"
+                Waveform="{Binding FullLengthVocalsDraw}"
+                WaveFloats="{Binding CurrentProcess.VocalsAudioFloats}"
+                WaveStream="{Binding CurrentProcess.VocalsAudioStream}"
+                WaveformFilePath="{Binding CurrentProcess.VocalsAudioFilePath}" />
+            <ItemsControl
+                Classes="linePossibilities"
+                ItemsSource="{Binding CurrentProcess.DetectedLinePossibilities}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <Canvas />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.DataTemplates>
+                    <DataTemplate x:DataType="library:LinePossibilities">
+                        <controls:OverlayRectangle
+                            Stroke="#B0FFD800"
+                            Fill="#56FFD800"
+                            Height="{Binding $parent[views:RecognizeView].((vm:RecognizeViewModel)DataContext).FullLengthVocalsDraw.DesiredPeakHeight}"
+                            StartSecond="{Binding StartSecond}"
+                            EndSecond="{Binding EndSecond}"
+                            WaveformDraw="{Binding $parent[views:RecognizeView].((vm:RecognizeViewModel)DataContext).FullLengthVocalsDraw}">
+                            <ToolTip.Tip>
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    RowDefinitions="*,*">
+                                    <TextBlock Text="{Binding StartSecond}" />
+                                    <TextBlock
+                                        HorizontalAlignment="Right"
+                                        Grid.Column="1"
+                                        Text="{Binding EndSecond}" />
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.ColumnSpan="2"
+                                        Text="{Binding Lyrics[0].Text}" />
+                                </Grid>
+                            </ToolTip.Tip>
+                        </controls:OverlayRectangle>
+                    </DataTemplate>
+                </ItemsControl.DataTemplates>
+            </ItemsControl>
+            <Canvas x:Name="ProgressPointerCanvas">
+                <Rectangle
+                    x:Name="ProgressPointer"
+                    IsVisible="{Binding AzureRecognizer.Recognizing}"
+                    Fill="#AAFF0000"
+                    Height="{Binding FullLengthVocalsDraw.DesiredPeakHeight}"
+                    Width="2"
+                    Canvas.Top="0">
+                    <Canvas.Left>
+                        <MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+                            <Binding Path="AzureRecognizer.ProcessedSeconds" />
+                            <Binding Path="FullLengthVocalsDraw.WaveformLengthSeconds" />
+                            <Binding Path="FullLengthVocalsDraw.DesiredImageWidth" />
+                        </MultiBinding>
+                    </Canvas.Left>
+                </Rectangle>
+            </Canvas>
+        </Grid>
+        <Label
+            Grid.Row="4"
+            x:Name="LogLabel"
+            IsVisible="{Binding HasEverBeenStarted}"
+            Content="Log"
+            Margin="5,0,0,0" />
+        <ScrollViewer
+            Grid.Row="5"
+            x:Name="LogScrollViewer"
+            IsVisible="{Binding HasEverBeenStarted}"
+            Margin="10,0,10,10"
+            MaxWidth="1000"
+            Background="#FF5D5A50">
+            <ItemsRepeater
+                ItemsSource="{Binding LogContents}"
+                SizeChanged="LogContentsRepeater_SizeChanged"
+                Margin="5">
+                <ItemsRepeater.ItemTemplate>
+                    <DataTemplate x:DataType="system:String">
+                        <TextBlock
+                            Text="{Binding}"
+                            Margin="0,1"
+                            Padding="1,2"
+                            Background="#22000000"
+                            TextWrapping="Wrap" />
+                    </DataTemplate>
+                </ItemsRepeater.ItemTemplate>
+            </ItemsRepeater>
+        </ScrollViewer>
+    </Grid>
+
+</UserControl>

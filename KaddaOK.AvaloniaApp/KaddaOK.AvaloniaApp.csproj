@@ -1,0 +1,103 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+    <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <Version>$(VersionPrefix)</Version>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+
+  
+  <ItemGroup>
+    <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <AvaloniaResource Remove="Assets\DesignTime\Example Song - Azure Recognition.json" />
+    <AvaloniaResource Remove="Assets\DesignTime\Example Song - Full.flac" />
+    <AvaloniaResource Remove="Assets\DesignTime\Example Song - Instruments.flac" />
+    <AvaloniaResource Remove="Assets\DesignTime\Example Song - Lyrics.txt" />
+    <AvaloniaResource Remove="Assets\DesignTime\Example Song - Vocals.flac" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <AvaloniaXaml Remove="Views\LinePossibilitiesControl.axaml" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <Compile Remove="Views\LinePossibilitiesControl.axaml.cs" />
+  </ItemGroup>
+
+  
+  <ItemGroup>
+    <None Remove="Assets\KaddaOKIcon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Avalonia" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Controls.ItemsRepeater" Version="11.0.4" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.4" />
+    <PackageReference Include="AvaloniaColorPicker" Version="1.4.0" />
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
+
+    <!--Condition below is needed to remove Avalonia.Diagnostics package from build output in Release configuration.-->
+    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.0.4" />
+    <PackageReference Include="DialogHost.Avalonia" Version="0.7.7" />
+    <PackageReference Include="FluentAvalonia.ProgressRing" Version="1.69.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\KaddaOK.Library\KaddaOK.Library.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Views\EditLinesView.axaml.cs">
+      <DependentUpon>EditLinesView.axaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+	<ItemGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <None Update="Assets\DesignTime\Example Song - Azure Recognition.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Full.flac">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Instruments.flac">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Lyrics.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Vocals.flac">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+	
+  <ItemGroup Condition=" '$(Configuration)' == 'Release' ">
+    <None Update="Assets\DesignTime\Example Song - Azure Recognition.json">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Full.flac">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Instruments.flac">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Lyrics.txt">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Assets\DesignTime\Example Song - Vocals.flac">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

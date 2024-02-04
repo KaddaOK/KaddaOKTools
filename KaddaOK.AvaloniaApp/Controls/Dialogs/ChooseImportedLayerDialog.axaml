@@ -1,0 +1,78 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:ytmm="clr-namespace:KaddaOK.Library.Ytmm;assembly=KaddaOK.Library"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.ChooseImportedLayerDialog"
+             x:DataType="ytmm:RzlrcLyrics">
+    <UserControl.Resources>
+        <local:ListToCountConverter x:Key="ListToCountConverter" />
+        <local:LyricItemsToTextConverter x:Key="LyricItemsToTextConverter" />
+    </UserControl.Resources>
+	<dialogs:ModalDialogChrome Title="Choose Layer">
+		<Grid ColumnDefinitions="500" RowDefinitions="150, *">
+			<Grid.Styles>
+				<Style Selector="TextBlock">
+					<Setter Property="TextWrapping" Value="Wrap" />
+				</Style>
+				<Style Selector="TextBlock.textPreview">
+					<Setter Property="FontSize" Value="10" />
+					<Setter Property="FontFamily" Value="Arial" />
+					<Setter Property="TextWrapping" Value="NoWrap" />
+					<Setter Property="FontStyle" Value="Italic" />
+				</Style>
+				<Style Selector="Label.layerName">
+					<Setter Property="FontSize" Value="15" />
+					<Setter Property="FontWeight" Value="Bold" />
+				</Style>
+			</Grid.Styles>
+			<StackPanel>
+			    <TextBlock>
+				    The selected RZLRC file contains multiple layers.
+			    </TextBlock>
+			    <TextBlock>
+				    This app can only work on one layer at a time.
+			    </TextBlock>
+			    <TextBlock>
+				    The other layers should persist unchanged if you export back to RZLRC at the end of the process.
+			    </TextBlock>
+			    <TextBlock>
+				    (Please save it as a new file though, just in case something doesn't work right!)
+			    </TextBlock>
+			    <TextBlock>
+				    Which layer would you like to load?
+			    </TextBlock>
+            </StackPanel>
+
+			<ScrollViewer Grid.Row="1">
+			    <ItemsRepeater ItemsSource="{Binding}" HorizontalAlignment="Center">
+				    <ItemsRepeater.ItemTemplate>
+					    <DataTemplate DataType="ytmm:RzlrcLyric">
+						    <Button HorizontalAlignment="Center"
+								    Margin="5"
+								    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+								    CommandParameter="{Binding}">
+							    <Button.Content>
+								    <Grid ColumnDefinitions="200,200" RowDefinitions="*,*" HorizontalAlignment="Center">
+									    <Label Classes="layerName" Content="{Binding LayerName}" />
+									    <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+										    <Label Content="{Binding item, Converter={StaticResource ListToCountConverter}}" />
+										    <Label Content="Lines" />
+									    </StackPanel>
+									    <TextBlock Classes="textPreview" Grid.Row="1" Grid.ColumnSpan="2"
+											       Text="{Binding item, Converter={StaticResource LyricItemsToTextConverter}}" />
+								    </Grid>
+							    </Button.Content>
+						    </Button>
+					    </DataTemplate>
+				    </ItemsRepeater.ItemTemplate>
+			    </ItemsRepeater>
+            </ScrollViewer>
+
+		</Grid>
+	</dialogs:ModalDialogChrome>
+</UserControl>

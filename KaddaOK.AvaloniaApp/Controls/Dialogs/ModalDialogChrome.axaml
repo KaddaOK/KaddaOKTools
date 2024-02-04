@@ -1,0 +1,37 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="300"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.ModalDialogChrome">
+	<UserControl.Template>
+		<ControlTemplate>
+            <Border
+                CornerRadius="10"
+                BorderBrush="#ffabe1ff"
+                BorderThickness="1">
+                <Grid
+                    RowDefinitions="30, *">
+                    <Border x:Name="TitleBarBorder"
+                            CornerRadius="10,10,0,0">
+                        <Label
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            FontSize="16"
+                            BorderThickness="0,0,0,2"
+                            BorderBrush="{DynamicResource SystemAccentColor}"
+                            Content="{TemplateBinding Title}"/>
+                    </Border>
+                    <ContentPresenter
+                        x:Name="ModalContentArea"
+                        Grid.Row="1"
+                        Margin="10, 15"
+                        Content="{TemplateBinding Content}"/>
+                </Grid>
+            </Border>
+        </ControlTemplate>
+    </UserControl.Template>
+    
+
+</UserControl>

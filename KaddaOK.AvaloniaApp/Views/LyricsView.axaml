@@ -1,0 +1,78 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.LyricsView"
+    x:DataType="vm:LyricsViewModel">
+    <Design.DataContext>
+        <designTime:DesignTimeLyricsViewModel />
+    </Design.DataContext>
+    <ScrollViewer>
+        <Grid
+            ColumnDefinitions="*,*"
+            Margin="5">
+            <StackPanel Grid.Column="0">
+                <Label Content="Lyrics Input" />
+                <StackPanel
+                    Orientation="Horizontal"
+                    Margin="0,0,10,5">
+                    <Label FontSize="13">
+                        Type or paste the original lyrics here, or
+                    </Label>
+                    <Button
+                        Classes="inline"
+                        Content="load from a file..."
+                        Height="24"
+                        Padding="5,2"
+                        Command="{Binding SelectLyricsFileCommand}"
+                        IsEnabled="{Binding !GettingFile}" />
+
+                </StackPanel>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="13"
+                    Text="Tip: Recognition will work best if you start a new line wherever the singer stops making continuous sound, which might be different from how the lyrics are normally written." />
+                <TextBox
+                    MinHeight="200"
+                    TextWrapping="Wrap"
+                    AcceptsReturn="True"
+                    x:Name="LyricInputEditor"
+                    Text="{Binding LyricEditorText}"
+                    TextChanged="LyricInputEditor_TextChanged" />
+            </StackPanel>
+            <StackPanel
+                Grid.Column="1"
+                Margin="10,0,5,0">
+                <Label Content="Unique Phrases" />
+                <Label FontSize="13">
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        Text="These are automatically de-duplicated from the lyrics to the left. They are sent to the Speech Service engine along with the audio recording to increase the likelihood it interprets the vocals as the right words." />
+                </Label>
+                <TextBlock
+                    Text="{Binding PhrasesText}"
+                    TextWrapping="Wrap"
+                    Margin="30"
+                    FontSize="14" />
+
+                <Button
+                    Content="Next Step"
+                    Classes="accent"
+                    HorizontalAlignment="Right"
+                    Margin="0, 15"
+                    Padding="15, 10"
+                    Command="{Binding GoToNextStepCommand}"
+                    local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                    ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
+                    IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}" />
+            </StackPanel>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

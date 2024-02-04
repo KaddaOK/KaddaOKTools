@@ -1,0 +1,267 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+    xmlns:ytmm="clr-namespace:KaddaOK.Library.Ytmm;assembly=KaddaOK.Library"
+    xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.AudioView"
+    x:DataType="vm:AudioViewModel">
+    <Design.DataContext>
+        <designTime:DesignTimeAudioViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="ScrollViewer.gettingFile">
+            <Setter
+                Property="Cursor"
+                Value="Wait" />
+        </Style>
+        <Style Selector="ScrollViewer.gettingFile StackPanel">
+            <Setter
+                Property="IsEnabled"
+                Value="False" />
+        </Style>
+        <Style Selector="Label.waveformLabel">
+            <Setter
+                Property="Margin"
+                Value="0,10,0,0" />
+        </Style>
+        <Style Selector="Border.outerWaveformBorder">
+            <Setter
+                Property="Margin"
+                Value="0,2,0,5" />
+            <Setter
+                Property="Background"
+                Value="#FF061424" />
+            <Setter
+                Property="BorderBrush"
+                Value="Gray" />
+            <Setter
+                Property="BorderThickness"
+                Value="1" />
+            <Setter
+                Property="CornerRadius"
+                Value="5" />
+        </Style>
+        <Style Selector="Border.innerWaveformBorder">
+            <Setter
+                Property="Margin"
+                Value="0,5" />
+            <Setter
+                Property="MinHeight"
+                Value="50" />
+        </Style>
+        <Style Selector="TextBlock.waveformNameText">
+            <Setter
+                Property="Margin"
+                Value="0,10,0,0" />
+            <Setter
+                Property="FontSize"
+                Value="12" />
+            <Setter
+                Property="HorizontalAlignment"
+                Value="Center" />
+        </Style>
+        <Style Selector="TextBlock.introText">
+            <Setter
+                Property="FontSize"
+                Value="12" />
+            <Setter
+                Property="TextWrapping"
+                Value="Wrap" />
+        </Style>
+    </UserControl.Styles>
+    <dialogHost:DialogHost Identifier="AudioViewDialogHost">
+        <dialogHost:DialogHost.DataTemplates>
+            <DataTemplate DataType="ytmm:RzlrcLyrics">
+                <dialogs:ChooseImportedLayerDialog DataContext="{Binding}" />
+            </DataTemplate>
+        </dialogHost:DialogHost.DataTemplates>
+        <ScrollViewer
+            x:Name="AudioViewScrollViewer"
+            Classes.gettingFile="{Binding GettingFile}">
+            <StackPanel
+                x:Name="AudioTabStackPanel"
+                Margin="20">
+                <TextBlock Classes="introText">
+                    To use the guided process for generating karaoke files, start here and follow
+                    the
+                    instructions on each screen, pushing the "Next Step" button to go through each
+                    tab,
+                    until you are satisfied with the content on the Edit tab.
+                </TextBlock>
+                <TextBlock
+                    Classes="introText"
+                    Margin="0,10"> To get started, select the WAV or FLAC files to work on below.
+                    (Separate instruments from vocals first using a tool such as <InlineUIContainer>
+                        <Button
+                            Classes="inline"
+                            Content="UVR"
+                            Command="{Binding LinkToUVRCommand}" />
+                    </InlineUIContainer>
+                    or whatever you prefer.) To proceed with the automatic process, only Vocals-only
+                    is mandatory, but for the best experience, all 3 should be selected. </TextBlock>
+                <TextBlock
+                    Classes="introText"
+                    Margin="0,10">
+                    Alternately, to edit a file from YTMM or KBS, click the Import... button at the
+                    bottom and select it.
+                    The app will attempt to load it and the accompanying audio files, and jump
+                    directly to the Edit tab.
+                </TextBlock>
+                <Label
+                    Classes="waveformLabel"
+                    Content="Original Unseparated Audio:" />
+                <Border
+                    Classes="outerWaveformBorder"
+                    x:Name="UnseparatedAudioBorder">
+                    <StackPanel x:Name="UnseparatedAudioBorderPanel">
+                        <Grid>
+                            <TextBlock
+                                Classes="waveformNameText"
+                                x:Name="UnseparatedAudioDisplayText"
+                                Text="{Binding CurrentProcess.UnseparatedAudioFilePath}" />
+                            <Button
+                                Content="X"
+                                ToolTip.Tip="Dismiss file"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ClearUnseparatedAudioCommand}"
+                                IsVisible="{Binding CurrentProcess.UnseparatedAudioFilePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Grid>
+
+                        <Border
+                            Classes="innerWaveformBorder"
+                            x:Name="InnerUnseparatedAudioBorder">
+                            <controls:DrawnWaveformControl
+                                CanSelectIfEmpty="True"
+                                OpenTitle="Select the original unseparated audio file"
+                                Waveform="{Binding UnseparatedAudioDrawnWaveform}"
+                                WaveFloats="{Binding CurrentProcess.UnseparatedAudioFloats}"
+                                WaveStream="{Binding CurrentProcess.UnseparatedAudioStream}"
+                                WaveformFilePath="{Binding CurrentProcess.UnseparatedAudioFilePath}" />
+                        </Border>
+                        <Label
+                            x:Name="UnseparatedAudioLengthTimeDisplay"
+                            Content="{Binding UnseparatedAudioDrawnWaveform.WaveformLengthText}"
+                            HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Border>
+
+                <Label
+                    Classes="waveformLabel"
+                    Content="Vocals-only Audio:" />
+                <Border
+                    Classes="outerWaveformBorder"
+                    x:Name="VocalsOnlyAudioBorder">
+                    <StackPanel x:Name="VocalsOnlyAudioBorderPanel">
+                        <Grid>
+                            <TextBlock
+                                Classes="waveformNameText"
+                                x:Name="VocalsOnlyAudioDisplayText"
+                                Text="{Binding CurrentProcess.VocalsAudioFilePath}" />
+                            <Button
+                                Content="X"
+                                ToolTip.Tip="Dismiss file"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ClearVocalsOnlyAudioCommand}"
+                                IsVisible="{Binding CurrentProcess.VocalsAudioFilePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Grid>
+
+                        <Border
+                            Classes="innerWaveformBorder"
+                            x:Name="InnerVocalsOnlyBorder">
+                            <controls:DrawnWaveformControl
+                                CanSelectIfEmpty="True"
+                                OpenTitle="Select the lead vocal audio file to process"
+                                Waveform="{Binding FullLengthVocalsDraw}"
+                                WaveFloats="{Binding CurrentProcess.VocalsAudioFloats}"
+                                WaveStream="{Binding CurrentProcess.VocalsAudioStream}"
+                                WaveformFilePath="{Binding CurrentProcess.VocalsAudioFilePath}" />
+                        </Border>
+                        <Label
+                            x:Name="VocalsOnlyLengthTimeDisplay"
+                            Content="{Binding FullLengthVocalsDraw.WaveformLengthText}"
+                            HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Border>
+                <Label
+                    Classes="waveformLabel"
+                    Content="Instrumental-only Audio:" />
+                <Border
+                    Classes="outerWaveformBorder"
+                    x:Name="InstrumentalAudioBorder">
+                    <StackPanel x:Name="InstrumentalAudioBorderPanel">
+                        <Grid>
+                            <TextBlock
+                                Classes="waveformNameText"
+                                x:Name="InstrumentalAudioDisplayText"
+                                Text="{Binding CurrentProcess.InstrumentalAudioFilePath}" />
+                            <Button
+                                Content="X"
+                                ToolTip.Tip="Dismiss file"
+                                HorizontalAlignment="Right"
+                                Command="{Binding ClearInstrumentalAudioCommand}"
+                                IsVisible="{Binding CurrentProcess.InstrumentalAudioFilePath, Converter={x:Static StringConverters.IsNotNullOrEmpty}}" />
+                        </Grid>
+
+                        <Border
+                            Classes="innerWaveformBorder"
+                            x:Name="InnerInstrumentalBorder">
+                            <controls:DrawnWaveformControl
+                                CanSelectIfEmpty="True"
+                                OpenTitle="Select the instrumental audio file"
+                                Waveform="{Binding InstrumentalAudioDrawnWaveform}"
+                                WaveFloats="{Binding CurrentProcess.InstrumentalAudioFloats}"
+                                WaveStream="{Binding CurrentProcess.InstrumentalAudioStream}"
+                                WaveformFilePath="{Binding CurrentProcess.InstrumentalAudioFilePath}" />
+                        </Border>
+                        <Label
+                            x:Name="WaveformLengthTimeDisplay"
+                            Content="{Binding InstrumentalAudioDrawnWaveform.WaveformLengthText}"
+                            HorizontalAlignment="Right" />
+                    </StackPanel>
+                </Border>
+
+                <Grid
+                    ColumnDefinitions="*,*"
+                    Margin="0, 15">
+                    <StackPanel Orientation="Horizontal">
+                        <Button
+                            Content="Import..."
+                            Command="{Binding ImportCommand}"
+                            ToolTip.Tip="Edit an existing file in this app"
+                            Padding="15, 10" />
+                        <Button
+                            Content="Clear All"
+                            Command="{Binding ClearAllCommand}"
+                            ToolTip.Tip="Clear all selections throughout the app"
+                            Padding="15, 10" />
+                    </StackPanel>
+
+
+                    <Button
+                        Grid.Column="1"
+                        Content="Next Step"
+                        Classes="accent"
+                        HorizontalAlignment="Right"
+                        Margin="0, 15"
+                        Padding="15, 10"
+                        Command="{Binding GoToNextStepCommand}"
+                        local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                        ToolTip.Tip="{Binding CurrentProcess.ReasonAudioStepIsIncomplete}"
+                        IsEnabled="{Binding CurrentProcess.AudioStepIsComplete}" />
+                </Grid>
+
+            </StackPanel>
+        </ScrollViewer>
+    </dialogHost:DialogHost>
+
+</UserControl>
