@@ -179,22 +179,24 @@
                                                 Classes="startSecond"
                                                 Content="{Binding StartSecond}"
                                                 Grid.Column="1" />
-                                            <ItemsRepeater
+                                            <ItemsControl
                                                 ItemsSource="{Binding Words}"
                                                 Grid.Column="2">
-                                                <ItemsRepeater.Layout>
-                                                    <WrapLayout Orientation="Horizontal" />
-                                                </ItemsRepeater.Layout>
-                                                <ItemsRepeater.ItemTemplate>
-                                                    <DataTemplate>
+												<ItemsControl.ItemsPanel>
+													<ItemsPanelTemplate>
+														<WrapPanel Orientation="Horizontal" />
+                                                    </ItemsPanelTemplate>
+                                                </ItemsControl.ItemsPanel>
+                                                <ItemsControl.ItemTemplate>
+													<DataTemplate>
                                                         <Button
                                                             Classes="wordButton"
                                                             Content="{Binding Text}"
                                                             Flyout="{StaticResource WordButtonFlyout}"
                                                             ContextFlyout="{StaticResource WordButtonFlyout}" />
                                                     </DataTemplate>
-                                                </ItemsRepeater.ItemTemplate>
-                                            </ItemsRepeater>
+                                                </ItemsControl.ItemTemplate>
+                                            </ItemsControl>
                                             <Label
                                                 Content="{Binding EndSecond}"
                                                 HorizontalAlignment="Right"
