@@ -13,7 +13,8 @@ namespace KaddaOK.AvaloniaApp.Models
     {
         AzureSpeechService,
         RzlrcImport,
-        KbpImport
+        KbpImport,
+        CtmImport
     }
 
     public partial class KaraokeProcess : ObservableBase
@@ -360,7 +361,8 @@ namespace KaddaOK.AvaloniaApp.Models
             get
             {
                 if (KaraokeSource == InitialKaraokeSource.RzlrcImport
-                    || KaraokeSource == InitialKaraokeSource.KbpImport)
+                    || KaraokeSource == InitialKaraokeSource.KbpImport
+                    || KaraokeSource == InitialKaraokeSource.CtmImport)
                 {
                     return null;
                 }

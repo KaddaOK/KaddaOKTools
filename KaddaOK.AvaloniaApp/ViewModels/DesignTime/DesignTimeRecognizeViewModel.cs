@@ -31,7 +31,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
     }
     public class DesignTimeRecognizeViewModel : RecognizeViewModel
     {
-        public DesignTimeRecognizeViewModel() : base(new DummyAzureRecognizer(), new KaddaOKSettingsPersistor(), DesignTimeKaraokeProcess.Get())
+        public DesignTimeRecognizeViewModel() : base(new DummyAzureRecognizer(), new KaddaOKSettingsPersistor(), new NfaCtmImporter(), DesignTimeKaraokeProcess.Get())
         {
             HasEverBeenStarted = true;
             LogContents = new ObservableCollection<string>(new[]

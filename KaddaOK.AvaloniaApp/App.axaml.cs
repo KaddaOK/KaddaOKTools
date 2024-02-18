@@ -43,6 +43,7 @@ public partial class App : Application
         services.AddTransient<IRzlrcImporter, RzlrcImporter>();
         services.AddTransient<IRzProjectGenerator, RzProjectGenerator>();
         services.AddTransient<IRzProjectSerializer, RzProjectSerializer>();
+        services.AddTransient<INfaCtmImporter, NfaCtmImporter>();
 
         services.AddTransient<AboutViewModel>();
         services.AddTransient<AudioViewModel>();

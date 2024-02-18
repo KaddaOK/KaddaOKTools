@@ -49,20 +49,57 @@
     </Design.DataContext>
     <Grid
         Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
-        RowDefinitions="60,60,35,200,25,*">
-        <StackPanel
-            x:Name="RecognizeInstructionsPanel"
-            Margin="5">
+        RowDefinitions="85,60,80,60,35,200,25,*">
+
+			<StackPanel>
+                <TextBlock TextWrapping="Wrap" FontSize="13" Margin="0,5">
+                    There are two ways to proceed from here.
+                </TextBlock>
+                <TextBlock TextWrapping="Wrap" FontSize="13" Margin="0,5">
+                    For the best result, I now recommend you use <InlineUIContainer>
+                        <Button
+                            Classes="inline"
+                            Content="my NeMo Forced Aligner scripts"
+                            Command="{Binding LinkToForcedAlignerCommand}" />
+                    </InlineUIContainer>.  This will conform the known exact text of the lyrics (from the previous tab).
+                </TextBlock>
+                <TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="12">
+					At the above link, you will find a Google Colab jupyter notebook which can be run on free resources, as
+					well as some scripts for running it locally.
+				</TextBlock>
+				<TextBlock
+                    TextWrapping="Wrap"
+                    FontSize="12"> Either way, this will produce a .ctm file with token-level 
+                    timing, which you can then import here:
+                </TextBlock>
+            </StackPanel>
+            <Button Grid.Row="1" Content="Import .ctm..."
+                    Classes="accent"
+                    Command="{Binding ImportCtmCommand}"/>
+
+        <StackPanel Grid.Row="2"
+                    x:Name="RecognizeInstructionsPanel"
+                    Margin="5">
             <TextBlock
                 TextWrapping="Wrap"
-                FontSize="12"> This step uses <InlineUIContainer>
+                FontSize="12">If NFA gives poor results with a particular song, try the original approach still available below: </TextBlock>
+            <TextBlock
+                TextWrapping="Wrap"
+                FontSize="12">
+                using <InlineUIContainer>
                     <Button
                         Classes="inline"
                         Content="Azure Speech Service"
                         Command="{Binding LinkToAzureSpeechServiceCommand}" />
                 </InlineUIContainer>
-                to interpret the vocals as text and get timing for each word. It will try to take
-                the lyrics provided into account while recognizing. </TextBlock>
+                to interpret the vocals as text and get timing for each word. 
+            </TextBlock>
+            <TextBlock
+                TextWrapping="Wrap"
+                FontSize="12">This will try to take
+                the lyrics provided into account while recognizing, but the results will not be exact. </TextBlock>
             <TextBlock
                 TextWrapping="Wrap"
                 FontSize="12">
@@ -74,7 +111,7 @@
             </TextBlock>
         </StackPanel>
         <Grid
-            Grid.Row="1"
+            Grid.Row="3"
             x:Name="AzureSettingsGrid"
             ColumnDefinitions="310, 140, 180, 140, *"
             RowDefinitions="20,*">
@@ -553,7 +590,6 @@
                 Grid.Column="3"
                 Grid.Row="1"
                 x:Name="GoBtn"
-                Classes="accent"
                 Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
                 Content="Start Recognizing"
                 Command="{Binding RecognizeCommand}"
@@ -599,13 +635,13 @@
             </Button>
         </Grid>
         <Label
-            Grid.Row="2"
+            Grid.Row="4"
             x:Name="ResultsLabel"
             IsVisible="{Binding HasEverBeenStarted}"
             Content="Results"
             VerticalAlignment="Bottom" />
         <Grid
-            Grid.Row="3"
+            Grid.Row="5"
             x:Name="ResultsGrid"
             SizeChanged="LayoutSizeChanged"
             IsVisible="{Binding HasEverBeenStarted}">
@@ -671,13 +707,13 @@
             </Canvas>
         </Grid>
         <Label
-            Grid.Row="4"
+            Grid.Row="6"
             x:Name="LogLabel"
             IsVisible="{Binding HasEverBeenStarted}"
             Content="Log"
             Margin="5,0,0,0" />
         <ScrollViewer
-            Grid.Row="5"
+            Grid.Row="7"
             x:Name="LogScrollViewer"
             IsVisible="{Binding HasEverBeenStarted}"
             Margin="10,0,10,10"

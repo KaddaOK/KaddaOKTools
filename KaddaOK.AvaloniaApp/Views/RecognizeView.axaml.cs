@@ -1,4 +1,6 @@
+using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Notifications;
 using Avalonia.Threading;
 using KaddaOK.AvaloniaApp.ViewModels;
 using KaddaOK.AvaloniaApp.ViewModels.DesignTime;
@@ -18,6 +20,12 @@ namespace KaddaOK.AvaloniaApp.Views
                 ? new DesignTimeRecognizeViewModel()
                 : App.ServiceProvider.GetRequiredService<RecognizeViewModel>();
             DataContext = _viewModel;
+        }
+
+        protected override void OnAttachedToVisualTree(VisualTreeAttachmentEventArgs e)
+        {
+            base.OnAttachedToVisualTree(e);
+            _viewModel.NotificationManager = new WindowNotificationManager(TopLevel.GetTopLevel(this)!);
         }
 
         private void LayoutSizeChanged(object? sender, SizeChangedEventArgs args)
