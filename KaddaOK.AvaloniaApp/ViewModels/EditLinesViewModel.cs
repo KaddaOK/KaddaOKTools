@@ -597,6 +597,16 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         }
 
         [RelayCommand]
+        private async Task DeleteLine(object? parameter)
+        {
+            if (parameter is LyricLine deleteThisLine)
+            {
+                AddUndoSnapshot();
+                CurrentProcess.ChosenLines!.Remove(deleteThisLine);
+            }
+        }
+
+        [RelayCommand]
         private async Task AddNewLine(object? parameter)
         {
             if (parameter is LyricLine addLineAfter)
