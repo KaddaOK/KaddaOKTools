@@ -167,7 +167,7 @@
                                         CornerRadius="3">
                                         <Grid
                                             Classes="lineStack"
-                                            ColumnDefinitions="20,36,*,36,25">
+                                            ColumnDefinitions="20,36,*,36,25,25">
                                             <Button
                                                 Classes="lineMergeButton"
                                                 Grid.Column="0"
@@ -207,6 +207,13 @@
                                                 Content="⏱"
                                                 ToolTip.Tip="Edit timing"
                                                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).EditLineCommand}"
+                                                CommandParameter="{Binding}" />
+											<Button
+                                                Classes="lineDeleteButton"
+                                                Grid.Column="5"
+                                                Content="🗑"
+                                                ToolTip.Tip="Delete line"
+                                                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DeleteLineCommand}"
                                                 CommandParameter="{Binding}" />
                                         </Grid>
                                     </Border>
