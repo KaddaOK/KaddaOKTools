@@ -150,7 +150,11 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 if (file != null)
                 {
                     await using var stream = await file.OpenWriteAsync();
-                    using var streamWriter = new StreamWriter(stream)
+
+                    // UTF-16 LE BOM
+                    Encoding encoding = new UnicodeEncoding(false, true);
+
+                    using var streamWriter = new StreamWriter(stream, encoding)
                     {
                         AutoFlush = true
                     };
@@ -196,7 +200,10 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                         }
 
                         var projectContents = RzProjectSerializer.Serialize(generatedProject);
-                        File.WriteAllText(projectPath, projectContents);
+
+                        using var writer = new StreamWriter(projectPath, false, encoding);
+                        await writer.WriteAsync(projectContents);
+
                         pathToLaunch = projectPath;
                     }
 

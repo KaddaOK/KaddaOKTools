@@ -1,9 +1,8 @@
-﻿using System;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Svg.Skia;
+using System;
+using System.Globalization;
+using System.Threading;
 
 namespace KaddaOK.AvaloniaApp.Windows;
 
@@ -15,6 +14,11 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+
+        CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+        culture.NumberFormat.NumberDecimalSeparator = "."; //Force use . for regions that use ,
+        Thread.CurrentThread.CurrentCulture = culture;
+
         try
         {
             BuildAvaloniaApp()
