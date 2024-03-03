@@ -33,7 +33,7 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
             {
                 var currentProcess = GetNewCurrentProcess();
 
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new MinMaxFloatWaveStreamSampler());
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler());
 
                 viewModel.MoveLineToPrevious(currentProcess.ChosenLines!.Last());
 
@@ -47,7 +47,7 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
             {
                 var currentProcess = GetNewCurrentProcess();
 
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new MinMaxFloatWaveStreamSampler());
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler());
 
                 viewModel.MoveLineToPrevious(currentProcess.ChosenLines!.Last());
 
@@ -92,7 +92,7 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
                 var currentProcess = GetNewCurrentProcess();
                 var modelWord = currentProcess.ChosenLines![0].Words[4];
                 Assert.Equal("model ", modelWord.Text);
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new MinMaxFloatWaveStreamSampler())
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
                     {
                         EditingTextOfWord = modelWord
                     };
@@ -107,7 +107,7 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
                 var currentProcess = GetNewCurrentProcess();
                 var modelWord = currentProcess.ChosenLines![0].Words[4];
                 Assert.Equal("model ", modelWord.Text);
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new MinMaxFloatWaveStreamSampler())
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
                     {
                         EditingTextOfWord = modelWord
                     };
@@ -122,7 +122,7 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
                 var currentProcess = GetNewCurrentProcess();
                 var modelWord = currentProcess.ChosenLines![0].Words[4];
                 Assert.Equal("model ", modelWord.Text);
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new MinMaxFloatWaveStreamSampler())
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
                     {
                         EditingTextOfWord = modelWord
                     };

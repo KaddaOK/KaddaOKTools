@@ -23,9 +23,10 @@ namespace KaddaOK.AvaloniaApp.ViewModels
     public partial class EditLinesViewModel : TickableBase
     {
         private ILineSplitter Splitter { get; }
+        private IWordMerger WordMerger { get; }
         private CancellationTokenSource AudioPlayingSource { get; }
         private IMinMaxFloatWaveStreamSampler Sampler { get; }
-        public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
+        public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
         {
             FullLengthVocalsDraw = new WaveformDraw
             {
@@ -33,6 +34,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 VerticalImage = true
             };
             Splitter = splitter;
+            WordMerger = merger;
             Sampler = sampler;
             UndoStack = new ObservableStack<string?>();
             RedoStack = new ObservableStack<string?>();
@@ -161,6 +163,24 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             }
         }
 
+        [RelayCommand]
+        private void MergeWithPrev(object? parameter)
+        {
+            if (parameter is LyricWord mergeHere)
+            {
+                MergeWord(mergeHere, true);
+            }
+        }
+
+        [RelayCommand]
+        private void MergeWithNext(object? parameter)
+        {
+            if (parameter is LyricWord mergeHere)
+            {
+                MergeWord(mergeHere, false);
+            }
+        }
+
         private void AddUndoSnapshot()
         {
             if (CurrentProcess?.ChosenLines != null)
@@ -197,6 +217,12 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             AddUndoSnapshot();
             Splitter.SplitLineAt(CurrentProcess?.ChosenLines, newLineHere, isBefore);
+        }
+
+        private void MergeWord(LyricWord mergeHere, bool isBefore)
+        {
+            AddUndoSnapshot();
+            WordMerger.MergeWord(CurrentProcess?.ChosenLines, mergeHere, isBefore);
         }
 
         [RelayCommand]

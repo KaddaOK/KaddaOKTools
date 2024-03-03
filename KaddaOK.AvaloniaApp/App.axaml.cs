@@ -37,6 +37,7 @@ public partial class App : Application
         services.AddTransient<IKbpImporter, KbpImporter>();
         services.AddTransient<IKbpSerializer, KbpSerializer>();
         services.AddTransient<ILineSplitter, LineSplitter>();
+        services.AddTransient<IWordMerger, WordMerger>();
         services.AddTransient<IMinMaxFloatWaveStreamSampler, MinMaxFloatWaveStreamSampler>();
         services.AddTransient<IResultRanker, ResultRanker>();
         services.AddTransient<IRzlrcContentsGenerator, RzlrcContentsGenerator>();

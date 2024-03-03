@@ -12,7 +12,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
 {
     public class DesignTimeEditLinesViewModel : EditLinesViewModel
     {
-        public DesignTimeEditLinesViewModel() : base(DesignTimeKaraokeProcess.Get(), new LineSplitter(), new MinMaxFloatWaveStreamSampler())
+        public DesignTimeEditLinesViewModel() : base(DesignTimeKaraokeProcess.Get(), new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
         {
         }
     }

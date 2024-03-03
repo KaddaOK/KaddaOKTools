@@ -89,7 +89,7 @@ namespace KaddaOK.AvaloniaApp.Services
         {
             var instructionArray = rzlrcItem.text.Split('<', '>');
 
-            var timeWithDelayRegex = new Regex(@"^(?'time'[0-9\.]+)(?:\+(?'delay'[0-9\.]+))?$");
+            var timeWithDelayRegex = new Regex(@"^(?'time'[0-9]+.?[0-9]*)(?:\+(?'delay'[0-9\.]+))?$");
             var lyricLine = new LyricLine(rzlrcItem)
             {
                 IsSelected = true,

@@ -55,6 +55,14 @@
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NewLineAfterCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
+                Header="Merge With Previous Syllable"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MergeWithPrevCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Merge With Next Syllable"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MergeWithNextCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
                 Header="Change Syllable Text..."
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).EditWordTextCommand}"
                 CommandParameter="{Binding}" />
