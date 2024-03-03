@@ -625,45 +625,55 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         private async Task AddNewLine(object? parameter)
         {
-            if (parameter is LyricLine addLineAfter)
+            LyricLine? addLineAfter;
+            int addLineAfterIndex;
+            if (parameter is LyricLine line)
             {
-                var addLineAfterIndex = CurrentProcess.ChosenLines!.IndexOf(addLineAfter);
-
-                if (addLineAfterIndex >= 0)
-                {
-                    var addingLine = new AddingLine
-                    {
-                        PreviousLine = addLineAfter
-                    };
-                    if (CurrentProcess.ChosenLines.Count > addLineAfterIndex + 1)
-                    {
-                        addingLine.NextLine = CurrentProcess.ChosenLines[addLineAfterIndex + 1];
-                    }
-
-                    // show a dialog to enter the words
-                    if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords
-                        && !string.IsNullOrWhiteSpace(newWords.EnteredText))
-                    {
-                        // create and add a new line
-                        var newLine = new LyricLine
-                        {
-                            IsSelected = true,
-                        };
-                        var enteredText = newWords.EnteredText;
-                        var startTime = newWords.PreviousLine?.EndSecond ?? 0;
-                        var endTime = newWords.NextLine?.StartSecond
-                                      ?? CurrentProcess.VocalsAudioStream!.TotalTime.TotalSeconds;
-
-                        var listOfNewWords = GetLyricWordsAcrossTime(enteredText, startTime, endTime);
-                        newLine.Words = new ObservableCollection<LyricWord>(listOfNewWords);
-
-                        CurrentProcess.ChosenLines.Insert(addLineAfterIndex + 1, newLine);
-
-                        // go straight to the edit dialog for it
-                        await EditLine(newLine);
-                    }
-                }
+                addLineAfter = line;
+                addLineAfterIndex = CurrentProcess.ChosenLines!.IndexOf(addLineAfter);
             }
+            else if (parameter?.ToString() == "top")
+            {
+                addLineAfter = null;
+                addLineAfterIndex = -1;
+            }
+            else
+            {
+                return;
+            }
+
+            var addingLine = new AddingLine
+            {
+                PreviousLine = addLineAfter
+            };
+            if (CurrentProcess.ChosenLines.Count > addLineAfterIndex + 1)
+            {
+                addingLine.NextLine = CurrentProcess.ChosenLines[addLineAfterIndex + 1];
+            }
+
+            // show a dialog to enter the words
+            if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords
+                && !string.IsNullOrWhiteSpace(newWords.EnteredText))
+            {
+                // create and add a new line
+                var newLine = new LyricLine
+                {
+                    IsSelected = true,
+                };
+                var enteredText = newWords.EnteredText;
+                var startTime = newWords.PreviousLine?.EndSecond ?? 0;
+                var endTime = newWords.NextLine?.StartSecond
+                              ?? CurrentProcess.VocalsAudioStream!.TotalTime.TotalSeconds;
+
+                var listOfNewWords = GetLyricWordsAcrossTime(enteredText, startTime, endTime);
+                newLine.Words = new ObservableCollection<LyricWord>(listOfNewWords);
+
+                CurrentProcess.ChosenLines.Insert(addLineAfterIndex + 1, newLine);
+
+                // go straight to the edit dialog for it
+                await EditLine(newLine);
+            }
+                
         }
 
         private static List<LyricWord> GetLyricWordsAcrossTime(string? enteredText, double startTime, double endTime)

@@ -134,10 +134,19 @@
                         Undo and Redo are available if you make a mistake.
                         When you're satisfied, you can switch to the Export tab.
                     </TextBlock>
+                    <Button
+                        Content="+"
+                        Padding="0,0,100,0"
+                        Margin="0,0,0,-10"
+                        ToolTip.Tip="Add New Line Here"
+                        Background="Transparent"
+                        Foreground="DarkGray"
+                        ZIndex="0"
+                        Command="{Binding AddNewLineCommand}" CommandParameter="top" />
                     <ItemsRepeater
                         x:Name="SelectionsItems"
                         ItemsSource="{Binding CurrentProcess.ChosenLines}"
-                        Margin="0,10,10,10">
+                        Margin="0,0,10,10">
                         <ItemsRepeater.Styles>
                             <Style Selector="Label">
                                 <Setter
