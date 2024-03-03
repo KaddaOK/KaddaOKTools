@@ -536,9 +536,9 @@
                                         </Grid>
                                         
                                     </StackPanel>
-                                    <CheckBox Margin="0,30,0,0" Content="Open the exported result in YTMM" IsChecked="{Binding CurrentProcess.LaunchResult}" />
-                                </StackPanel>
 
+                                </StackPanel>
+                                <CheckBox Margin="0,30,0,0" Content="Open the exported result in YTMM" IsChecked="{Binding CurrentProcess.LaunchResult}" />
                             </StackPanel>
                             <Button
                                 Margin="0,20,0,0"
