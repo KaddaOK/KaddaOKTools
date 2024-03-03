@@ -474,7 +474,7 @@ namespace KaddaOK.AvaloniaApp.Models
             set => SetProperty(ref insertProgressBars, value);
         }
 
-        private decimal progressBarGapLength = 10;
+        private decimal progressBarGapLength = 5;
         public decimal ProgressBarGapLength
         {
             get => progressBarGapLength;
@@ -495,7 +495,7 @@ namespace KaddaOK.AvaloniaApp.Models
             set => SetProperty(ref progressBarHeight, value);
         }
 
-        private int progressBarYPosition = 960;
+        private int progressBarYPosition = 540;
         public int ProgressBarYPosition
         {
             get => progressBarYPosition;
