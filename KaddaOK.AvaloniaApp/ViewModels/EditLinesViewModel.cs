@@ -615,7 +615,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                     }
 
                     // show a dialog to enter the words
-                    if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords)
+                    if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords
+                        && !string.IsNullOrWhiteSpace(newWords.EnteredText))
                     {
                         // create and add a new line
                         var newLine = new LyricLine
