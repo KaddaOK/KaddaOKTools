@@ -183,6 +183,14 @@ namespace KaddaOK.Library
             }
 
             // ok, everything is still wired up by ref
+            // need to remove any lines that have been deleted
+            var itemsThatExistedBefore = processedResults.Select(s => s.OriginalRzlrcItem).ToList();
+            var itemsThatNeedDeletion = selectedPage.item?.Where(i => !itemsThatExistedBefore.Contains(i));
+            if (itemsThatNeedDeletion.Any())
+            {
+                selectedPage.item = selectedPage.item.Where(i => !itemsThatNeedDeletion.Contains(i)).ToArray();
+            }
+
             foreach (var line in processedResults)
             {
                 LyricItem itemToSet;
