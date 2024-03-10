@@ -127,6 +127,7 @@
 	<Application.Resources>
         <local:WaveformToPointConverter x:Key="WaveformToPointConverter" />
         <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
+        <local:ObjectEqualityBooleanConverter x:Key="ObjectEqualityBooleanConverter" />
         <local:RoundingConverter x:Key="RoundingConverter" />
     </Application.Resources>
 </Application>

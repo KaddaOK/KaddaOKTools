@@ -19,6 +19,11 @@ namespace KaddaOK.Library
                 if (originalLine.Words != null)
                 {
                     var originalWordIndex = originalLine.Words.IndexOf(wordToSplit);
+                    if (originalWordIndex == 0 && splitBefore)
+                    {
+                        // can't split before this because it's already the first word; do nothing
+                        return;
+                    }
 
                     var newLine = new LyricLine
                     {
@@ -41,6 +46,7 @@ namespace KaddaOK.Library
                 var indexOf = originalLine.Words.IndexOf(wordToDelete);
                 if (indexOf > 0)
                 {
+                    // TODO: wait what why? Investigate what the rationale for this trimming was, because it looks wrong as I go by it here rn
                     originalLine.Words[indexOf - 1].Text = originalLine?.Words[indexOf - 1]?.Text?.TrimEnd();
                 }
                 originalLine?.Words.Remove(wordToDelete);

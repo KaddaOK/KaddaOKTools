@@ -37,5 +37,16 @@ namespace KaddaOK.AvaloniaApp.Controls.Dialogs
         {
             EditLinesViewModel?.EditLineTimingDialogPointerReleased(sender, args);
         }
+
+        private void UserControl_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
+        {
+            EditLinesViewModel?.EditLineTimingDialogKeyDown(sender, e);
+            e.Handled = true;
+        }
+
+        private void UserControl_AttachedToVisualTree(object? sender, Avalonia.VisualTreeAttachmentEventArgs e)
+        {
+            this.Focus();
+        }
     }
 }

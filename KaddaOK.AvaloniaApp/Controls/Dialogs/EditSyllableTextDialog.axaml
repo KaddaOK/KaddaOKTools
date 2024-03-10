@@ -24,11 +24,13 @@
                 and the timing dialog will open automatically for you to check the new distribution.)
             </TextBlock>
             <TextBox
+                AttachedToVisualTree="TextBox_AttachedToVisualTree"
                 Grid.Row="2"
                 Margin="0 8 0 0"
                 HorizontalAlignment="Stretch"
                 x:Name="EditWordTextBox"
-                Text="{Binding Text, Mode=OneWay}" />
+                Text="{Binding Text, Mode=OneWay}"
+                KeyDown="TextBox_KeyDown"/>
             <StackPanel
                 Grid.Row="3"
                 Orientation="Horizontal"

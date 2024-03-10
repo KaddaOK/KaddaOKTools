@@ -4,54 +4,51 @@ namespace KaddaOK.Library
 {
     public interface IWordMerger
     {
-        void MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore);
+        LyricWord MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore);
     }
 
     public class WordMerger : IWordMerger
     {
-        public void MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore)
+        public LyricWord? MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore)
         {
             var originalLine = allLines?.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToMerge));
-            if (originalLine != null)
+            if (originalLine == null)
             {
-                var originalLineIndex = allLines!.IndexOf(originalLine);
-                if (originalLine.Words != null)
-                {
-                    var originalWordIndex = originalLine.Words.IndexOf(wordToMerge);
-                    if ((withWordBefore && originalWordIndex < 1)
-                        || (!withWordBefore && originalWordIndex == originalLine.Words.Count - 1))
-                    {
-                        return; // I don't wanna.  TODO: I guess this would move the word to the line in question?
-                    }
-
-                    if (withWordBefore)
-                    {
-                        var prevWordIndex = originalWordIndex - 1;
-                        var prevWord = originalLine.Words[prevWordIndex];
-                        var newWord = new LyricWord
-                        {
-                            StartSecond = prevWord.StartSecond,
-                            EndSecond = wordToMerge.EndSecond,
-                            Text = $"{prevWord.Text.TrimEnd()}{wordToMerge.Text.TrimStart()}"
-                        };
-                        originalLine.Words = new ObservableCollection<LyricWord>(
-                            originalLine.Words.Take(prevWordIndex).Concat(new []{newWord}).Concat(originalLine.Words.Skip(originalWordIndex + 1)));
-                    }
-                    else
-                    {
-                        var nextWordIndex = originalWordIndex + 1;
-                        var nextWord = originalLine.Words[nextWordIndex];
-                        var newWord = new LyricWord
-                        {
-                            StartSecond = wordToMerge.StartSecond,
-                            EndSecond = nextWord.EndSecond,
-                            Text = $"{wordToMerge.Text.TrimEnd()}{nextWord.Text.TrimStart()}"
-                        };
-                        originalLine.Words = new ObservableCollection<LyricWord>(
-                            originalLine.Words.Take(originalWordIndex).Concat(new[] { newWord }).Concat(originalLine.Words.Skip(nextWordIndex + 1)));
-                    }
-                }
+                return null;
             }
+
+            var originalLineIndex = allLines!.IndexOf(originalLine);
+
+            if (originalLine.Words == null)
+            {
+                return null;
+            }
+
+            var originalWordIndex = originalLine.Words.IndexOf(wordToMerge);
+            if ((withWordBefore && originalWordIndex < 1)
+                || (!withWordBefore && originalWordIndex == originalLine.Words.Count - 1))
+            {
+                return null; // I don't wanna.  TODO: I guess this would move the word to the line in question?
+            }
+
+            // either we're merging with the word with the previous index or the next index
+            var firstWordIndex = withWordBefore ? originalWordIndex - 1 : originalWordIndex;
+            var secondWordIndex = withWordBefore ? originalWordIndex : originalWordIndex + 1;
+            var firstWord = originalLine.Words[firstWordIndex];
+            var secondWord = originalLine.Words[secondWordIndex];
+
+            var replacementWord = new LyricWord
+            {
+                StartSecond = firstWord.StartSecond,
+                EndSecond = secondWord.EndSecond,
+                Text = $"{firstWord.Text.TrimEnd()}{secondWord.Text.TrimStart()}"
+            };
+
+            originalLine.Words = new ObservableCollection<LyricWord>(
+                originalLine.Words.Take(firstWordIndex).Concat(new[] { replacementWord })
+                    .Concat(originalLine.Words.Skip(secondWordIndex + 1)));
+
+            return replacementWord;
         }
     }
 }

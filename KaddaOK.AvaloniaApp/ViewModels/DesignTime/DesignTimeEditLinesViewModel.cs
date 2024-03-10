@@ -14,6 +14,10 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
     {
         public DesignTimeEditLinesViewModel() : base(DesignTimeKaraokeProcess.Get(), new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
         {
+            UndoStack.Add(new ChosenLinesAction("[]", "did this before this view"));
+            UndoStack.Add(new ChosenLinesAction("[]", "and then I did this"));
+            RedoStack.Add(new ChosenLinesAction("[]", "already undid this first"));
+            RedoStack.Add(new ChosenLinesAction("[]", "then undid this"));
         }
     }
 }
