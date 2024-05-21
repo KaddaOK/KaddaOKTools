@@ -129,5 +129,8 @@
         <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
         <local:ObjectEqualityBooleanConverter x:Key="ObjectEqualityBooleanConverter" />
         <local:RoundingConverter x:Key="RoundingConverter" />
+        <local:TimingWordIsPlayingConverter x:Key="TimingWordIsPlayingConverter" />
+        <local:TimingWordStartHasBeenSetConverter x:Key="TimingWordStartHasBeenSetConverter" />
+        <local:TimingWordEndHasBeenSetConverter x:Key="TimingWordEndHasBeenSetConverter" />
     </Application.Resources>
 </Application>

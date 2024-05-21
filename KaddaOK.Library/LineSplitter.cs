@@ -4,15 +4,21 @@ namespace KaddaOK.Library
 {
     public interface ILineSplitter
     {
-        void SplitLineAt(ObservableCollection<LyricLine>? allLines, LyricWord wordToSplit, bool splitBefore);
-        void DeleteWord(ObservableCollection<LyricLine> allLines, LyricWord wordToDelete);
+        void SplitLineAt<TList, TItem>(ObservableCollection<TList>? allLines, TItem wordToSplit, bool splitBefore)
+            where TItem : LyricWord
+            where TList : ILyricLine<TItem>, new();
+        void DeleteWord<TList, TItem>(ObservableCollection<TList> allLines, TItem wordToDelete)
+            where TItem : LyricWord
+            where TList : ILyricLine<TItem>, new();
     }
 
     public class LineSplitter : ILineSplitter
     {
-        public void SplitLineAt(ObservableCollection<LyricLine>? allLines, LyricWord wordToSplit, bool splitBefore)
+        public void SplitLineAt<TList, TItem>(ObservableCollection<TList>? allLines, TItem wordToSplit, bool splitBefore)
+            where TItem : LyricWord
+            where TList : ILyricLine<TItem>, new()
         {
-            var originalLine = allLines?.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToSplit));
+            var originalLine = allLines.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToSplit));
             if (originalLine != null)
             {
                 var originalLineIndex = allLines!.IndexOf(originalLine);
@@ -25,20 +31,25 @@ namespace KaddaOK.Library
                         return;
                     }
 
-                    var newLine = new LyricLine
+                    var newLine = new TList
                     {
-                        IsSelected = originalLine.IsSelected,
-                        Words = new ObservableCollection<LyricWord>(originalLine.Words.Skip(originalWordIndex + (splitBefore ? 0 : 1)))
+                        Words = new ObservableCollection<TItem>(originalLine.Words.Skip(originalWordIndex + (splitBefore ? 0 : 1)))
                     };
+                    if (newLine is LyricLine newLyricLine && originalLine is LyricLine oldLyricLine)
+                    {
+                        newLyricLine.IsSelected = oldLyricLine.IsSelected;
+                    }
 
-                    originalLine.Words = new ObservableCollection<LyricWord>(originalLine.Words.Take(splitBefore ? originalWordIndex : originalWordIndex + 1));
+                    originalLine.Words = new ObservableCollection<TItem>(originalLine.Words.Take(splitBefore ? originalWordIndex : originalWordIndex + 1));
                     originalLine.Words.Last().Text = originalLine.Words.Last().Text?.TrimEnd();
                     allLines.Insert(originalLineIndex+1, newLine);
                 }
             }
         }
 
-        public void DeleteWord(ObservableCollection<LyricLine> allLines, LyricWord wordToDelete)
+        public void DeleteWord<TList, TItem>(ObservableCollection<TList> allLines, TItem wordToDelete)
+            where TItem : LyricWord
+            where TList : ILyricLine<TItem>, new()
         {
             var originalLine = allLines.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToDelete));
             if (originalLine?.Words != null)

@@ -14,7 +14,8 @@ namespace KaddaOK.AvaloniaApp.Models
         AzureSpeechService,
         RzlrcImport,
         KbpImport,
-        CtmImport
+        CtmImport,
+        ManualSync
     }
 
     public partial class KaraokeProcess : ObservableBase
@@ -227,7 +228,7 @@ namespace KaddaOK.AvaloniaApp.Models
         {
             get
             {
-                if (!KnownOriginalLyrics?.Lyrics?.Any() ?? true)
+                if (!KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true)
                 {
                     return "Lyrics must be supplied for a quality result.";
                 }
@@ -309,6 +310,80 @@ namespace KaddaOK.AvaloniaApp.Models
 
         #endregion
 
+        #region Manual Alignment
+        private ObservableCollection<ManualTimingLine>? manualTimingLines;
+        public ObservableCollection<ManualTimingLine>? ManualTimingLines
+        {
+            get => manualTimingLines;
+            set
+            {
+                if (SetProperty(ref manualTimingLines, value))
+                {
+                    ManualAlignmentCompletenessChanged();
+                };
+            }
+        }
+
+        public int TotalWordsInManualTiming
+        {
+            get
+            {
+                if (!(ManualTimingLines?.Any() ?? false)) return 0;
+
+                return ManualTimingLines.SelectMany(m => m.Words).Count();
+            }
+        }
+
+        public int TimedWordsInManualTiming
+        {
+            get
+            {
+                if (!(ManualTimingLines?.Any() ?? false)) return 0;
+
+                return ManualTimingLines.SelectMany(m => m.Words).Count(m => m.StartHasBeenManuallySet && m.EndHasBeenManuallySet);
+            }
+        }
+
+        private ObservableQueue<TimingWord>? manualTimingQueue;
+        public ObservableQueue<TimingWord>? ManualTimingQueue
+        {
+            get => manualTimingQueue;
+            set => SetProperty(ref manualTimingQueue, value);
+        }
+
+        public void ManualAlignmentCompletenessChanged()
+        {
+            RaisePropertyChanged(nameof(TimedWordsInManualTiming));
+            RaisePropertyChanged(nameof(TotalWordsInManualTiming));
+            RaisePropertyChanged(nameof(ReasonManualAlignmentIsIncomplete));
+            RaisePropertyChanged(nameof(ManualAlignmentIsComplete));
+            RaisePropertyChanged(nameof(ReasonEditTabIsDisabled));
+            RaisePropertyChanged(nameof(EditTabIsEnabled));
+        }
+
+        public bool ManualAlignmentIsComplete => string.IsNullOrWhiteSpace(ReasonManualAlignmentIsIncomplete);
+
+        public string? ReasonManualAlignmentIsIncomplete
+        {
+            get
+            {
+                if (ManualTimingLines == null || !ManualTimingLines.Any())
+                {
+                    return "There are no lines of lyrics.";
+                }
+
+                var unprocessedSyllables = TotalWordsInManualTiming - TimedWordsInManualTiming;
+                if (unprocessedSyllables > 0)
+                {
+                    return $"{unprocessedSyllables} syllables have not yet been timed.";
+                }
+
+                return null;
+            }
+        }
+        #endregion
+
+
         #region Narrow Step
 
         private ObservableCollection<LyricLine>? chosenLines;
@@ -365,6 +440,10 @@ namespace KaddaOK.AvaloniaApp.Models
                     || KaraokeSource == InitialKaraokeSource.CtmImport)
                 {
                     return null;
+                }
+                if (KaraokeSource == InitialKaraokeSource.ManualSync)
+                {
+                    return ReasonManualAlignmentIsIncomplete;
                 }
 
                 return ReasonNarrowingStepIsIncomplete;

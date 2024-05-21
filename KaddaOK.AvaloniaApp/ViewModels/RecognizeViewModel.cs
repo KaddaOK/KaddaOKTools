@@ -79,7 +79,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 return false;
             }
 
-            if (!CurrentProcess!.KnownOriginalLyrics?.Lyrics?.Any() ?? true)
+            if (!CurrentProcess!.KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true)
             {
                 reporter.ReasonCantExecute = "Lyrics must be supplied for a quality result.";
                 return false;
@@ -191,7 +191,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                         var ctmLines = File.ReadAllLines(ctmFilePath).ToList();
 
                         var lyricLines =
-                            NfaCtmImporter.ImportNfaCtmAndLyrics(ctmLines, CurrentProcess.KnownOriginalLyrics?.Lyrics);
+                            NfaCtmImporter.ImportNfaCtmAndLyrics(ctmLines, CurrentProcess.KnownOriginalLyrics?.SeparatorCleansedLines);
 
                         CurrentProcess.ChosenLines =
                             new ObservableCollection<LyricLine>(lyricLines);

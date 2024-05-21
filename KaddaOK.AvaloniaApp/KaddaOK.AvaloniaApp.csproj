@@ -44,6 +44,7 @@
     <PackageReference Include="Avalonia.Svg.Skia" Version="11.0.0.2" />
     <PackageReference Include="Avalonia.Themes.Fluent" Version="11.0.4" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.0.4" />
+    <PackageReference Include="Avalonia.Xaml.Interactivity" Version="11.0.10.9" />
     <PackageReference Include="AvaloniaColorPicker" Version="1.4.0" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.1" />
 
@@ -61,6 +62,9 @@
   <ItemGroup>
     <Compile Update="Views\EditLinesView.axaml.cs">
       <DependentUpon>EditLinesView.axaml</DependentUpon>
+    </Compile>
+    <Compile Update="Views\ManualAlignView.axaml.cs">
+      <DependentUpon>ManualAlignView.axaml</DependentUpon>
     </Compile>
   </ItemGroup>
 

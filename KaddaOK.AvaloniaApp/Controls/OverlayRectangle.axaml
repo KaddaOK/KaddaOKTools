@@ -1,22 +1,32 @@
-<UserControl xmlns="https://github.com/avaloniaui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
-             mc:Ignorable="d" d:DesignWidth="100" d:DesignHeight="50"
-             x:Class="KaddaOK.AvaloniaApp.Controls.OverlayRectangle"
-             x:DataType="controls:OverlayRectangle">
-    <UserControl.Styles>
-        <Style Selector="controls|DragHandleLine">
-            <Setter Property="Stroke" Value="Transparent" />
-            <Setter Property="Cursor" Value="SizeWestEast" />
-			<Setter Property="StrokeThickness" Value="5" />
-        </Style>
-    </UserControl.Styles>
-    <UserControl.Template>
-        <ControlTemplate>
+<UserControl
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+	mc:Ignorable="d"
+	d:DesignWidth="100"
+	d:DesignHeight="50"
+	x:Class="KaddaOK.AvaloniaApp.Controls.OverlayRectangle"
+	x:DataType="controls:OverlayRectangle">
+	<UserControl.Styles>
+		<Style Selector="controls|DragHandleLine">
+			<Setter
+				Property="Stroke"
+				Value="Transparent" />
+			<Setter
+				Property="Cursor"
+				Value="SizeWestEast" />
+			<Setter
+				Property="StrokeThickness"
+				Value="5" />
+		</Style>
+	</UserControl.Styles>
+	<UserControl.Template>
+		<ControlTemplate>
 			<Grid>
-				<Rectangle Name="DisplayRectangle"
+				<Rectangle
+					Name="DisplayRectangle"
 					StrokeThickness="{TemplateBinding StrokeThickness}"
 					Stroke="{TemplateBinding Stroke}"
 					Fill="{TemplateBinding Fill}"
@@ -24,29 +34,53 @@
 					Classes.isVertical="{TemplateBinding IsVertical}">
 					<Rectangle.Styles>
 						<Style Selector="Rectangle">
-							<Setter Property="Height" Value="{TemplateBinding Height}" />
+							<Setter
+								Property="Height"
+								Value="{TemplateBinding Height}" />
 							<Setter Property="Width">
 								<Setter.Value>
 									<MultiBinding Converter="{StaticResource WaveformToLengthConverter}">
-										<Binding Path="StartSecond" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="EndSecond" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="WaveformDraw.WaveformLengthSeconds" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="WaveformDraw.DesiredImageWidth" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="StartOffsetSecond" RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="StartSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="EndSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="WaveformDraw.WaveformLengthSeconds"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="WaveformDraw.DesiredImageWidth"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="StartOffsetSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
 									</MultiBinding>
 								</Setter.Value>
 							</Setter>
 						</Style>
 						<Style Selector="Rectangle.isVertical">
-							<Setter Property="Width" Value="{TemplateBinding Width}" />
+							<Setter
+								Property="Width"
+								Value="{TemplateBinding Width}" />
 							<Setter Property="Height">
 								<Setter.Value>
 									<MultiBinding Converter="{StaticResource WaveformToLengthConverter}">
-										<Binding Path="StartSecond" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="EndSecond" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="WaveformDraw.WaveformLengthSeconds" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="WaveformDraw.DesiredImageWidth" RelativeSource="{RelativeSource TemplatedParent}" />
-										<Binding Path="StartOffsetSecond" RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="StartSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="EndSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="WaveformDraw.WaveformLengthSeconds"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="WaveformDraw.DesiredImageWidth"
+											RelativeSource="{RelativeSource TemplatedParent}" />
+										<Binding
+											Path="StartOffsetSecond"
+											RelativeSource="{RelativeSource TemplatedParent}" />
 									</MultiBinding>
 								</Setter.Value>
 							</Setter>
@@ -54,23 +88,23 @@
 					</Rectangle.Styles>
 				</Rectangle>
 				<controls:DragHandleLine
-                      Name="LeftBounds"
-                      StartPoint="{Binding #DisplayRectangle.Bounds.TopLeft}" 
-                      EndPoint="{Binding  #DisplayRectangle.Bounds.BottomLeft}"
-                      ContainerTotalSeconds="{Binding WaveformDraw.WaveformLengthSeconds, RelativeSource={RelativeSource TemplatedParent}}"
-                      ContainerWidth="{Binding WaveformDraw.DesiredImageWidth, RelativeSource={RelativeSource TemplatedParent}}"
-                      ContainerOffsetSeconds="{Binding StartOffsetSecond, RelativeSource={RelativeSource TemplatedParent}}"
-                      />
+					IsVisible="{Binding AllowDrag, RelativeSource={RelativeSource TemplatedParent}}"
+					Name="LeftBounds"
+					StartPoint="{Binding #DisplayRectangle.Bounds.TopLeft}"
+					EndPoint="{Binding  #DisplayRectangle.Bounds.BottomLeft}"
+					ContainerTotalSeconds="{Binding WaveformDraw.WaveformLengthSeconds, RelativeSource={RelativeSource TemplatedParent}}"
+					ContainerWidth="{Binding WaveformDraw.DesiredImageWidth, RelativeSource={RelativeSource TemplatedParent}}"
+					ContainerOffsetSeconds="{Binding StartOffsetSecond, RelativeSource={RelativeSource TemplatedParent}}" />
 				<controls:DragHandleLine
-                      Name="RightBounds" 
-                      StartPoint="{Binding #DisplayRectangle.Bounds.TopRight}" 
-                      EndPoint="{Binding  #DisplayRectangle.Bounds.BottomRight}" 
-                      ContainerTotalSeconds="{Binding WaveformDraw.WaveformLengthSeconds, RelativeSource={RelativeSource TemplatedParent}}"
-                      ContainerWidth="{Binding WaveformDraw.DesiredImageWidth, RelativeSource={RelativeSource TemplatedParent}}" 
-                      ContainerOffsetSeconds="{Binding StartOffsetSecond, RelativeSource={RelativeSource TemplatedParent}}"
-                      />
+					IsVisible="{Binding AllowDrag, RelativeSource={RelativeSource TemplatedParent}}"
+					Name="RightBounds"
+					StartPoint="{Binding #DisplayRectangle.Bounds.TopRight}"
+					EndPoint="{Binding  #DisplayRectangle.Bounds.BottomRight}"
+					ContainerTotalSeconds="{Binding WaveformDraw.WaveformLengthSeconds, RelativeSource={RelativeSource TemplatedParent}}"
+					ContainerWidth="{Binding WaveformDraw.DesiredImageWidth, RelativeSource={RelativeSource TemplatedParent}}"
+					ContainerOffsetSeconds="{Binding StartOffsetSecond, RelativeSource={RelativeSource TemplatedParent}}" />
 			</Grid>
-        </ControlTemplate>
-    </UserControl.Template>
+		</ControlTemplate>
+	</UserControl.Template>
 
 </UserControl>

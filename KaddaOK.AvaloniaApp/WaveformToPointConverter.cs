@@ -12,15 +12,16 @@ namespace KaddaOK.AvaloniaApp
     {
         public object? Convert(IList<object?> values, Type targetType, object? parameter, CultureInfo culture)
         {
-            /*
+            
             var sb = new StringBuilder();
-            sb.AppendLine(nameof(WaveformToPointConverter));
+            sb.Append(nameof(WaveformToPointConverter));
             for (int i = 0; i < values.Count; i++)
             {
-                sb.AppendLine($"[{i}]: {values[i]?.ToString() ?? "null"}");
+                sb.Append($"[{i}]: {values[i]?.ToString() ?? "null"}");
             }
             Debug.WriteLine(sb.ToString());
-            */
+
+            double? returnValue = null;
 
             // need to know the second of the point
             // need to know the length of the waveform in seconds
@@ -39,10 +40,13 @@ namespace KaddaOK.AvaloniaApp
                 }
 
                 //Debug.WriteLine($"{pointSeconds} / {waveLengthSeconds} * {totalWidth}");
-                return pointSeconds / waveLengthSeconds * totalWidth;
+                returnValue = pointSeconds / waveLengthSeconds * totalWidth;
             }
 
-            return null;
+            sb.Append($" = {returnValue}");
+            Debug.WriteLine(sb.ToString());
+
+            return returnValue;
         }
     }
 }

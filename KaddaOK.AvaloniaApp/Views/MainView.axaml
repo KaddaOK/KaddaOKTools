@@ -65,7 +65,7 @@
                 Property="TextElement.Foreground"
                 Value="#FF6F6F6F" />
         </Style>
-        <Style Selector="views|AudioView, views|LyricsView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
+        <Style Selector="views|AudioView, views|LyricsView, views|ManualAlignView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
             <Setter
                 Property="Background"
                 Value="{DynamicResource SystemRegionColor}" />
@@ -124,7 +124,7 @@
                 ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}">
-                <views:RecognizeView />
+                <views:ManualAlignView />
             </TabItem>
             <TabItem
                 x:Name="NarrowTab"

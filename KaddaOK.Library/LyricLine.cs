@@ -1,11 +1,17 @@
 ﻿using Microsoft.CognitiveServices.Speech;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using KaddaOK.Library.Kbs;
 using KaddaOK.Library.Ytmm;
 
 namespace KaddaOK.Library
 {
-    public class LyricLine : ObservableBase, IAudioSpan
+    public interface ILyricLine<T> where T : LyricWord
+    {
+        ObservableCollection<T> Words { get; set; }
+    }
+
+    public class LyricLine : ObservableBase, IAudioSpan, ILyricLine<LyricWord>
     {
         public string? Text => string.Concat(Words.Select(w => w.Text));
 
@@ -119,6 +125,15 @@ namespace KaddaOK.Library
         public LyricLine()
         {
             words = new ObservableCollection<LyricWord>();
+        }
+
+        public static LyricLine FromIncomingSeparatedText(string text, double songLength)
+        {
+            return new LyricLine
+            {
+                Words = new ObservableCollection<LyricWord>(
+                    LyricWord.GetLyricWordsAcrossTime(text, songLength, songLength))
+            };
         }
 
         public static void MoveSpacesToEndsOfWords(IList<LyricWord> words)

@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -53,15 +54,13 @@ namespace KaddaOK.AvaloniaApp.Views
             {
                 _viewModel.ApplyLineTimingEdit(e.Parameter);
             }
-
-            this.Focus();
         }
 
         private void EditLinesView_OnKeyDown(object? sender, KeyEventArgs e)
         {
             if (!this.FindDescendantOfType<DialogHost>()?.IsOpen ?? false) // leave it alone if dialogs are open
             {
-                _viewModel.KeyPressed(e);
+                _viewModel.HandleWordEditKeys(e, false);
             }
         }
 
@@ -73,30 +72,23 @@ namespace KaddaOK.AvaloniaApp.Views
 
         private void WordButton_GotFocus(object? sender, GotFocusEventArgs e)
         {
-            _viewModel.CursorWord = ((Button)sender)?.CommandParameter as LyricWord;
+            var lyricWordButton = sender as Button;
+            _viewModel.CursorWord = lyricWordButton?.CommandParameter as LyricWord;
+            var itemsControl = lyricWordButton?.FindLogicalAncestorOfType<ItemsControl>();
+            _viewModel.CursorLine = itemsControl?.DataContext as LyricLine;
         }
 
-        private void MenuItem_AttachedToLogicalTree(object? sender, Avalonia.LogicalTree.LogicalTreeAttachmentEventArgs e)
+        private void LyricWordButtonFlyoutMenuItem_KeyDown(object? sender, Avalonia.Input.KeyEventArgs e)
         {
+            // it's a bit strange to have to do it this way, but these MenuItems are refusing to respond to HotKeys 
             var menuItem = sender as MenuItem;
-            if (menuItem?.InputGesture != null)
+            if (_viewModel.HandleWordEditKeys(e, true))
             {
-                var keyBinding = new KeyBinding
-                {
-                    Gesture = menuItem.InputGesture,
-                    Command = menuItem.Command,
-                    CommandParameter = menuItem.CommandParameter
-                };
-                if (!menuItem.KeyBindings.Any())
-                {
-                    menuItem.KeyBindings.Add(keyBinding);
-                }
-                var presenter = menuItem?.FindLogicalAncestorOfType<MenuFlyoutPresenter>();
-                if (presenter != null)
-                {
-                    presenter.KeyBindings.AddRange(menuItem.KeyBindings);
-                }
+                var menuItemButton = menuItem?.FindLogicalAncestorOfType<Button>();
+                menuItemButton?.Flyout?.Hide();
             }
+
+            this.Focus();
         }
     }
 }

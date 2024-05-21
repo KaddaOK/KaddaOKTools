@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using KaddaOK.Library;
 using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using KaddaOK.AvaloniaApp.Models;
@@ -62,9 +63,9 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                     CurrentProcess!.LyricsFilePath = result.TryGetLocalPath();
                     // TODO: the data here flows a really wacky way, should maybe rethink
                     var knownLyrics = KnownOriginalLyrics.FromFilePath(CurrentProcess!.LyricsFilePath);
-                    if (knownLyrics.Lyrics != null)
+                    if (knownLyrics.UncleansedLines != null)
                     {
-                        LyricEditorText = string.Join(Environment.NewLine, knownLyrics.Lyrics);
+                        LyricEditorText = string.Join(Environment.NewLine, knownLyrics.UncleansedLines);
                     }
                 }
                 GettingFile = false;
@@ -84,7 +85,28 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
+            SetUpManualAlignment();
             CurrentProcess!.SelectedTabIndex = 2;
+        }
+
+        public void SetUpManualAlignment()
+        {
+            // TODO: this belongs somewhere else, probably as a button on a choice screen I haven't set up yet
+            // TODO: warn the user if CurrentProcess.ManualTimingLines is not null and any have manual start and end set
+            var maxSeconds = (CurrentProcess.UnseparatedAudioStream ?? CurrentProcess.VocalsAudioStream)?.TotalTime.TotalSeconds;
+            CurrentProcess.ManualTimingLines = new ObservableCollection<ManualTimingLine>
+                (
+                    CurrentProcess.KnownOriginalLyrics.UncleansedLines
+                    .Select(l => new ManualTimingLine
+                    (
+                        LyricWord.GetLyricWordsAcrossTime(l, maxSeconds ?? 0, maxSeconds ?? 0)
+                            .Select(TimingWord.FromLyricWord)))
+            );
+            CurrentProcess.ManualTimingQueue =
+                new ObservableQueue<TimingWord>(CurrentProcess.ManualTimingLines.SelectMany(t => t.Words));
+            CurrentProcess.ManualTimingQueue.Peek().IsNext = true;
+            // TODO: this should happen in a different place than here
+            CurrentProcess.KaraokeSource = InitialKaraokeSource.ManualSync;
         }
 
         public LyricsViewModel(KaraokeProcess karaokeProcess) : base(karaokeProcess)

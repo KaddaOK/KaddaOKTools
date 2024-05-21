@@ -53,6 +53,7 @@ public partial class App : Application
         services.AddTransient<LyricsViewModel>();
         services.AddTransient<NarrowingViewModel>();
         services.AddTransient<RecognizeViewModel>();
+        services.AddTransient<ManualAlignViewModel>();
 
         // Build the service provider
         ServiceProvider = services.BuildServiceProvider();

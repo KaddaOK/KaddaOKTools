@@ -12,16 +12,17 @@
         <Grid RowDefinitions="*,*,*,*" MaxWidth="500">
             <Label
                 Content="{Binding StartSecond}"
+                IsVisible="{Binding Converter={StaticResource TimingWordStartHasBeenSetConverter}}"
                 HorizontalAlignment="Left" />
             <Label
                 Content="{Binding Text}"
                 HorizontalAlignment="Center" />
             <Label
                 Content="{Binding EndSecond}"
+                IsVisible="{Binding Converter={StaticResource TimingWordEndHasBeenSetConverter}}"
                 HorizontalAlignment="Right" />
 			<TextBlock Grid.Row="1" TextWrapping="Wrap">
-                Enter the new text for this timed syllable. (You may break it up into multiple words or syllables by using space or | characters, 
-                and the timing dialog will open automatically for you to check the new distribution.)
+                Enter the new text for this timed syllable. (You may break it up into multiple words or syllables by using space, /, or | characters.)
             </TextBlock>
             <TextBox
                 AttachedToVisualTree="TextBox_AttachedToVisualTree"

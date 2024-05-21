@@ -14,7 +14,7 @@
 				Enter the text for the new line.
 			</TextBlock>
 			<TextBlock TextWrapping="Wrap">
-				(To separate syllables, use a | (pipe) character.)
+				(To separate syllables, use a / or | character.)
 			</TextBlock>
 			<Grid ColumnDefinitions="36,*,36" RowDefinitions="*,*,*,*">
 				<Label FontSize="10" Content="{Binding PreviousLine.StartSecond}" />

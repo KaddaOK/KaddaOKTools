@@ -1,0 +1,459 @@
+<UserControl
+	xmlns="https://github.com/avaloniaui"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+	xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+	xmlns:views="clr-namespace:KaddaOK.AvaloniaApp.Views"
+	xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+	xmlns:system="clr-namespace:System;assembly=System.Runtime"
+	xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+	xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
+	xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+	mc:Ignorable="d"
+	d:DesignWidth="1000"
+	d:DesignHeight="800"
+	x:Class="KaddaOK.AvaloniaApp.Views.ManualAlignView"
+	x:DataType="vm:ManualAlignViewModel"
+	Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
+	KeyDown="ManualAlign_KeyDown">
+	<UserControl.Resources>
+		<MenuFlyout
+					x:Key="WordButtonFlyout"
+					x:DataType="models:TimingWord">
+			<MenuItem
+                Header="Move Recording Head To Before This Syllable"
+                Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).MoveHeadCommand}"
+                CommandParameter="{Binding}" />
+			<Separator />
+            <MenuItem
+                Header="Edit Text/Split Syllables..."
+                Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).EditWordTextCommand}"
+                CommandParameter="{Binding}" />
+			<Separator />
+			<MenuItem
+                Header="Merge With Previous Syllable"
+                Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).MergeWithPrevCommand}"
+                CommandParameter="{Binding}" />
+			<MenuItem
+                Header="Merge With Next Syllable"
+                Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).MergeWithNextCommand}"
+                CommandParameter="{Binding}" />
+			<Separator />
+            <MenuItem
+                Header="Delete Syllable"
+                Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).DeleteWordCommand}"
+                CommandParameter="{Binding}" />
+        </MenuFlyout>
+	</UserControl.Resources>
+	<UserControl.Styles>
+		<Style
+			x:DataType="models:ManualTimingLine"
+			Selector="ItemsControl.timedLines > ContentPresenter">
+			<Setter Property="Canvas.Left">
+				<Setter.Value>
+					<MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+						<Binding Path="ManualStartSecond" />
+						<Binding Path="$parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).FullLengthVocalsDraw.WaveformLengthSeconds" />
+						<Binding Path="$parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).FullLengthVocalsDraw.DesiredImageWidth" />
+					</MultiBinding>
+				</Setter.Value>
+			</Setter>
+			<Setter
+				Property="Canvas.Top"
+				Value="0" />
+		</Style>
+	</UserControl.Styles>
+	<Design.DataContext>
+		<designTime:DesignTimeManualAlignViewModel />
+	</Design.DataContext>
+	<dialogHost:DialogHost
+		Identifier="ManualAlignViewDialogHost">
+        <dialogHost:DialogHost.DataTemplates>
+            <DataTemplate DataType="vm:ManualAlignViewModel">
+                <dialogs:EditSyllableTextDialog DataContext="{Binding EditingTextOfWord}" />
+            </DataTemplate>
+            <DataTemplate DataType="models:AddingLine">
+                <dialogs:InsertNewLineDialog DataContext="{Binding}" />
+            </DataTemplate>
+        </dialogHost:DialogHost.DataTemplates>
+	    <Grid RowDefinitions="Auto, 36, 75, *">
+		    <StackPanel Margin="5">
+			    <StackPanel.Styles>
+				    <Style Selector="TextBlock">
+                        <Setter
+                            Property="FontSize"
+                            Value="12" />
+					    <Setter Property="TextWrapping" Value="Wrap"/>
+					    <Setter Property="Margin" Value="0,3" />
+                    </Style>
+                </StackPanel.Styles>
+                <TextBlock>
+				    On this screen you can tap the timing of each syllable using the arrow keys on your keyboard.<InlineUIContainer>
+                        <Button Margin="0" Padding="0" Background="Transparent" Command="{Binding ShowInstructions}" IsVisible="{Binding !InstructionsVisible}">
+                            <Button.Styles>
+                                <Style Selector="Button /template/ ContentPresenter">
+                                    <Setter Property="FontStyle" Value="Italic" />
+                                </Style>
+                            </Button.Styles>
+                            ...(show full instructions)
+                        </Button>
+                    </InlineUIContainer>
+                </TextBlock>
+			    <StackPanel IsVisible="{Binding InstructionsVisible}">
+                    <TextBlock>
+                        The position in the audio is shown by a green line on the waveform below.
+                        You can move it by clicking and/or dragging on the waveform.
+                    </TextBlock>
+                    <TextBlock>
+                        The next word/syllable to record is shown in blue.
+                        You can change what syllable to start recording on by clicking on it.
+                        If any syllables before it already have timing, the play position will automatically
+                        jump to 3 seconds before the end of the most recent syllable (but you can still move it
+                        before recording); otherwise it will start at 0.
+                    </TextBlock>
+                    <TextBlock>
+                        When you are ready to record timing, hit the Record (⏺) button.  The audio will start playing.
+                    </TextBlock>
+                    <TextBlock>
+                        While recording, hit the → arrow key on your keyboard to record when the blue syllable begins.
+
+                        The syllable will turn yellow to indicate it is currently being sung.
+                    </TextBlock>
+                    <TextBlock>
+                        If the → key is pressed again, that will record both the end of the current
+                        syllable and the beginning of the next syllable.
+                    </TextBlock>
+                    <TextBlock>
+                        If the ↓ arrow key is pressed instead, it ends the current syllable without
+                        yet starting the next syllable, which will start on the next press of the → arrow key.
+                        This allows you to insert gaps anywhere in a phrase.
+                    </TextBlock>
+                    <TextBlock>
+                        Recording stops automatically after the last syllable, but you
+                        can stop, start, and move around at any time without losing work (as long as you don't leave the tab).
+                    </TextBlock>
+                    <TextBlock>
+                        You can use the Play (⏵) button to preview the timing; syllables that have already been timed will light up yellow while being sung.
+                    </TextBlock>
+                    <TextBlock>
+					    When you have timed every syllable, you can go on to the next step. 
+                    </TextBlock>
+                    <Button Margin="0" Padding="0" Background="Transparent" Command="{Binding HideInstructions}">
+                        <Button.Styles>
+                            <Style Selector="Button /template/ ContentPresenter">
+                                <Setter Property="FontStyle" Value="Italic" />
+                            </Style>
+                        </Button.Styles>
+					    <TextBlock>(hide full instructions)</TextBlock>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+		    <Border Grid.Row="1" BorderBrush="Gray" Background="#111" BorderThickness="1">
+                <Grid ColumnDefinitions="170, *, 220">
+                    <StackPanel x:Name="TimeReadoutStackPanel"
+                                Orientation="Horizontal"
+                                VerticalAlignment="Center"
+                                Width="120">
+                        <TextBlock
+                            x:Name="PlaybackPositionReadout"
+                            Classes.readoutIsRecording="{Binding IsRecording}"
+                            Width="60"
+                            Text="{Binding CurrentPlaybackPositionText}" />
+                        <TextBlock Text="/" Margin="5,0" />
+                        <TextBlock
+                            x:Name="TotalLengthReadout"
+                            Width="60"
+                            Text="{Binding FullLengthVocalsDraw.WaveformLengthText}" />
+                    </StackPanel>
+                    <StackPanel
+			            Grid.Column="1"
+			            x:Name="ShuttleControls"
+			            Orientation="Horizontal"
+			            HorizontalAlignment="Center">
+			            <Button
+				            Content="⏵"
+				            IsVisible="{Binding !IsPlaying}"
+				            Command="{Binding PlayCommand}"
+				            CommandParameter="{Binding}" />
+                        <Button
+				            Content="⏸"
+				            IsVisible="{Binding IsPlaying}"
+				            Command="{Binding PauseCommand}"
+				            CommandParameter="{Binding}" />
+			            <Button
+				            Content="⏺"
+				            Command="{Binding RecordCommand}"
+				            CommandParameter="{Binding}" />
+			            <Button
+				            x:Name="StopButton"
+				            Content="⏹"
+				            Command="{Binding StopCommand}"
+				            CommandParameter="{Binding}" />
+                    </StackPanel>
+
+			        <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <TextBlock VerticalAlignment="Center" Margin="10,0">
+                            <Run Text="{Binding CurrentProcess.TimedWordsInManualTiming}" />
+                            /
+                            <Run Text="{Binding CurrentProcess.TotalWordsInManualTiming}" />
+                            Timed
+                        </TextBlock>
+                        <Button
+                            Margin="10,0"
+                            Content="Next Step"
+                            Classes="accent"
+                            HorizontalAlignment="Right"
+                            Command="{Binding GoToNextStepCommand}"
+                            local:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                            ToolTip.Tip="{Binding CurrentProcess.ReasonManualAlignmentIsIncomplete}"
+                            IsEnabled="{Binding CurrentProcess.ManualAlignmentIsComplete}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+		    <Border Grid.Row="2" BorderBrush="Gray" Background="#111" BorderThickness="1,0,1,1">
+                <Grid
+			        SizeChanged="LayoutSizeChanged"
+			        PointerPressed="SeekBar_PointerPressed"
+			        PointerMoved="SeekBar_PointerMoved"
+			        PointerReleased="SeekBar_PointerReleased">
+			        <controls:DrawnWaveformControl
+				        Height="75"
+				        CanSelectIfEmpty="False"
+				        Waveform="{Binding FullLengthVocalsDraw}"
+				        WaveFloats="{Binding CurrentProcess.VocalsAudioFloats}"
+				        WaveStream="{Binding CurrentProcess.VocalsAudioStream}"
+				        WaveformFilePath="{Binding CurrentProcess.VocalsAudioFilePath}" />
+			        <ItemsControl
+				        Classes="timedLines"
+				        ItemsSource="{Binding CurrentProcess.ManualTimingLines}">
+				        <ItemsControl.ItemsPanel>
+					        <ItemsPanelTemplate>
+						        <Canvas />
+					        </ItemsPanelTemplate>
+				        </ItemsControl.ItemsPanel>
+				        <ItemsControl.DataTemplates>
+					        <DataTemplate x:DataType="models:ManualTimingLine">
+						        <controls:OverlayRectangle
+							        AllowDrag="False"
+							        Stroke="#B0FFD800"
+							        Fill="#56FFD800"
+							        Height="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).FullLengthVocalsDraw.DesiredPeakHeight}"
+							        StartSecond="{Binding ManualStartSecond}"
+							        EndSecond="{Binding ManualEndSecond}"
+							        WaveformDraw="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).FullLengthVocalsDraw}">
+							        <ToolTip.Tip>
+								        <Grid
+									        ColumnDefinitions="*,*"
+									        RowDefinitions="*,*">
+									        <TextBlock Text="{Binding ManualStartSecond}" />
+									        <TextBlock
+										        HorizontalAlignment="Right"
+										        Grid.Column="1"
+										        Text="{Binding ManualEndSecond}" />
+									        <TextBlock
+										        Grid.Row="1"
+										        Grid.ColumnSpan="2"
+										        Text="{Binding Text}" />
+								        </Grid>
+							        </ToolTip.Tip>
+						        </controls:OverlayRectangle>
+					        </DataTemplate>
+				        </ItemsControl.DataTemplates>
+			        </ItemsControl>
+			        <Canvas x:Name="CaretCanvas">
+				        <Canvas.Styles>
+					        <Style Selector="Rectangle#PlaybackPositionCaret">
+						        <Setter Property="Canvas.Left">
+							        <Setter.Value>
+								        <MultiBinding Converter="{StaticResource WaveformToPointConverter}">
+									        <Binding Path="CaretPositionSeconds" />
+									        <Binding Path="FullLengthVocalsDraw.WaveformLengthSeconds" />
+									        <Binding Path="FullLengthVocalsDraw.DesiredImageWidth" />
+								        </MultiBinding>
+							        </Setter.Value>
+						        </Setter>
+					        </Style>
+					        <Style Selector="Rectangle.caretIsPlaying">
+						        <Setter
+							        Property="Fill"
+							        Value="Green" />
+					        </Style>
+					        <Style Selector="Rectangle.caretIsRecording">
+						        <Setter
+							        Property="Fill"
+							        Value="Red" />
+					        </Style>
+				        </Canvas.Styles>
+                        <Rectangle
+					        x:Name="PlaybackPositionCaret"
+					        Width="2"
+					        Height="75"
+					        Canvas.Top="0"
+					        Classes.caretIsPlaying="{Binding !IsRecording}"
+					        Classes.caretIsRecording="{Binding IsRecording}">
+				        </Rectangle>
+			        </Canvas>
+		        </Grid>
+            </Border>
+            <ScrollViewer Grid.Row="3">
+			    <ItemsRepeater
+				    x:Name="TimingLinesRepeater"
+				    ItemsSource="{Binding CurrentProcess.ManualTimingLines}">
+				    <ItemsRepeater.ItemTemplate>
+					    <DataTemplate>
+						    <ItemsRepeater
+							    x:Name="NewWordsRepeater"
+							    ItemsSource="{Binding Words}"
+							    Margin="10,0"
+							    HorizontalAlignment="Center">
+							    <ItemsRepeater.Styles>
+								    <Style Selector="Border">
+									    <Setter
+										    Property="BorderThickness"
+										    Value="1" />
+									    <Setter
+										    Property="BorderBrush"
+										    Value="#FF555555" />
+									    <Setter
+										    Property="Background"
+										    Value="#FF333333" />
+									    <Setter
+										    Property="Margin"
+										    Value="2,8,2,2" />
+									    <Setter
+										    Property="CornerRadius"
+										    Value="2" />
+								    </Style>
+								    <Style Selector="Label">
+									    <Setter
+										    Property="FontSize"
+										    Value="22" />
+									    <Setter
+										    Property="FontFamily"
+										    Value="Arial" />
+									    <Setter
+										    Property="HorizontalAlignment"
+										    Value="Center" />
+								    </Style>
+								    <Style Selector="Label.timeDetail">
+									    <Setter
+										    Property="FontSize"
+										    Value="10" />
+								    </Style>
+								    <Style Selector="Border.hasFinished">
+									    <Setter
+										    Property="BorderBrush"
+										    Value="Transparent" />
+									    <Setter
+										    Property="Background"
+										    Value="Transparent" />
+								    </Style>
+								    <Style Selector="Border.hasFinished > Label">
+									    <Setter
+										    Property="Foreground"
+										    Value="Green" />
+								    </Style>
+								    <Style Selector="Border.isRunning">
+									    <Setter
+										    Property="BorderBrush"
+										    Value="Orange" />
+									    <Setter
+										    Property="Background"
+										    Value="DarkOrange" />
+								    </Style>
+								    <Style Selector="Border.isRunning > Label">
+									    <Setter
+										    Property="Foreground"
+										    Value="White" />
+									    <Setter
+										    Property="FontWeight"
+										    Value="Bold" />
+								    </Style>
+								    <Style Selector="Border.isNext">
+									    <Setter
+										    Property="BorderBrush"
+										    Value="Teal" />
+									    <Setter
+										    Property="Background"
+										    Value="DarkBlue" />
+								    </Style>
+								    <Style Selector="Border.isNext > Label">
+									    <Setter
+										    Property="Foreground"
+										    Value="Teal" />
+									    <Setter
+										    Property="FontWeight"
+										    Value="Bold" />
+								    </Style>
+							    </ItemsRepeater.Styles>
+							    <ItemsRepeater.Layout>
+								    <StackLayout Orientation="Horizontal" />
+							    </ItemsRepeater.Layout>
+							    <ItemsRepeater.ItemTemplate>
+								    <DataTemplate DataType="models:TimingWord">
+									    <Border
+										    Classes.hasFinished="{Binding HasFinished}"
+										    Classes.isNext="{Binding IsNext}">
+										    <Classes.isRunning>
+											    <MultiBinding Converter="{StaticResource TimingWordIsPlayingConverter}">
+												    <Binding Path="IsRunning" />
+												    <Binding Path="$parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).IsRecording" />
+												    <Binding Path="$parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).IsPlaying" />
+												    <Binding Path="StartHasBeenManuallySet" />
+												    <Binding Path="$parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).CurrentPlaybackPositionSeconds" />
+												    <Binding Path="StartSecond" />
+												    <Binding Path="EndHasBeenManuallySet" />
+												    <Binding Path="EndSecond" />
+											    </MultiBinding>
+										    </Classes.isRunning>
+										    <Button
+											    ToolTip.Tip="Click to move recording head to before this word"
+											    Background="Transparent"
+											    Foreground="DarkGray"
+											    ZIndex="0"
+											    Command="{Binding $parent[views:ManualAlignView].((vm:ManualAlignViewModel)DataContext).MoveHeadCommand}"
+											    CommandParameter="{Binding}"
+                                                ContextFlyout="{StaticResource WordButtonFlyout}">
+											    <Grid RowDefinitions="18,*,18">
+												    <Label
+													    Classes="timeDetail"
+													    Content="{Binding StartSecond, Converter={StaticResource RoundingConverter}}">
+													    <Label.IsVisible>
+														    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+															    <Binding Path="StartHasBeenManuallySet" />
+														    </MultiBinding>
+													    </Label.IsVisible>
+												    </Label>
+												    <Label
+													    Grid.Row="1"
+													    HorizontalAlignment="Center"
+													    Content="{Binding Text}" />
+												    <Label
+													    Grid.Row="2"
+													    Classes="timeDetail"
+													    Content="{Binding EndSecond, Converter={StaticResource RoundingConverter}}">
+													    <Label.IsVisible>
+														    <MultiBinding Converter="{x:Static BoolConverters.Or}">
+															    <Binding Path="EndHasBeenManuallySet" />
+														    </MultiBinding>
+													    </Label.IsVisible>
+												    </Label>
+											    </Grid>
+										    </Button>
+									    </Border>
+								    </DataTemplate>
+							    </ItemsRepeater.ItemTemplate>
+						    </ItemsRepeater>
+					    </DataTemplate>
+				    </ItemsRepeater.ItemTemplate>
+			    </ItemsRepeater>
+		    </ScrollViewer>
+
+	    </Grid>
+    </dialogHost:DialogHost>
+
+
+</UserControl>
