@@ -65,7 +65,7 @@
                 Property="TextElement.Foreground"
                 Value="#FF6F6F6F" />
         </Style>
-        <Style Selector="views|AudioView, views|LyricsView, views|ManualAlignView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
+        <Style Selector="views|StartView, views|AudioView, views|LyricsView, views|ManualAlignView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
             <Setter
                 Property="Background"
                 Value="{DynamicResource SystemRegionColor}" />
@@ -106,13 +106,20 @@
             x:Name="MainViewTabControl"
             SelectedIndex="{Binding CurrentProcess.SelectedTabIndex, Mode=TwoWay}">
             <TabItem
+                x:Name="StartTab"
+                Header="Start">
+                <views:StartView />
+            </TabItem>
+            <TabItem
                 x:Name="AudioTab"
-                Header="Audio">
+                Header="Audio"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}">
                 <views:AudioView />
             </TabItem>
             <TabItem
                 x:Name="LyricsTab"
                 Header="Lyrics"
+                IsVisible="{Binding CurrentProcess.LyricsTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonAudioStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.AudioStepIsComplete}">
@@ -121,6 +128,7 @@
             <TabItem
                 x:Name="RecognizeTab"
                 Header="Recognize"
+                IsVisible="{Binding CurrentProcess.RecognizeTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}">
@@ -129,15 +137,26 @@
             <TabItem
                 x:Name="NarrowTab"
                 Header="Narrow"
+                IsVisible="{Binding CurrentProcess.NarrowTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonRecognizeStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.RecognizeStepIsComplete}">
                 <views:NarrowingView />
             </TabItem>
             <TabItem
+                x:Name="AlignTab"
+                Header="Align"
+                IsVisible="{Binding CurrentProcess.ManualAlignTabVisible}"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonManualAlignIsDisabled}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.ManualAlignIsEnabled}">
+                <views:ManualAlignView />
+            </TabItem>
+            <TabItem
                 Margin="30,0,1,0"
                 x:Name="EditLinesTab"
                 Header="Edit"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}"
                 ToolTip.Tip="{Binding
                                 CurrentProcess.ReasonEditTabIsDisabled}"
 				avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
@@ -148,6 +167,7 @@
             <TabItem
                 x:Name="ExportTab"
                 Header="Export"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonCantExport}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.CanExport}">

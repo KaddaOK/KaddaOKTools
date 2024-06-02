@@ -60,6 +60,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\StartView.axaml.cs">
+      <DependentUpon>StartView.axaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\EditLinesView.axaml.cs">
       <DependentUpon>EditLinesView.axaml</DependentUpon>
     </Compile>

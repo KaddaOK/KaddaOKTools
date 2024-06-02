@@ -11,6 +11,7 @@ namespace KaddaOK.AvaloniaApp.Models
 {
     public enum InitialKaraokeSource
     {
+        NotSelected,
         AzureSpeechService,
         RzlrcImport,
         KbpImport,
@@ -24,16 +25,23 @@ namespace KaddaOK.AvaloniaApp.Models
         public InitialKaraokeSource KaraokeSource
         {
             get => _karaokeSource;
-            set => SetProperty(ref _karaokeSource, value);
-        }
-
-        private string? _existingKaraokeImportFilePath;
-        public string? ExistingKaraokeImportFilePath
-        {
-            get => _existingKaraokeImportFilePath;
             set
             {
-                if (SetProperty(ref _existingKaraokeImportFilePath, value))
+                SetProperty(ref _karaokeSource, value);
+                RaisePropertyChanged(nameof(RecognizeTabVisible));
+                RaisePropertyChanged(nameof(NarrowTabVisible));
+                RaisePropertyChanged(nameof(ManualAlignTabVisible));
+                RaisePropertyChanged(nameof(LyricsTabVisible));
+            }
+        }
+
+        private string? _importedKaraokeSourceFilePath;
+        public string? ImportedKaraokeSourceFilePath
+        {
+            get => _importedKaraokeSourceFilePath;
+            set
+            {
+                if (SetProperty(ref _importedKaraokeSourceFilePath, value))
                 {
                     AudioStepCompletenessChanged();
                 };
@@ -67,6 +75,8 @@ namespace KaddaOK.AvaloniaApp.Models
             get => _selectedTabIndex;
             set => SetProperty(ref _selectedTabIndex, value);
         }
+
+        public bool KaraokeSourceIsSet => KaraokeSource != InitialKaraokeSource.NotSelected;
 
         #region Audio Step
 
@@ -184,17 +194,21 @@ namespace KaddaOK.AvaloniaApp.Models
             UnseparatedAudioStream = null;
             InstrumentalAudioFilePath = null;
             InstrumentalAudioStream = null;
-            ExistingKaraokeImportFilePath = null;
+            ImportedKaraokeSourceFilePath = null;
             OriginalImportedKbpFile = null;
             OriginalImportedRzlrcFile = null;
             OriginalImportedRzlrcPage = null;
-            KaraokeSource = InitialKaraokeSource.AzureSpeechService;
+            //KaraokeSource = InitialKaraokeSource.AzureSpeechService;
             ClearLyricsAndDownstream();
         }
 
         #endregion
 
         #region Lyrics Step
+
+        public bool LyricsTabVisible => KaraokeSource != InitialKaraokeSource.KbpImport 
+                                        && KaraokeSource != InitialKaraokeSource.RzlrcImport
+                                        && KaraokeSource != InitialKaraokeSource.NotSelected;
 
         private string? _lyricsFilePath;
         public string? LyricsFilePath
@@ -247,6 +261,8 @@ namespace KaddaOK.AvaloniaApp.Models
         #endregion
 
         #region Recognize Step
+
+        public bool RecognizeTabVisible => KaraokeSource == InitialKaraokeSource.AzureSpeechService;
 
         private ObservableCollection<LinePossibilities>? detectedLinePossibilities;
         public ObservableCollection<LinePossibilities>? DetectedLinePossibilities
@@ -351,6 +367,23 @@ namespace KaddaOK.AvaloniaApp.Models
             set => SetProperty(ref manualTimingQueue, value);
         }
 
+        public bool ManualAlignTabVisible => KaraokeSource == InitialKaraokeSource.ManualSync;
+
+        public bool ManualAlignIsEnabled => string.IsNullOrWhiteSpace(ReasonManualAlignIsDisabled);
+
+        public string? ReasonManualAlignIsDisabled
+        {
+            get
+            {
+                if (KaraokeSource != InitialKaraokeSource.ManualSync)
+                {
+                    return "This is not a manual sync project.";
+                }
+
+                return null;
+            }
+        }
+
         public void ManualAlignmentCompletenessChanged()
         {
             RaisePropertyChanged(nameof(TimedWordsInManualTiming));
@@ -385,6 +418,8 @@ namespace KaddaOK.AvaloniaApp.Models
 
 
         #region Narrow Step
+
+        public bool NarrowTabVisible => KaraokeSource == InitialKaraokeSource.AzureSpeechService;
 
         private ObservableCollection<LyricLine>? chosenLines;
         public ObservableCollection<LyricLine>? ChosenLines

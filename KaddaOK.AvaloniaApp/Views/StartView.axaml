@@ -1,0 +1,334 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+    xmlns:local="clr-namespace:KaddaOK.AvaloniaApp"
+    xmlns:controls="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+    xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+    xmlns:ytmm="clr-namespace:KaddaOK.Library.Ytmm;assembly=KaddaOK.Library"
+    xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+    xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    mc:Ignorable="d"
+    d:DesignWidth="1000"
+    d:DesignHeight="800"
+    x:Class="KaddaOK.AvaloniaApp.Views.StartView"
+    x:DataType="vm:StartViewModel">
+    <Design.DataContext>
+        <designTime:DesignTimeStartViewModel />
+    </Design.DataContext>
+    <UserControl.Styles>
+        <Style Selector="ScrollViewer.gettingFile">
+            <Setter
+                Property="Cursor"
+                Value="Wait" />
+        </Style>
+        <Style Selector="ScrollViewer.gettingFile StackPanel">
+            <Setter
+                Property="IsEnabled"
+                Value="False" />
+        </Style>
+        <Style Selector="Label.waveformLabel">
+            <Setter
+                Property="Margin"
+                Value="0,10,0,0" />
+        </Style>
+        <Style Selector="Border.outerWaveformBorder">
+            <Setter
+                Property="Margin"
+                Value="0,2,0,5" />
+            <Setter
+                Property="Background"
+                Value="#FF061424" />
+            <Setter
+                Property="BorderBrush"
+                Value="Gray" />
+            <Setter
+                Property="BorderThickness"
+                Value="1" />
+            <Setter
+                Property="CornerRadius"
+                Value="5" />
+        </Style>
+        <Style Selector="Border.innerWaveformBorder">
+            <Setter
+                Property="Margin"
+                Value="0,5" />
+            <Setter
+                Property="MinHeight"
+                Value="50" />
+        </Style>
+
+        <Style Selector="TextBlock.introText">
+            <Setter
+                Property="Margin"
+                Value="0,0,0,10" />
+            <Setter
+                Property="TextWrapping"
+                Value="Wrap" />
+        </Style>
+        <Style Selector="Border.initialOptionBorder">
+            <Setter Property="BorderBrush" Value="Gray" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="10" />
+        </Style>
+        <Style Selector="StackPanel.optionMainLineStackPanel">
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="StackPanel.optionMainLineStackPanel TextBlock">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Margin" Value="10,0" />
+        </Style>
+        <Style Selector="StackPanel.optionMainLineStackPanel Button">
+            <Setter Property="Padding" Value="15,10" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="StackPanel.moreInfoStackPanel">
+            <Setter Property="Margin" Value="5" />
+        </Style>
+        <Style Selector="TextBlock.linkButtonText">
+            <Setter Property="FontFamily" Value="Arial" />
+            <Setter Property="FontStyle" Value="Italic" />
+        </Style>
+    </UserControl.Styles>
+    <dialogHost:DialogHost Identifier="StartViewDialogHost">
+        <dialogHost:DialogHost.DataTemplates>
+            <DataTemplate DataType="ytmm:RzlrcLyrics">
+                <dialogs:ChooseImportedLayerDialog DataContext="{Binding}" />
+            </DataTemplate>
+        </dialogHost:DialogHost.DataTemplates>
+        <ScrollViewer
+            x:Name="StartViewScrollViewer"
+            Classes.gettingFile="{Binding GettingFile}">
+            <StackPanel
+                x:Name="StartTabStackPanel"
+                Margin="20">
+                <TextBlock Classes="introText">
+                    Choose the initial lyrics sync method for this project:
+                </TextBlock>
+                <Border Classes="initialOptionBorder">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+                            <Button Content="Manual Timing in Kadda OK Tools"
+                                Command="{Binding SelectManualProcessCommand}" />
+                            <TextBlock> Input lyric timing by tapping a key while the song plays.<InlineUIContainer>
+                                    <Button Margin="0" Padding="0" Background="Transparent"
+                                        Command="{Binding ShowManualInstructionsCommand}"
+                                        IsVisible="{Binding !ManualInstructionsVisible}">
+                                        <TextBlock Classes="linkButtonText">(more info)</TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding ManualInstructionsVisible}"
+                            Classes="moreInfoStackPanel">
+                            <TextBlock Classes="introText">
+                                This is the gold standard. On the following pages, you will tap
+                                arrow keys in time with each syllable (as designated by you during
+                                lyrics input) of the vocals to record their start and end
+                                timestamps.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                It's easy and fun and gives you a guaranteed result.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                The downsides are that it demands your full and acoustic attention
+                                rather than allowing you to multitask in any way, and that it may be
+                                difficult to do well if the song's rhythm is complex or swung or
+                                goes by very fast, as this tool can currently only run at 100%
+                                speed.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                You can, however, move around at will in the audio and/or the text,
+                                and punch-in wherever you want as many times as you want.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                Difficult songs could be synchronized first in Karaoke Builder
+                                Studio, whose similar method does have a playback speed control, and
+                                then imported into Kadda OK Tools to be tweaked using the controls
+                                that have fewer drawbacks.
+                            </TextBlock>
+                            <Button Margin="0" Padding="0" Background="Transparent"
+                                Command="{Binding HideManualInstructionsCommand}">
+                                <TextBlock Classes="linkButtonText">(less info)</TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="initialOptionBorder">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+                            <Button Content="Automatic Timing via Forced Aligner"
+                                Command="{Binding SelectCtmCommand}" />
+                            <TextBlock> Import a .CTM file created using NeMo Forced Aligner or
+                                similar.<InlineUIContainer>
+                                    <Button Margin="0" Padding="0" Background="Transparent"
+                                        Command="{Binding ShowAlignerInstructions}"
+                                        IsVisible="{Binding !AlignerInstructionsVisible}">
+                                        <TextBlock Classes="linkButtonText">(link and more info)</TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding AlignerInstructionsVisible}"
+                            Classes="moreInfoStackPanel">
+                            <TextBlock Classes="introText">
+                                This usually gives very good sub-syllable-level timing, and always
+                                has accurate text.
+                            </TextBlock>
+                            <TextBlock Classes="introText"> Using <InlineUIContainer>
+                                    <Button
+                                        Classes="inline"
+                                        Content="this Kadda OK repository"
+                                        Command="{Binding LinkToForcedAlignerCommand}" />
+                                </InlineUIContainer>,
+                                you can run this easily using a free (though slow to initialize)
+                                Google Colab notebook, or set it up on your own machine for repeated
+                                use. </TextBlock>
+                            <TextBlock Classes="introText">
+                                Its downsides are that the timing you get is based on a speaking
+                                voice and may not be where you'd want things to split up musically,
+                                and it will likely give incorrect results if your vocals-only audio
+                                has instruments bleeding through in non-vocal moments.
+                            </TextBlock>
+                            <Button Margin="0" Padding="0" Background="Transparent"
+                                Command="{Binding HideAlignerInstructionsCommand}">
+                                <TextBlock Classes="linkButtonText">(less info)</TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="initialOptionBorder">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+                            <Button Content="Automatic Timing via Azure Speech Service" />
+                            <TextBlock> Automatically time the recording using Azure speech-to-text
+                                technology.<InlineUIContainer>
+                                    <Button Margin="0" Padding="0" Background="Transparent"
+                                        Command="{Binding ShowAzureInstructions}"
+                                        IsVisible="{Binding !AzureInstructionsVisible}">
+                                        <TextBlock Classes="linkButtonText">(more info)</TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding AzureInstructionsVisible}"
+                            Classes="moreInfoStackPanel">
+                            <TextBlock Classes="introText">
+                                This app will communicate with the Azure cloud to recognize the text
+                                sung in the vocal audio.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                This method can only give word-level timing, and the text is often
+                                inaccurate and needs correction.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                This is because unlike a forced aligner, which starts with the text
+                                and tries to map the audio onto it, Azure Speech starts with the
+                                audio and tries to transcribe it, and while the lyrics provided to
+                                it are taken into account as custom phrases to expect, the cloud
+                                recognizer is not forced to use them and will often interpret things
+                                differently.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                Azure offers a free 5 hours worth of this service every month.
+                                Sign-up is required.
+                            </TextBlock>
+                            <Button Margin="0" Padding="0" Background="Transparent"
+                                Command="{Binding HideAzureInstructions}">
+                                <TextBlock Classes="linkButtonText">(less info)</TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="initialOptionBorder">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+                            <Button Content="Import from Karaoke Builder Studio" />
+                            <TextBlock> Ingest a .kbp file to edit and export.<InlineUIContainer>
+                                    <Button Margin="0" Padding="0" Background="Transparent"
+                                        Command="{Binding ShowKbsImportInstructions}"
+                                        IsVisible="{Binding !KbsImportInstructionsVisible}">
+                                        <TextBlock Classes="linkButtonText">(more info)</TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding KbsImportInstructionsVisible}"
+                            Classes="moreInfoStackPanel">
+                            <TextBlock Classes="introText">
+                                If you are already a KBS user and have an existing project, and/or
+                                you prefer to use its method for initial sync and just want to use
+                                Kadda OK Tools for editing or conversion, you can import a .kbp file
+                                here.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                This allows you to make changes using the superior aspects of the
+                                Kadda OK Tools editing experience, then export back to KBS for
+                                rendering, or convert it to a YouTube Movie Maker project for more
+                                advanced graphics.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                It does not require you to have a registered license for KBS, which
+                                is only required for rendering in KBS.
+                            </TextBlock>
+                            <Button Margin="0" Padding="0" Background="Transparent"
+                                Command="{Binding HideKbsImportInstructions}">
+                                <TextBlock Classes="linkButtonText">(less info)</TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <Border Classes="initialOptionBorder">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+                            <Button Content="Import from YouTube Movie Maker" />
+                            <TextBlock> Ingest a .rzlrc file to edit and export.<InlineUIContainer>
+                                    <Button Margin="0" Padding="0" Background="Transparent"
+                                        Command="{Binding ShowYtmmImportInstructions}"
+                                        IsVisible="{Binding !YtmmImportInstructionsVisible}">
+                                        <TextBlock Classes="linkButtonText">(more info)</TextBlock>
+                                    </Button>
+                                </InlineUIContainer>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <StackPanel IsVisible="{Binding YtmmImportInstructionsVisible}"
+                            Classes="moreInfoStackPanel">
+                            <TextBlock Classes="introText">
+                                If you are already a YTMM user and have an existing project, or want
+                                to use Kadda OK Tools for editing or conversion, you can import a
+                                .rzlrc file here.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                This allows you to make changes using the superior aspects of the
+                                Kadda OK Tools editing experience, then export back to YTMM for
+                                rendering, or convert it to a KBS project in order to render to
+                                CD+G.
+                            </TextBlock>
+                            <TextBlock Classes="introText">
+                                It does not require you to have a registered license for YTMM
+                                (though the .rzmmpj generation feature during export back to YTMM
+                                assumes you have unlocked 1080p rendering).
+                            </TextBlock>
+                            <Button Margin="0" Padding="0" Background="Transparent"
+                                Command="{Binding HideYtmmImportInstructions}">
+                                <TextBlock Classes="linkButtonText">(less info)</TextBlock>
+                            </Button>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </dialogHost:DialogHost>
+
+</UserControl>

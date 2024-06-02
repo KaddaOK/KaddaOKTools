@@ -20,6 +20,7 @@ using DialogHostAvalonia;
 using KaddaOK.AvaloniaApp.Controls;
 using KaddaOK.AvaloniaApp.Models;
 using KaddaOK.AvaloniaApp.Services;
+using KaddaOK.AvaloniaApp.Views;
 using NAudio.Wave;
 using NAudio.Utils;
 using NAudio.Wave.SampleProviders;
@@ -221,7 +222,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         public void GoToNextStep(object? parameter)
         {
             CurrentProcess.ChosenLines = new ObservableCollection<LyricLine>(CurrentProcess.ManualTimingLines.Select(ManualTimingLine.ToLyricLine));
-            CurrentProcess!.SelectedTabIndex = 4;
+            CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Edit;
             CurrentProcess.CanExportFactorsChanged();
         }
 

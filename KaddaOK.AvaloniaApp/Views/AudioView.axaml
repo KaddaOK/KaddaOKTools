@@ -235,11 +235,6 @@
                     Margin="0, 15">
                     <StackPanel Orientation="Horizontal">
                         <Button
-                            Content="Import..."
-                            Command="{Binding ImportCommand}"
-                            ToolTip.Tip="Edit an existing file in this app"
-                            Padding="15, 10" />
-                        <Button
                             Content="Clear All"
                             Command="{Binding ClearAllCommand}"
                             ToolTip.Tip="Clear all selections throughout the app"

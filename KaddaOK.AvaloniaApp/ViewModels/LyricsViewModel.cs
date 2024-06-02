@@ -3,10 +3,12 @@ using CommunityToolkit.Mvvm.Input;
 using KaddaOK.Library;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using KaddaOK.AvaloniaApp.Models;
 using Avalonia.Controls.Notifications;
+using KaddaOK.AvaloniaApp.Views;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -85,32 +87,67 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
-            SetUpManualAlignment();
-            CurrentProcess!.SelectedTabIndex = 2;
+            switch (CurrentProcess.KaraokeSource)
+            {
+                case InitialKaraokeSource.ManualSync:
+                    SetUpManualAlignment();
+                    CurrentProcess.SelectedTabIndex = (int)TabIndexes.ManualAlign;
+                    break;
+                case InitialKaraokeSource.CtmImport:
+                    DoCtmImport();
+                    CurrentProcess.SelectedTabIndex = (int)TabIndexes.Edit;
+                    break;
+                case InitialKaraokeSource.AzureSpeechService:
+                    CurrentProcess.SelectedTabIndex = (int)TabIndexes.Recognize;
+                    break;
+            }
         }
 
         public void SetUpManualAlignment()
         {
-            // TODO: this belongs somewhere else, probably as a button on a choice screen I haven't set up yet
             // TODO: warn the user if CurrentProcess.ManualTimingLines is not null and any have manual start and end set
             var maxSeconds = (CurrentProcess.UnseparatedAudioStream ?? CurrentProcess.VocalsAudioStream)?.TotalTime.TotalSeconds;
             CurrentProcess.ManualTimingLines = new ObservableCollection<ManualTimingLine>
                 (
-                    CurrentProcess.KnownOriginalLyrics.UncleansedLines
+                    CurrentProcess.KnownOriginalLyrics?.UncleansedLines?
                     .Select(l => new ManualTimingLine
                     (
                         LyricWord.GetLyricWordsAcrossTime(l, maxSeconds ?? 0, maxSeconds ?? 0)
                             .Select(TimingWord.FromLyricWord)))
+                    ?? new ManualTimingLine[]{}
             );
             CurrentProcess.ManualTimingQueue =
                 new ObservableQueue<TimingWord>(CurrentProcess.ManualTimingLines.SelectMany(t => t.Words));
             CurrentProcess.ManualTimingQueue.Peek().IsNext = true;
-            // TODO: this should happen in a different place than here
-            CurrentProcess.KaraokeSource = InitialKaraokeSource.ManualSync;
         }
 
-        public LyricsViewModel(KaraokeProcess karaokeProcess) : base(karaokeProcess)
+        public void DoCtmImport()
         {
+            var ctmFilePath = CurrentProcess.ImportedKaraokeSourceFilePath;
+            if (ctmFilePath == null || !Path.GetExtension(ctmFilePath)
+                    .EndsWith("ctm", StringComparison.InvariantCultureIgnoreCase))
+            {
+                if (NotificationManager != null)
+                {
+                    NotificationManager.Position = NotificationPosition.BottomRight;
+                    NotificationManager.Show(new Notification("Error", "There is no CTM file selected for import!", NotificationType.Error, TimeSpan.Zero));
+                }
+            }
+            var ctmLines = File.ReadAllLines(ctmFilePath).ToList();
+            var lyricLines =
+                NfaCtmImporter.ImportNfaCtmAndLyrics(ctmLines, CurrentProcess.KnownOriginalLyrics?.SeparatorCleansedLines);
+
+            CurrentProcess.ChosenLines =
+                new ObservableCollection<LyricLine>(lyricLines);
+            CurrentProcess.RaiseChosenLinesChanged();
+            CurrentProcess.NarrowingStepCompletenessChanged();
+            CurrentProcess.CanExportFactorsChanged();
+        }
+
+        private readonly INfaCtmImporter NfaCtmImporter;
+        public LyricsViewModel(KaraokeProcess karaokeProcess, INfaCtmImporter nfaCtmImporter) : base(karaokeProcess)
+        {
+            NfaCtmImporter = nfaCtmImporter;
         }
     }
 }
