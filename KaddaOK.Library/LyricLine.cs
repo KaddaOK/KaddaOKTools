@@ -54,9 +54,14 @@ namespace KaddaOK.Library
             set
             {
                 SetProperty(ref words, value);
-                RaisePropertyChanged(nameof(StartSecond));
-                RaisePropertyChanged(nameof(EndSecond));
+                RaiseTimingChanged();
             }
+        }
+
+        public void RaiseTimingChanged()
+        {
+            RaisePropertyChanged(nameof(StartSecond));
+            RaisePropertyChanged(nameof(EndSecond));
         }
 
         public double StartSecond

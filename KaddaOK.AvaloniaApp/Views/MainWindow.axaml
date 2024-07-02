@@ -14,7 +14,7 @@
     Background="Transparent"
     SystemDecorations="Full"
     Position="0,0"
-    Width="1000"
+    Width="1180"
     MinWidth="800"
     Height="860"
     WindowState="Normal"
@@ -22,19 +22,22 @@
     x:Name="Main"
     x:CompileBindings="True"
     x:DataType="vm:MainViewModel"
-    TransparencyLevelHint="AcrylicBlur"
+    RequestedThemeVariant="Dark"
     ExtendClientAreaToDecorationsHint="True"
-    RequestedThemeVariant="Dark">
-    <Panel>
-        <ExperimentalAcrylicBorder CornerRadius="16">
-            <ExperimentalAcrylicBorder.Material>
-                <ExperimentalAcrylicMaterial
-                    BackgroundSource="Digger"
-                    TintColor="Black"
-                    TintOpacity="1"
-                    MaterialOpacity="0.5" />
-            </ExperimentalAcrylicBorder.Material>
+    >
+
+        <Panel>
+
+            <Border CornerRadius="20" IsHitTestVisible="False" Background="#FF17181D" BorderBrush="{DynamicResource SystemBaseLowColor}" BorderThickness="1">
+
+            </Border>
+			<Border Background="#FF2B2B2B" BorderBrush="{DynamicResource SystemBaseLowColor}" BorderThickness="1,1,0,1"
+                    Width="220" HorizontalAlignment="Left" CornerRadius="20,0,0,20">
+
+            </Border>
             <views:MainView />
-        </ExperimentalAcrylicBorder>
-    </Panel>
+        </Panel>
+	<!--
+	</Border>-->
+
 </Window>

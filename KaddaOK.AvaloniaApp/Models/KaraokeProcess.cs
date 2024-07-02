@@ -28,10 +28,15 @@ namespace KaddaOK.AvaloniaApp.Models
             set
             {
                 SetProperty(ref _karaokeSource, value);
+                RaisePropertyChanged(nameof(KaraokeSourceIsSet));
                 RaisePropertyChanged(nameof(RecognizeTabVisible));
                 RaisePropertyChanged(nameof(NarrowTabVisible));
                 RaisePropertyChanged(nameof(ManualAlignTabVisible));
                 RaisePropertyChanged(nameof(LyricsTabVisible));
+                RaisePropertyChanged(nameof(ManualAlignIsEnabled));
+                RaisePropertyChanged(nameof(ReasonManualAlignIsDisabled));
+                RaisePropertyChanged(nameof(EditTabIsEnabled));
+                RaisePropertyChanged(nameof(ReasonEditTabIsDisabled));
             }
         }
 
@@ -84,6 +89,8 @@ namespace KaddaOK.AvaloniaApp.Models
         {
             RaisePropertyChanged(nameof(ReasonAudioStepIsIncomplete));
             RaisePropertyChanged(nameof(AudioStepIsComplete));
+            RaisePropertyChanged(nameof(ReasonManualAlignIsDisabled));
+            RaisePropertyChanged(nameof(ManualAlignIsEnabled));
         }
 
         public bool AudioStepIsComplete => string.IsNullOrWhiteSpace(ReasonAudioStepIsIncomplete);
@@ -234,6 +241,8 @@ namespace KaddaOK.AvaloniaApp.Models
         {
             RaisePropertyChanged(nameof(ReasonLyricsStepIsIncomplete));
             RaisePropertyChanged(nameof(LyricsStepIsComplete));
+            RaisePropertyChanged(nameof(ReasonManualAlignIsDisabled));
+            RaisePropertyChanged(nameof(ManualAlignIsEnabled));
         }
 
         public bool LyricsStepIsComplete => string.IsNullOrWhiteSpace(ReasonLyricsStepIsIncomplete);
@@ -244,7 +253,7 @@ namespace KaddaOK.AvaloniaApp.Models
             {
                 if (!KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true)
                 {
-                    return "Lyrics must be supplied for a quality result.";
+                    return "Lyrics are required for this project type.";
                 }
 
                 return null;
@@ -380,7 +389,7 @@ namespace KaddaOK.AvaloniaApp.Models
                     return "This is not a manual sync project.";
                 }
 
-                return null;
+                return ReasonAudioStepIsIncomplete ?? ReasonLyricsStepIsIncomplete;
             }
         }
 

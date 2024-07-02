@@ -20,7 +20,9 @@
             ColumnDefinitions="*,*"
             Margin="5">
             <StackPanel Grid.Column="0">
-                <Label Content="Lyrics Input" />
+                <TextBlock Classes="pageTitleHeader">
+                    Lyrics
+                </TextBlock>
                 <StackPanel
                     Orientation="Horizontal"
                     Margin="0,0,10,5">
@@ -41,7 +43,7 @@
                 </StackPanel>
                 <StackPanel x:Name="AzureDescription">
                     <StackPanel.IsVisible>
-                        <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
+                        <MultiBinding Converter="{StaticResource EnumEqualityBooleanConverter}">
                             <Binding Path="CurrentProcess.KaraokeSource" />
                             <Binding Source="{x:Static models:InitialKaraokeSource.AzureSpeechService}" />
                         </MultiBinding>
@@ -60,7 +62,7 @@
                 </StackPanel>
                 <StackPanel x:Name="CtmDescription">
                     <StackPanel.IsVisible>
-                        <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
+                        <MultiBinding Converter="{StaticResource EnumEqualityBooleanConverter}">
                             <Binding Path="CurrentProcess.KaraokeSource" />
                             <Binding Source="{x:Static models:InitialKaraokeSource.CtmImport}" />
                         </MultiBinding>
@@ -84,7 +86,7 @@
 
                 <StackPanel x:Name="ManualDescription">
                     <StackPanel.IsVisible>
-                        <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
+                        <MultiBinding Converter="{StaticResource EnumEqualityBooleanConverter}">
                             <Binding Path="CurrentProcess.KaraokeSource" />
                             <Binding Source="{x:Static models:InitialKaraokeSource.ManualSync}" />
                         </MultiBinding>
@@ -119,7 +121,7 @@
                 Margin="10,0,5,0">
                 <StackPanel>
                     <StackPanel.IsVisible>
-                        <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
+                        <MultiBinding Converter="{StaticResource EnumEqualityBooleanConverter}">
                             <Binding Path="CurrentProcess.KaraokeSource" />
                             <Binding Source="{x:Static models:InitialKaraokeSource.AzureSpeechService}" />
                         </MultiBinding>

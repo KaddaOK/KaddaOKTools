@@ -1,0 +1,59 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
+             xmlns:dialogHost="clr-namespace:DialogHostAvalonia;assembly=DialogHost.Avalonia"
+             xmlns:library="clr-namespace:KaddaOK.Library;assembly=KaddaOK.Library"
+             xmlns:viewModels="clr-namespace:KaddaOK.AvaloniaApp.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="500" d:DesignHeight="350"
+             x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.NudgeTimingsDialog"
+             x:DataType="viewModels:NudgeTimingsViewModel">
+    <dialogs:ModalDialogChrome Title="Nudge All Timings">
+        <Grid RowDefinitions="170,30,100" MaxWidth="500">
+			<StackPanel>
+            <TextBlock TextWrapping="Wrap" Margin="2">
+				Shift all the starts and stops in the entire song by an offset value in seconds.
+			</TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="2">
+                Positive values will move everything later relative to the music, and should 
+                be applied if the scroll is happening too early. 
+            </TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="2">
+                Negative values will move everything earlier relative to the music, and should
+                be applied if the scroll isn't happening early enough.  
+			</TextBlock>
+            <TextBlock TextWrapping="Wrap" Margin="2">
+                For instance, to move everything 100ms earlier in the song to give singers more 
+                time to react, enter -0.1 in the input below.
+            </TextBlock>
+            </StackPanel>
+			<Grid Grid.Row="1" ColumnDefinitions="*, 30">
+
+                <NumericUpDown
+                    Increment="0.01"
+                    FormatString="{}{0:#,0.00}"
+                    Value="{Binding NudgeBy}"/>
+				<TextBlock Grid.Column="1" Text="s" Margin="5"/>
+			</Grid>
+
+            <StackPanel
+                Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Right"
+                Margin="0,10,0,0">
+                <Button
+                    Content="Apply"
+                    Classes="accent"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                    CommandParameter="{Binding}" />
+
+                <Button
+                    Content="Cancel"
+                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}" />
+            </StackPanel>
+
+        </Grid>
+
+    </dialogs:ModalDialogChrome>
+</UserControl>

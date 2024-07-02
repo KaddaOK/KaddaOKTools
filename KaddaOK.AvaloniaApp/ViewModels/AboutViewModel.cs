@@ -1,12 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 using KaddaOK.AvaloniaApp.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using KaddaOK.AvaloniaApp.Models;
+using System.Diagnostics;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -16,7 +12,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
         }
 
-        public string? AssemblyVersion => Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+        public string? AssemblyVersion => FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
 
         [RelayCommand]
         private void LinkToLantern()

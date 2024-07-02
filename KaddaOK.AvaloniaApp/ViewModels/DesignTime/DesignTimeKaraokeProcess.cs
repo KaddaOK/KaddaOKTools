@@ -53,6 +53,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
 
                 DetectedLinePossibilities = linePossibilities,
 
+                KaraokeSource = InitialKaraokeSource.AzureSpeechService,
+
                 ChosenLines = new ObservableCollection<LyricLine>(linePossibilities.Select(l => l.Lyrics[0]))
             };
         }

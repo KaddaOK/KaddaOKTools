@@ -14,11 +14,14 @@
     <Design.DataContext>
         <designTime:DesignTimeAboutViewModel />
     </Design.DataContext>
-	<Grid RowDefinitions="50, *">
-        <TextBlock Margin="5,10" FontSize="20">
+	<Grid RowDefinitions="50, 50, *">
+        <TextBlock Classes="pageTitleHeader">
+            About
+        </TextBlock>
+        <TextBlock Grid.Row="1" Margin="5" FontSize="20">
             Kadda OK Tools <Run Text="{Binding AssemblyVersion}" />
         </TextBlock>
-		<ScrollViewer Grid.Row="1">
+		<ScrollViewer Grid.Row="2">
 			<StackPanel Margin="5,0">
 				<StackPanel.Styles>
 					<Style Selector="TextBlock.specialThanks">

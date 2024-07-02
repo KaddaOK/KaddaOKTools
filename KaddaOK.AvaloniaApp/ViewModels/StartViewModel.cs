@@ -18,6 +18,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 {
     public partial class StartViewModel : DrawsFullLengthVocalsBase
     {
+        private string dialogHostName = "StartViewDialogHost";
         private bool _gettingFile;
         public bool GettingFile
         {
@@ -36,103 +37,17 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             KbpImporter = kbpImporter;
         }
 
-        private bool manualInstructionsVisible;
-        public bool ManualInstructionsVisible
-        {
-            get => manualInstructionsVisible;
-            set => SetProperty(ref manualInstructionsVisible, value);
-        }
-
-        [RelayCommand]
-        public void HideManualInstructions(object? parameter)
-        {
-            ManualInstructionsVisible = false;
-        }
-        [RelayCommand]
-        public void ShowManualInstructions(object? parameter)
-        {
-            ManualInstructionsVisible = true;
-        }
-
-        private bool alignerInstructionsVisible;
-        public bool AlignerInstructionsVisible
-        {
-            get => alignerInstructionsVisible;
-            set => SetProperty(ref alignerInstructionsVisible, value);
-        }
-
-        [RelayCommand]
-        public void HideAlignerInstructions(object? parameter)
-        {
-            AlignerInstructionsVisible = false;
-        }
-        [RelayCommand]
-        public void ShowAlignerInstructions(object? parameter)
-        {
-            AlignerInstructionsVisible = true;
-        }
-
-        private bool azureInstructionsVisible;
-        public bool AzureInstructionsVisible
-        {
-            get => azureInstructionsVisible;
-            set => SetProperty(ref azureInstructionsVisible, value);
-        }
-
-        [RelayCommand]
-        public void HideAzureInstructions(object? parameter)
-        {
-            AzureInstructionsVisible = false;
-        }
-        [RelayCommand]
-        public void ShowAzureInstructions(object? parameter)
-        {
-            AzureInstructionsVisible = true;
-        }
-
-
-
-        private bool kbsImportInstructionsVisible;
-        public bool KbsImportInstructionsVisible
-        {
-            get => kbsImportInstructionsVisible;
-            set => SetProperty(ref kbsImportInstructionsVisible, value);
-        }
-
-        [RelayCommand]
-        public void HideKbsImportInstructions(object? parameter)
-        {
-            KbsImportInstructionsVisible = false;
-        }
-        [RelayCommand]
-        public void ShowKbsImportInstructions(object? parameter)
-        {
-            KbsImportInstructionsVisible = true;
-        }
-
-
-        private bool ytmmImportInstructionsVisible;
-        public bool YtmmImportInstructionsVisible
-        {
-            get => ytmmImportInstructionsVisible;
-            set => SetProperty(ref ytmmImportInstructionsVisible, value);
-        }
-
-        [RelayCommand]
-        public void HideYtmmImportInstructions(object? parameter)
-        {
-            YtmmImportInstructionsVisible = false;
-        }
-        [RelayCommand]
-        public void ShowYtmmImportInstructions(object? parameter)
-        {
-            YtmmImportInstructionsVisible = true;
-        }
-
         [RelayCommand]
         public void SelectManualProcess()
         {
             CurrentProcess.KaraokeSource = InitialKaraokeSource.ManualSync;
+            CurrentProcess.SelectedTabIndex = (int)TabIndexes.Audio;
+        }
+
+        [RelayCommand]
+        public void SelectAzureProcess()
+        {
+            CurrentProcess.KaraokeSource = InitialKaraokeSource.AzureSpeechService;
             CurrentProcess.SelectedTabIndex = (int)TabIndexes.Audio;
         }
 
@@ -189,7 +104,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                                 RzlrcLyric? selectedLayer = null;
                                 if (imported.Count > 1) // select one
                                 {
-                                    var dialogResult = await DialogHost.Show(imported, "AudioViewDialogHost");
+                                    var dialogResult = await DialogHost.Show(imported, dialogHostName);
                                     selectedLayer = dialogResult as RzlrcLyric;
                                 }
                                 CurrentProcess.ClearAudioAndDownstream();

@@ -44,6 +44,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
     }
     public partial class EditLinesViewModel : TickableBase
     {
+        private string dialogHostName = "EditLinesViewDialogHost";
+
         private ILineSplitter Splitter { get; }
         private IWordMerger WordMerger { get; }
         private CancellationTokenSource AudioPlayingSource { get; }
@@ -374,7 +376,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             if (parameter is LyricWord editThisWord)
             {
                 EditingTextOfWord = editThisWord;
-                if (await DialogHost.Show(this, "EditLinesViewDialogHost") is string newText)
+                if (await DialogHost.Show(this, dialogHostName) is string newText)
                 {
                     AddUndoSnapshot($"Change syllable \"{editThisWord.Text}\" to \"{newText}\"");
                     var lineNeedsTiming = ApplyEditWordText(newText);
@@ -737,7 +739,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             {
                 LineBeingEdited = new EditingLine(editThisLine);
                 await CalculateClipWindowAsync();
-                await DialogHost.Show(LineBeingEdited, "EditLinesViewDialogHost");
+                await DialogHost.Show(LineBeingEdited, dialogHostName);
             }
         }
 
@@ -771,7 +773,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             }
 
             // show a dialog to enter the words
-            if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords
+            if (await DialogHost.Show(addingLine, dialogHostName) is AddingLine newWords
                 && !string.IsNullOrWhiteSpace(newWords.EnteredText))
             {
                 // create and add a new line
@@ -991,6 +993,90 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             word.IsRunning = false;
             word.IsNext = true;
             word.HasFinished = false;
+        }
+
+        [RelayCommand]
+        private async Task NudgeAllTimings(object? parameter)
+        {
+            var result = await DialogHost.Show(new NudgeTimingsViewModel(), dialogHostName);
+            if (result is NudgeTimingsViewModel appliedModel && appliedModel.NudgeBy != 0)
+            {
+                AddUndoSnapshot($"Nudge all timings by {appliedModel.NudgeBy}s");
+                foreach (var line in CurrentProcess.ChosenLines)
+                {
+                    foreach (var word in line.Words)
+                    {
+                        word.StartSecond += appliedModel.NudgeBy;
+                        word.EndSecond += appliedModel.NudgeBy;
+                        line.RaiseTimingChanged();
+                    }
+                }
+            };
+        }
+
+        [RelayCommand]
+        private async Task UpperCaseAllText(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to UPPER CASE");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToUpperInvariant();
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task LowerCaseAllText(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to lower case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task SentenceCaseAllLines(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to Sentence case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+
+                    if (word.Text is { Length: >= 1 } && line.Words.FirstOrDefault() == word)
+                    {
+                        word.Text = word.Text[0].ToString().ToUpperInvariant() 
+                                    + word.Text.Substring(1);
+                    }
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task TitleCaseAllWords(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to Title Case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+                    var wordIndex = line.Words.IndexOf(word);
+                    if (word.Text is { Length: >= 1 }
+                        && (wordIndex == 0 || line.Words[wordIndex-1].Text.EndsWith(" ")))
+                    {
+                        word.Text = word.Text[0].ToString().ToUpperInvariant()
+                                    + word.Text.Substring(1);
+                    }
+                }
+            }
         }
 
         protected override void Tick()
@@ -1221,6 +1307,16 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             wordBeingDragged = null;
             modeBeingDragged = WordDraggingMode.None;
+        }
+    }
+
+    public class NudgeTimingsViewModel : ObservableBase
+    {
+        private double nudgeBy;
+        public double NudgeBy
+        {
+            get => nudgeBy;
+            set => SetProperty(ref nudgeBy, value);
         }
     }
 }

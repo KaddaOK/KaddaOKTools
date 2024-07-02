@@ -90,6 +90,9 @@
 					    <Setter Property="Margin" Value="0,3" />
                     </Style>
                 </StackPanel.Styles>
+                <TextBlock Classes="pageTitleHeader">
+                    Align
+                </TextBlock>
                 <TextBlock>
 				    On this screen you can tap the timing of each syllable using the arrow keys on your keyboard.<InlineUIContainer>
                         <Button Margin="0" Padding="0" Background="Transparent" Command="{Binding ShowInstructions}" IsVisible="{Binding !InstructionsVisible}">

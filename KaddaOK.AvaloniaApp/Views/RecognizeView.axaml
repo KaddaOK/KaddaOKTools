@@ -49,13 +49,16 @@
     </Design.DataContext>
     <Grid
         Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
-        RowDefinitions="0,0,80,60,35,200,25,*">
+        RowDefinitions="0,0,130,60,35,200,25,*">
 
 
 
         <StackPanel Grid.Row="2"
                     x:Name="RecognizeInstructionsPanel"
                     Margin="5">
+            <TextBlock Classes="pageTitleHeader">
+                Recognize
+            </TextBlock>
             <TextBlock
                 TextWrapping="Wrap"
                 FontSize="12">

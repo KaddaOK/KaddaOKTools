@@ -4,31 +4,36 @@ namespace KaddaOK.Library
 {
     public interface IWordMerger
     {
-        (LyricLine? resultingLine, LyricWord? resultingWord) MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore);
+        (TList? resultingLine, TItem? resultingWord) MergeWord<TList, TItem>(ObservableCollection<TList> allLines, TItem wordToMerge, bool withWordBefore)
+            where TItem : LyricWord, new()
+            where TList : ILyricLine<TItem>, new();
     }
 
     public class WordMerger : IWordMerger
     {
-        public (LyricLine? resultingLine, LyricWord? resultingWord) MergeWord(ObservableCollection<LyricLine>? allLines, LyricWord wordToMerge, bool withWordBefore)
+        public (TList? resultingLine, TItem? resultingWord) MergeWord<TList, TItem>
+            (ObservableCollection<TList> allLines, TItem wordToMerge, bool withWordBefore)
+            where TItem : LyricWord, new()
+            where TList : ILyricLine<TItem>, new()
         {
-            var originalLine = allLines?.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToMerge));
+            var originalLine = allLines.SingleOrDefault(l => l.Words != null && l.Words.Contains(wordToMerge));
             if (originalLine == null)
             {
-                return (null, null);
+                return (default, default);
             }
 
             var originalLineIndex = allLines!.IndexOf(originalLine);
 
             if (originalLine.Words == null)
             {
-                return (null, null);
+                return (default, default);
             }
 
             var originalWordIndex = originalLine.Words.IndexOf(wordToMerge);
             if ((withWordBefore && originalWordIndex < 1)
                 || (!withWordBefore && originalWordIndex == originalLine.Words.Count - 1))
             {
-                return (null, null); // I don't wanna.  TODO: I guess this would move the word to the previous line...
+                return (default, default); // I don't wanna.  TODO: I guess this would move the word to the previous line...
             }
 
             // either we're merging with the word with the previous index or the next index
@@ -37,14 +42,14 @@ namespace KaddaOK.Library
             var firstWord = originalLine.Words[firstWordIndex];
             var secondWord = originalLine.Words[secondWordIndex];
 
-            var replacementWord = new LyricWord
+            var replacementWord = new TItem
             {
                 StartSecond = firstWord.StartSecond,
                 EndSecond = secondWord.EndSecond,
                 Text = $"{firstWord.Text.TrimEnd()}{secondWord.Text.TrimStart()}"
             };
 
-            originalLine.Words = new ObservableCollection<LyricWord>(
+            originalLine.Words = new ObservableCollection<TItem>(
                 originalLine.Words.Take(firstWordIndex).Concat(new[] { replacementWord })
                     .Concat(originalLine.Words.Skip(secondWordIndex + 1)));
 

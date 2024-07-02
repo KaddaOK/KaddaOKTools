@@ -29,6 +29,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 {
     public partial class ManualAlignViewModel : TickableBase
     {
+        private string dialogHostName = "ManualAlignViewDialogHost";
+
         private CancellationTokenSource AudioPlayingSource { get; }
 
         private bool isPlaying;
@@ -147,7 +149,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             if (parameter is TimingWord editThisWord)
             {
                 EditingTextOfWord = editThisWord;
-                if (await DialogHost.Show(this, "ManualAlignViewDialogHost") is string newText)
+                if (await DialogHost.Show(this, dialogHostName) is string newText)
                 {
                     // TODO: AddUndoSnapshot($"Change syllable \"{editThisWord.Text}\" to \"{newText}\"");
                     ApplyEditWordText(newText);
@@ -215,7 +217,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private void MergeWord(TimingWord mergeHere, bool isBefore)
         {
             // TODO: AddUndoSnapshot($"Merge \"{mergeHere.Text}\" with {(isBefore ? "previous" : "next")} syllable");
-            // TODO: WordMerger.MergeWord(CurrentProcess?.ManualTimingLines, mergeHere, isBefore);
+            WordMerger.MergeWord(CurrentProcess?.ManualTimingLines, mergeHere, isBefore);
         }
 
         [RelayCommand]

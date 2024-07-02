@@ -1,4 +1,5 @@
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using Avalonia;
 using Avalonia.Controls;
@@ -81,7 +82,6 @@ namespace KaddaOK.AvaloniaApp.Views
         private void ManualAlign_KeyDown(object? sender, KeyEventArgs e)
         {
             _viewModel?.ManualAlignKeyDown(sender, e);
-            e.Handled = true;
         }
     }
 }
