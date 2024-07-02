@@ -13,6 +13,7 @@ using Avalonia.Controls.Notifications;
 using Avalonia.Platform.Storage;
 using KaddaOK.AvaloniaApp.Models;
 using KaddaOK.AvaloniaApp.Services;
+using KaddaOK.AvaloniaApp.Views;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -79,7 +80,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 return false;
             }
 
-            if (!CurrentProcess!.KnownOriginalLyrics?.Lyrics?.Any() ?? true)
+            if (!CurrentProcess!.KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true)
             {
                 reporter.ReasonCantExecute = "Lyrics must be supplied for a quality result.";
                 return false;
@@ -154,80 +155,13 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
-            CurrentProcess!.SelectedTabIndex = 3;
-        }
-
-        [RelayCommand]
-        public async Task ImportCtm()
-        {
-            if (App.MainWindow == null)
-            {
-                throw new InvalidOperationException(
-                    "Couldn't find the reference to MainWindow in order to show a dialog");
-            }
-
-            var options = new FilePickerOpenOptions
-            {
-                AllowMultiple = false,
-                Title = "Select a .CTM file to import",
-                FileTypeFilter = new FilePickerFileType[] { new ("NeMo Forced Aligner tokens .ctm file")
-                {
-                    Patterns = new[] { "*.ctm" }
-                } }
-            };
-
-            try
-            {
-                Dispatcher.UIThread.Invoke(() => { GettingFile = true; });
-                var results = await App.MainWindow.StorageProvider.OpenFilePickerAsync(options);
-                var result = results?.FirstOrDefault();
-                if (result != null)
-                {
-
-                    var ctmFilePath = result.TryGetLocalPath();
-
-                    if (!string.IsNullOrWhiteSpace(ctmFilePath))
-                    {
-                        var ctmLines = File.ReadAllLines(ctmFilePath).ToList();
-
-                        var lyricLines =
-                            NfaCtmImporter.ImportNfaCtmAndLyrics(ctmLines, CurrentProcess.KnownOriginalLyrics?.Lyrics);
-
-                        CurrentProcess.ChosenLines =
-                            new ObservableCollection<LyricLine>(lyricLines);
-
-
-                        CurrentProcess.KaraokeSource = InitialKaraokeSource.CtmImport;
-                        CurrentProcess.RaiseChosenLinesChanged();
-                        CurrentProcess.NarrowingStepCompletenessChanged();
-                        CurrentProcess.CanExportFactorsChanged();
-                        CurrentProcess!.SelectedTabIndex = 4;
-                    }
-                }
-                GettingFile = false;
-            }
-            catch (Exception e)
-            {
-                // The user canceled or something went wrong
-                if (NotificationManager != null)
-                {
-                    NotificationManager.Position = NotificationPosition.BottomRight;
-                    NotificationManager.Show(new Notification("Error", $"An error occurred: {e.Message}", NotificationType.Error, TimeSpan.Zero));
-                }
-                GettingFile = false;
-            }
+            CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Narrow;
         }
 
         [RelayCommand]
         private void LinkToAzureSpeechService()
         {
             UrlOpener.OpenUrl("https://azure.microsoft.com/en-us/products/ai-services/speech-to-text");
-        }
-
-        [RelayCommand]
-        private void LinkToForcedAligner()
-        {
-            UrlOpener.OpenUrl("https://github.com/KaddaOK/Forced-Aligner-for-Karaoke");
         }
     }
 }

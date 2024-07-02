@@ -29,6 +29,9 @@
     </Design.DataContext>
     <ScrollViewer>
         <StackPanel>
+            <TextBlock Classes="pageTitleHeader">
+                Export
+            </TextBlock>
             <Label Content="Colors for Output" />
             <Grid
                 x:Name="FullColorGrid"

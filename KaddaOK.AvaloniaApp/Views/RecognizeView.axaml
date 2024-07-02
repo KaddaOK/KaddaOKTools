@@ -49,46 +49,20 @@
     </Design.DataContext>
     <Grid
         Classes.isRunning="{Binding CurrentProcess.RecognitionIsRunning}"
-        RowDefinitions="85,60,80,60,35,200,25,*">
+        RowDefinitions="0,0,130,60,35,200,25,*">
 
-			<StackPanel>
-                <TextBlock TextWrapping="Wrap" FontSize="13" Margin="0,5">
-                    There are two ways to proceed from here.
-                </TextBlock>
-                <TextBlock TextWrapping="Wrap" FontSize="13" Margin="0,5">
-                    For the best result, I now recommend you use <InlineUIContainer>
-                        <Button
-                            Classes="inline"
-                            Content="my NeMo Forced Aligner scripts"
-                            Command="{Binding LinkToForcedAlignerCommand}" />
-                    </InlineUIContainer>.  This will conform the known exact text of the lyrics (from the previous tab).
-                </TextBlock>
-                <TextBlock
-                    TextWrapping="Wrap"
-                    FontSize="12">
-					At the above link, you will find a Google Colab jupyter notebook which can be run on free resources, as
-					well as some scripts for running it locally.
-				</TextBlock>
-				<TextBlock
-                    TextWrapping="Wrap"
-                    FontSize="12"> Either way, this will produce a .ctm file with token-level 
-                    timing, which you can then import here:
-                </TextBlock>
-            </StackPanel>
-            <Button Grid.Row="1" Content="Import .ctm..."
-                    Classes="accent"
-                    Command="{Binding ImportCtmCommand}"/>
+
 
         <StackPanel Grid.Row="2"
                     x:Name="RecognizeInstructionsPanel"
                     Margin="5">
-            <TextBlock
-                TextWrapping="Wrap"
-                FontSize="12">If NFA gives poor results with a particular song, try the original approach still available below: </TextBlock>
+            <TextBlock Classes="pageTitleHeader">
+                Recognize
+            </TextBlock>
             <TextBlock
                 TextWrapping="Wrap"
                 FontSize="12">
-                using <InlineUIContainer>
+                This tab uses <InlineUIContainer>
                     <Button
                         Classes="inline"
                         Content="Azure Speech Service"

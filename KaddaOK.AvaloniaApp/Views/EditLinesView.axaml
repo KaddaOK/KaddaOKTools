@@ -45,48 +45,79 @@
             x:Key="IsIgnoredStroke"
             Color="#B0AAAAAA" />
 
+		<MenuFlyout
+            x:Key="TransformButtonFlyout">
+            <MenuItem 
+				Header="Nudge all timings..."
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NudgeAllTimingsCommand}"
+				/>
+			<Separator />
+			<MenuItem 
+                Header="UPPER CASE ALL TEXT" 
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).UpperCaseAllTextCommand}"
+				/>
+            <MenuItem
+                Header="lower case all text"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).LowerCaseAllTextCommand}"
+            />
+            <MenuItem
+                Header="Sentence case all lines"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).SentenceCaseAllLinesCommand}"
+            />
+            <MenuItem
+                Header="Title Case All Words"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).TitleCaseAllWordsCommand}"
+            />
+        </MenuFlyout>
         <MenuFlyout
             x:Key="WordButtonFlyout"
             x:DataType="library:LyricWord">
             <MenuItem
-				AttachedToLogicalTree="MenuItem_AttachedToLogicalTree"
                 Header="Split Line Before This Syllable"
-                HotKey="s" InputGesture="s"
+                InputGesture="s"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NewLineBeforeCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Split Line After This Syllable"
-                HotKey="a" InputGesture="a"
+                InputGesture="a"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).NewLineAfterCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Merge With Previous Syllable"
-                HotKey="w" InputGesture="w"
+                InputGesture="w"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MergeWithPrevCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Merge With Next Syllable"
-                HotKey="q" InputGesture="q"
+                InputGesture="q"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MergeWithNextCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Change Syllable Text..."
-                HotKey="e" InputGesture="e"
+                InputGesture="e"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).EditWordTextCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Delete Syllable"
-                HotKey="d" InputGesture="d"
+                InputGesture="d"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DeleteWordCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Delete Entire Line"
-                HotKey="delete" InputGesture="delete"
+                InputGesture="delete"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DeleteEntireLineCommand}"
                 CommandParameter="{Binding}" />
             <MenuItem
                 Header="Move All Words to Previous Line"
-                HotKey="z" InputGesture="z"
+                InputGesture="z"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToPreviousCommand}"
                 CommandParameter="{Binding}" />
         </MenuFlyout>
@@ -107,6 +138,9 @@
             <DataTemplate DataType="models:AddingLine">
                 <dialogs:InsertNewLineDialog DataContext="{Binding}" />
             </DataTemplate>
+			<DataTemplate DataType="vm:NudgeTimingsViewModel">
+				<dialogs:NudgeTimingsDialog DataContext="{Binding}" />
+            </DataTemplate>
         </dialogHost:DialogHost.DataTemplates>
         <Grid
             x:Name="EditLinesViewOuterGrid"
@@ -118,9 +152,12 @@
 					x:Name="SelectionsScrollViewer"
 					Grid.Row="0">
 					<StackPanel>
+                        <TextBlock Classes="pageTitleHeader">
+                            Edit
+                        </TextBlock>
 						<TextBlock
 							TextWrapping="Wrap"
-							Margin="10"
+							Margin="5"
 							FontSize="12">
 							On this screen you can make direct changes to the words and lines.
 							Click the ⤴ button to make a line part of its preceeding line.
@@ -176,17 +213,28 @@
 							<ItemsRepeater.ItemTemplate>
 								<DataTemplate x:DataType="library:LyricLine">
 									<StackPanel x:Name="PhraseRepeaterStackPanel">
-										<Border x:Name="PhrasesRepeaterPhraseBorder"
-											ZIndex="5"
-											BorderBrush="{DynamicResource ListMediumColor}"
-											Background="Black"
-											BorderThickness="0,0,1,1"
-											Margin="13,3,0,0"
-											Padding="0,0,0,3"
-											CornerRadius="3">
-											<Grid x:Name="PhrasesRepeaterGrid"
-												Classes="lineStack"
-												ColumnDefinitions="20,36,*,36,25">
+                                        <StackPanel.Styles>
+											<Style Selector="Border.isCursor">
+												<Setter Property="Background" Value="#FF002628" />
+                                            </Style>
+                                        </StackPanel.Styles>
+                                        <Border x:Name="PhrasesRepeaterPhraseBorder"
+                                                ZIndex="5"
+                                                BorderBrush="{DynamicResource ListMediumColor}"
+                                                Background="Black"
+                                                BorderThickness="0,0,1,1"
+                                                Margin="13,3,0,0"
+                                                Padding="0,0,0,3"
+                                                CornerRadius="3">
+                                            <Classes.isCursor>
+                                                <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
+                                                    <Binding Path="." />
+                                                    <Binding Path="$parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).CursorLine" />
+                                                </MultiBinding>
+                                            </Classes.isCursor>
+                                            <Grid x:Name="PhrasesRepeaterGrid"
+                                                  Classes="lineStack"
+                                                  ColumnDefinitions="20,36,*,36,25">
 												<Button
 													Classes="lineMergeButton"
 													Grid.Column="0"
@@ -265,6 +313,10 @@
 					</StackPanel>
 
 				</ScrollViewer>
+				<Button Grid.Row="1" 
+                        VerticalAlignment="Bottom"
+                        Content="Transform All..."
+                        Flyout="{StaticResource TransformButtonFlyout}"/>
                 <StackPanel x:Name="UndoHistory" Grid.Row="1" HorizontalAlignment="Right" Margin="0,5,10,10">
                     <StackPanel.Styles>
 						<Style Selector="TextBlock.HistoryItem">

@@ -8,86 +8,69 @@
     xmlns:avalonia="clr-namespace:KaddaOK.AvaloniaApp"
     xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
     mc:Ignorable="d"
-    d:DesignWidth="1000"
-    d:DesignHeight="800"
+    d:DesignWidth="1180"
+    d:DesignHeight="860"
     x:Class="KaddaOK.AvaloniaApp.Views.MainView"
     x:DataType="vm:MainViewModel">
     <Design.DataContext>
         <designTime:DesignTimeMainViewModel />
     </Design.DataContext>
     <UserControl.Styles>
-        <Style Selector="TabItem">
+
+        <Style Selector="TabControl#MainViewTabControl TabItem">
             <Setter
                 Property="CornerRadius"
-                Value="10,10,0,0" />
+                Value="20" />
             <Setter
                 Property="Margin"
-                Value="0,0,1,0" />
-            <Setter
-                Property="Background"
-                Value="#FF0C0D10" />
-            <Setter
-                Property="BorderThickness"
-                Value="1,1,1,0" />
+                Value="10" />
+            <Setter Property="Width" Value="180" />
+            <Setter Property="Height" Value="50" />
         </Style>
-        <Style Selector="TabItem:selected">
+        <Style Selector="TabControl#MainViewTabControl TabItem:selected">
             <Setter
                 Property="Background"
-                Value="{DynamicResource SystemRegionColor}" />
-            <Setter
-                Property="Margin"
-                Value="0,0,1,-2" />
-            <Setter
-                Property="Padding"
-                Value="12,0,12,2" />
+                Value="{DynamicResource SystemAccentColor}" />
+
             <Setter
                 Property="BorderThickness"
-                Value="1,1,1,0" />
+                Value="0" />
             <Setter
                 Property="BorderBrush"
                 Value="#FFABE1FF" />
         </Style>
-        <Style Selector="TabItem:selected:pointerover /template/ Border">
+        <Style
+            Selector="TabControl#MainViewTabControl TabItem:selected:pointerover /template/ Border">
             <Setter
                 Property="TextElement.Foreground"
                 Value="{DynamicResource TabItemHeaderForegroundSelected}" />
         </Style>
-        <Style Selector="TabItem:pointerover /template/ Border">
+        <Style Selector="TabControl#MainViewTabControl TabItem:pointerover /template/ Border">
             <Setter
                 Property="Background"
                 Value="{DynamicResource SystemRegionColor}" />
+			<Setter
+				Property="Cursor"
+                Value="Hand" />
         </Style>
-        <Style Selector="TabItem:disabled /template/ Border">
-            <Setter
+        <Style Selector="TabControl#MainViewTabControl TabItem:disabled /template/ Border">
+            <!--<Setter
                 Property="Background"
-                Value="#801B1F26" />
+                Value="#801B1F26" />-->
             <Setter
                 Property="TextElement.Foreground"
-                Value="#FF6F6F6F" />
+                Value="#FF444444" />
         </Style>
-        <Style Selector="views|AudioView, views|LyricsView, views|RecognizeView, views|NarrowingView, views|EditLinesView, views|ExportView, views|AboutView">
-            <Setter
-                Property="Background"
-                Value="{DynamicResource SystemRegionColor}" />
-            <Setter
-                Property="Padding"
-                Value="10" />
-            <Setter
-                Property="CornerRadius"
-                Value="0,10,5,5" />
-            <Setter
-                Property="BorderThickness"
-                Value="1,0,1,1" />
-            <Setter
-                Property="BorderBrush"
-                Value="#FFABE1FF" />
+
+        <Style
+            Selector="TabControl#MainViewTabControl /template/ ContentPresenter#PART_SelectedContentHost">
+            <Setter Property="Padding" Value="20,0,0,0" />
         </Style>
     </UserControl.Styles>
-    <Grid RowDefinitions="32,*">
-        <StackPanel
-            Orientation="Horizontal"
-            HorizontalAlignment="Center">
-            <Image
+    <Grid Margin="0">
+        <StackPanel Width="220" Margin="0,20,0,0" Height="32" VerticalAlignment="Top" HorizontalAlignment="Left"
+            Orientation="Horizontal">
+            <Image Margin="30,0,0,0"
                 Source="/Assets/KaddaOKIcon.png"
                 HorizontalAlignment="Center" />
             <Label
@@ -98,64 +81,95 @@
                 IsHitTestVisible="False" />
         </StackPanel>
 
+		<Image Height="20" VerticalAlignment="Top" IsHitTestVisible="False">
+            <DrawingImage>
+                <DrawingGroup>
+                    <GeometryDrawing Brush="Transparent" Geometry="F1M0,0L20,0L20,20L0,20z" />
+                    <GeometryDrawing Brush="#FF444444" Geometry="F0 M7.5 11C6.67 11 6 11.67 6 12.5C6 13.33 6.67 14 7.5 14C8.33 14 9 13.33 9 12.5C9 11.67 8.33 11 7.5 11ZM2.5 6C1.67 6 1 6.67 1 7.5C1 8.33 1.67 9 2.5 9C3.33 9 4 8.33 4 7.5C4 6.67 3.33 6 2.5 6ZM2.5 11C1.67 11 1 11.67 1 12.5C1 13.33 1.67 14 2.5 14C3.33 14 4 13.33 4 12.5C4 11.67 3.33 11 2.5 11ZM17.5 9C18.33 9 19 8.33 19 7.5C19 6.67 18.33 6 17.5 6C16.67 6 16 6.67 16 7.5C16 8.33 16.67 9 17.5 9ZM12.5 11C11.67 11 11 11.67 11 12.5C11 13.33 11.67 14 12.5 14C13.33 14 14 13.33 14 12.5C14 11.67 13.33 11 12.5 11ZM17.5 11C16.67 11 16 11.67 16 12.5C16 13.33 16.67 14 17.5 14C18.33 14 19 13.33 19 12.5C19 11.67 18.33 11 17.5 11ZM7.5 6C6.67 6 6 6.67 6 7.5C6 8.33 6.67 9 7.5 9C8.33 9 9 8.33 9 7.5C9 6.67 8.33 6 7.5 6ZM12.5 6C11.67 6 11 6.67 11 7.5C11 8.33 11.67 9 12.5 9C13.33 9 14 8.33 14 7.5C14 6.67 13.33 6 12.5 6Z" />
+                </DrawingGroup>
+            </DrawingImage>
+        </Image>
 
         <TabControl
-            Grid.Row="1"
-            Margin="10"
+            Margin="10,20,10,10"
             Padding="0"
+            TabStripPlacement="Left"
             x:Name="MainViewTabControl"
             SelectedIndex="{Binding CurrentProcess.SelectedTabIndex, Mode=TwoWay}">
-            <TabItem
+            <TabControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <DockPanel Width="200" />
+                </ItemsPanelTemplate>
+            </TabControl.ItemsPanel>
+            <TabItem DockPanel.Dock="Top" Margin="10,80,10,10"
+                x:Name="StartTab"
+                Header="Start">
+                <views:StartView />
+            </TabItem>
+            <TabItem DockPanel.Dock="Top"
                 x:Name="AudioTab"
-                Header="Audio">
+                Header="Audio"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}">
                 <views:AudioView />
             </TabItem>
-            <TabItem
+            <TabItem DockPanel.Dock="Top"
                 x:Name="LyricsTab"
                 Header="Lyrics"
+                IsVisible="{Binding CurrentProcess.LyricsTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonAudioStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.AudioStepIsComplete}">
                 <views:LyricsView />
             </TabItem>
-            <TabItem
+            <TabItem DockPanel.Dock="Top"
                 x:Name="RecognizeTab"
                 Header="Recognize"
+                IsVisible="{Binding CurrentProcess.RecognizeTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}">
-                <views:RecognizeView />
+                <views:ManualAlignView />
             </TabItem>
-            <TabItem
+            <TabItem DockPanel.Dock="Top"
                 x:Name="NarrowTab"
                 Header="Narrow"
+                IsVisible="{Binding CurrentProcess.NarrowTabVisible}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonRecognizeStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.RecognizeStepIsComplete}">
                 <views:NarrowingView />
             </TabItem>
-            <TabItem
-                Margin="30,0,1,0"
+            <TabItem DockPanel.Dock="Top"
+                x:Name="AlignTab"
+                Header="Align"
+                IsVisible="{Binding CurrentProcess.ManualAlignTabVisible}"
+                ToolTip.Tip="{Binding CurrentProcess.ReasonManualAlignIsDisabled}"
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.ManualAlignIsEnabled}">
+                <views:ManualAlignView />
+            </TabItem>
+            <TabItem DockPanel.Dock="Top"
                 x:Name="EditLinesTab"
                 Header="Edit"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}"
                 ToolTip.Tip="{Binding
                                 CurrentProcess.ReasonEditTabIsDisabled}"
-				avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
-				IsEnabled="{Binding CurrentProcess.EditTabIsEnabled}">
+                avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
+                IsEnabled="{Binding CurrentProcess.EditTabIsEnabled}">
 
                 <views:EditLinesView />
             </TabItem>
-            <TabItem
+            <TabItem DockPanel.Dock="Top"
                 x:Name="ExportTab"
                 Header="Export"
+                IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}"
                 ToolTip.Tip="{Binding CurrentProcess.ReasonCantExport}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.CanExport}">
                 <views:ExportView />
             </TabItem>
 
-            <TabItem
-                Margin="30,0,1,0"
+            <TabItem DockPanel.Dock="Bottom" VerticalAlignment="Bottom"
                 x:Name="AboutTab"
                 Header="About">
                 <views:AboutView />

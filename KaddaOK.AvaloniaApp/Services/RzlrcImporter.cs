@@ -66,7 +66,7 @@ namespace KaddaOK.AvaloniaApp.Services
 
         public async Task LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath)
         {
-            karaokeProcess.ExistingKaraokeImportFilePath = originalPath;
+            karaokeProcess.ImportedKaraokeSourceFilePath = originalPath;
             karaokeProcess.ExportToFilePath = originalPath;
             karaokeProcess.KaraokeSource = InitialKaraokeSource.RzlrcImport;
             karaokeProcess.BackgroundColor = GetFromBGRUint(rzlrcPageToLoad.BKColor);

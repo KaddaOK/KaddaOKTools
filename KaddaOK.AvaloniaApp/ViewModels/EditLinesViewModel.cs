@@ -17,7 +17,6 @@ using NAudio.Wave.SampleProviders;
 using Avalonia.Controls;
 using KaddaOK.AvaloniaApp.Controls;
 using KaddaOK.AvaloniaApp.Views;
-using Avalonia.VisualTree;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -44,11 +43,13 @@ namespace KaddaOK.AvaloniaApp.ViewModels
     }
     public partial class EditLinesViewModel : TickableBase
     {
+        private string dialogHostName = "EditLinesViewDialogHost";
+
         private ILineSplitter Splitter { get; }
         private IWordMerger WordMerger { get; }
         private CancellationTokenSource AudioPlayingSource { get; }
         private IMinMaxFloatWaveStreamSampler Sampler { get; }
-        public EditLinesView EditLinesView { get; set; } // TODO: are you sure you wanna do this? It's paradigm-breakingly bad practice...
+        public IEditLinesView EditLinesView { get; set; } // TODO: are you sure you wanna do this? It's paradigm-breakingly bad practice...
         public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
         {
             FullLengthVocalsDraw = new WaveformDraw
@@ -145,6 +146,13 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             get => cursorWord;
             set => SetProperty(ref cursorWord, value);
+        }
+
+        private LyricLine? cursorLine;
+        public LyricLine? CursorLine
+        {
+            get => cursorLine;
+            set => SetProperty(ref cursorLine, value);
         }
 
         private bool isRecording;
@@ -253,10 +261,11 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private void MergeWord(LyricWord mergeHere, bool isBefore)
         {
             AddUndoSnapshot($"Merge \"{mergeHere.Text}\" with {(isBefore ? "previous" : "next")} syllable");
-            var resultingWord = WordMerger.MergeWord(CurrentProcess?.ChosenLines, mergeHere, isBefore);
-            if (resultingWord != null)
+            var mergeResult = WordMerger.MergeWord(CurrentProcess?.ChosenLines, mergeHere, isBefore);
+            if (mergeResult.resultingWord != null)
             {
-                CursorWord = resultingWord;
+                CursorLine = mergeResult.resultingLine;
+                CursorWord = mergeResult.resultingWord;
                 EditLinesView.Focus();
             }
         }
@@ -278,6 +287,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             // it seems to lose keyboard focus afterwards for some reason...
             EditLinesView.Focus();
             // and the word cursor no longer works, unfortunately...
+            CursorLine = null;
             CursorWord = null;
         }
 
@@ -298,6 +308,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             // it seems to lose keyboard focus afterwards for some reason...
             EditLinesView.Focus();
             // and the word cursor no longer works, unfortunately...
+            CursorLine = null;
             CursorWord = null;
         }
 
@@ -318,6 +329,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                     ? deletingFromLine.Words[deletedWordIndex]
                     : deletingFromLine.Words.LastOrDefault();
 
+                CursorLine = deletingFromLine;
                 CursorWord = newFocusedWord;
 
                 EditLinesView.Focus();
@@ -350,6 +362,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                                 : CurrentProcess.ChosenLines.LastOrDefault();
             if (newFocusedLine?.Words?.Any() ?? false)
             {
+                CursorLine = newFocusedLine;
                 CursorWord = newFocusedLine.Words.First();
             }
 
@@ -362,7 +375,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             if (parameter is LyricWord editThisWord)
             {
                 EditingTextOfWord = editThisWord;
-                if (await DialogHost.Show(this, "EditLinesViewDialogHost") is string newText)
+                if (await DialogHost.Show(this, dialogHostName) is string newText)
                 {
                     AddUndoSnapshot($"Change syllable \"{editThisWord.Text}\" to \"{newText}\"");
                     var lineNeedsTiming = ApplyEditWordText(newText);
@@ -380,8 +393,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             if (!string.IsNullOrWhiteSpace(newText)
                 && EditingTextOfWord != null)
             {
-                var newSyllables =
-                    GetLyricWordsAcrossTime(newText, EditingTextOfWord.StartSecond, EditingTextOfWord.EndSecond);
+                var newSyllables = LyricWord.GetLyricWordsAcrossTime(newText, EditingTextOfWord.StartSecond, EditingTextOfWord.EndSecond);
 
                 EditingTextOfWord.Text = newSyllables[0].Text;
                 EditingTextOfWord.EndSecond = newSyllables[0].EndSecond;
@@ -413,7 +425,11 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             {
                 AddUndoSnapshot($"Edited timing for \"{LineBeingEdited.OriginalLine.Text}\"");
                 LineBeingEdited.OriginalLine.Words = new ObservableCollection<LyricWord>(LineBeingEdited.NewTiming);
+                CursorLine = LineBeingEdited.OriginalLine;
+                CursorWord = LineBeingEdited.OriginalLine.Words.FirstOrDefault();
             }
+
+            EditLinesView.Focus();
         }
 
         [RelayCommand]
@@ -672,7 +688,6 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 PlayAudio.Play();
                 StartTicking();
             }
-
         }
 
         [RelayCommand]
@@ -723,7 +738,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             {
                 LineBeingEdited = new EditingLine(editThisLine);
                 await CalculateClipWindowAsync();
-                await DialogHost.Show(LineBeingEdited, "EditLinesViewDialogHost");
+                await DialogHost.Show(LineBeingEdited, dialogHostName);
             }
         }
 
@@ -757,7 +772,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             }
 
             // show a dialog to enter the words
-            if (await DialogHost.Show(addingLine, "EditLinesViewDialogHost") is AddingLine newWords
+            if (await DialogHost.Show(addingLine, dialogHostName) is AddingLine newWords
                 && !string.IsNullOrWhiteSpace(newWords.EnteredText))
             {
                 // create and add a new line
@@ -770,7 +785,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 var endTime = newWords.NextLine?.StartSecond
                               ?? CurrentProcess.VocalsAudioStream!.TotalTime.TotalSeconds;
 
-                var listOfNewWords = GetLyricWordsAcrossTime(enteredText, startTime, endTime);
+                var listOfNewWords = LyricWord.GetLyricWordsAcrossTime(enteredText, startTime, endTime);
                 newLine.Words = new ObservableCollection<LyricWord>(listOfNewWords);
 
                 AddUndoSnapshot($"Added new line \"{newLine.Text}\"");
@@ -782,287 +797,61 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 
         }
 
-        private static List<LyricWord> GetLyricWordsAcrossTime(string? enteredText, double startTime, double endTime)
-        {
-            var fullWords = enteredText?.Split(' ') ?? new[] { enteredText };
-            var syllables = fullWords
-                .SelectMany(f => (f + " ")
-                    .Split('|'))
-                .Where(w => !string.IsNullOrWhiteSpace(w))
-                .ToList();
-            var availableTime = endTime - startTime;
-            var eachSyllableGets = Math.Round(availableTime / (double)syllables.Count, 2);
-            var currentTime = Math.Round(startTime, 2);
-            var listOfNewWords = new List<LyricWord>();
-            for (int i = 0; i < syllables.Count; i++)
-            {
-                var newWord = new LyricWord
-                {
-                    Text = syllables[i],
-                    StartSecond = currentTime
-                };
-                currentTime = Math.Round(currentTime + eachSyllableGets, 2);
-                newWord.EndSecond = currentTime;
-                listOfNewWords.Add(newWord);
-            }
-
-            return listOfNewWords;
-        }
-
-        public void KeyPressed(KeyEventArgs keyArgs)
-        {
-            // TODO: this no longer needs be its own thing
-            HandleWordEditKeys(keyArgs);
-        }
-
-        private void HandleWordEditKeys(KeyEventArgs keyArgs)
+        public bool HandleWordEditKeys(KeyEventArgs keyArgs, bool isFromFlyout)
         {
             switch (keyArgs.Key)
             {
-                case Key.Down:
-                case Key.Right:
-                case Key.Left:
-                case Key.Up:
-                    SwitchWordSelection(keyArgs);
-                    break;
                 case Key.A:
                     if (CursorWord != null)
                     {
                         NewLineAfter(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.S:
                     if (CursorWord != null)
                     {
                         NewLineBefore(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.W:
                     if (CursorWord != null)
                     {
                         MergeWithPrev(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.Q:
                     if (CursorWord != null)
                     {
                         MergeWithNext(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.E:
                     if (CursorWord != null)
                     {
                         EditWordText(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.D:
                     if (CursorWord != null)
                     {
                         DeleteWord(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.Delete:
                     if (CursorWord != null)
                     {
                         DeleteEntireLine(CursorWord);
                     }
-                    break;
+                    return true;
                 case Key.Z:
                     if (CursorWord != null)
                     {
                         MoveLineToPrevious(CursorWord);
                     }
-                    break;
-            }
-        }
-
-        private void SwitchWordSelection(KeyEventArgs keyArgs)
-        {
-            // this is just gonna change focus and let the handler in the view set it back... wacky I know, but it makes
-            // sense because of what we can and can't control around tabbing and such.
-            // Also, apparently the order in which it finds these isn't reliable, so we'll have to sort it by the order in
-            // memory...
-            var allWordButtonsByPhrases = EditLinesView.GetVisualDescendants().Where(x => x.Name == "PhraseWordsItemsControl")
-                .Select(s => new
-                {
-                    Buttons = s.GetVisualDescendants().Where(y => y.Name == "LyricWordButton").Select(y => (Button)y).ToList(),
-                    SortOrder = CurrentProcess.ChosenLines.IndexOf(s.DataContext as LyricLine)
-                }).OrderBy(s => s.SortOrder)
-                .Select(s => s.Buttons.OrderBy(x => CurrentProcess.ChosenLines[s.SortOrder].Words.IndexOf(x.CommandParameter as LyricWord)).ToList())
-                .Where(s => s.Count > 0) // I'm not sure why this even happened; virtualization maybe
-                .ToList();
-
-
-            Button? destinationButton = null;
-            if (CursorWord == null)
-            {
-                switch (keyArgs.Key)
-                {
-                    case Key.Down:
-                    case Key.Right:
-                        destinationButton = allWordButtonsByPhrases.FirstOrDefault()?.FirstOrDefault();
-                        break;
-                    case Key.Left:
-                        destinationButton = allWordButtonsByPhrases.FirstOrDefault()?.LastOrDefault();
-                        break;
-                    case Key.Up:
-                        destinationButton = allWordButtonsByPhrases.LastOrDefault()?.FirstOrDefault();
-                        break;
-                }
-            }
-            else
-            {
-                var currentPhrase = allWordButtonsByPhrases.SingleOrDefault(phrase => phrase.Any(word => word.CommandParameter == CursorWord));
-                if (currentPhrase != null)
-                {
-                    var currentPhraseIndex = allWordButtonsByPhrases.IndexOf(currentPhrase);
-                    var currentWordButton = currentPhrase.FirstOrDefault(word => word.CommandParameter == CursorWord);
-                    var currentWordIndex = currentPhrase.IndexOf(currentWordButton);
-                    switch (keyArgs.Key)
-                    {
-                        case Key.Down:
-                            if (allWordButtonsByPhrases.Count > currentPhraseIndex + 1)
-                            {
-                                var nextPhrase = allWordButtonsByPhrases[currentPhraseIndex + 1];
-                                var nextWordIndex = nextPhrase.Count > currentWordIndex
-                                    ? currentWordIndex
-                                    : nextPhrase.Count - 1;
-                                destinationButton = nextPhrase[nextWordIndex];
-                            }
-
-                            break;
-                        case Key.Right:
-                            if (currentWordIndex < currentPhrase.Count - 1)
-                            {
-                                destinationButton = currentPhrase[currentWordIndex + 1];
-                            }
-
-                            break;
-                        case Key.Left:
-                            if (currentWordIndex > 0)
-                            {
-                                destinationButton = currentPhrase[currentWordIndex - 1];
-                            }
-
-                            break;
-                        case Key.Up:
-                            if (currentPhraseIndex > 0)
-                            {
-                                var nextPhrase = allWordButtonsByPhrases[currentPhraseIndex - 1];
-                                var nextWordIndex = nextPhrase.Count > currentWordIndex
-                                    ? currentWordIndex
-                                    : nextPhrase.Count - 1;
-                                destinationButton = nextPhrase[nextWordIndex];
-                            }
-
-                            break;
-                    }
-
-                }
-            }
-
-            destinationButton?.BringIntoView();
-            destinationButton?.Focus();
-
-            /*switch (keyArgs.Key)
-            {
-                case Key.Down:
-                    if (CursorWord == null)
-                    {
-                        CursorWord = CurrentProcess.ChosenLines?.FirstOrDefault()?.Words?.FirstOrDefault();
-                    }
-                    else
-                    {
-                        var originalLine =
-                            CurrentProcess.ChosenLines?.SingleOrDefault(l =>
-                                l.Words != null && l.Words.Contains(CursorWord));
-                        if (originalLine?.Words != null)
-                        {
-                            var originalLineIndex = CurrentProcess.ChosenLines.IndexOf(originalLine);
-                            var originalWordIndex = originalLine.Words.IndexOf(CursorWord);
-                            if (CurrentProcess.ChosenLines.Count > originalLineIndex + 1)
-                            {
-                                var nextLine = CurrentProcess.ChosenLines[originalLineIndex + 1];
-                                var nextWordIndex = nextLine.Words.Count > originalWordIndex
-                                    ? originalWordIndex
-                                    : nextLine.Words.Count - 1;
-                                CursorWord = nextLine.Words[nextWordIndex];
-                            }
-                        }
-                    }
-
-                    break;
-                case Key.Right:
-                    if (CursorWord == null)
-                    {
-                        CursorWord = CurrentProcess.ChosenLines?.FirstOrDefault()?.Words?.FirstOrDefault();
-                    }
-                    else
-                    {
-                        var originalLine =
-                            CurrentProcess.ChosenLines?.SingleOrDefault(l =>
-                                l.Words != null && l.Words.Contains(CursorWord));
-                        if (originalLine?.Words != null)
-                        {
-                            var originalWordIndex = originalLine.Words.IndexOf(CursorWord);
-                            if (originalWordIndex < originalLine.Words.Count - 1)
-                            {
-                                CursorWord = originalLine.Words[originalWordIndex + 1];
-                            }
-                        }
-                    }
-
-                    break;
-                case Key.Left:
-                    if (CursorWord == null)
-                    {
-                        CursorWord = CurrentProcess.ChosenLines?.FirstOrDefault()?.Words?.LastOrDefault();
-                    }
-                    else
-                    {
-                        var originalLine =
-                            CurrentProcess.ChosenLines?.SingleOrDefault(l =>
-                                l.Words != null && l.Words.Contains(CursorWord));
-                        if (originalLine?.Words != null)
-                        {
-                            var originalWordIndex = originalLine.Words.IndexOf(CursorWord);
-                            if (originalWordIndex > 0)
-                            {
-                                CursorWord = originalLine.Words[originalWordIndex - 1];
-                            }
-                        }
-                    }
-
-                    break;
-                case Key.Up:
-                    if (CursorWord == null)
-                    {
-                        CursorWord = CurrentProcess.ChosenLines?.LastOrDefault()?.Words?.FirstOrDefault();
-                    }
-                    else
-                    {
-                        var originalLine =
-                            CurrentProcess.ChosenLines?.SingleOrDefault(l =>
-                                l.Words != null && l.Words.Contains(CursorWord));
-                        if (originalLine?.Words != null)
-                        {
-                            var originalLineIndex = CurrentProcess.ChosenLines.IndexOf(originalLine);
-                            var originalWordIndex = originalLine.Words.IndexOf(CursorWord);
-                            if (originalLineIndex > 0)
-                            {
-                                var nextLine = CurrentProcess.ChosenLines[originalLineIndex - 1];
-                                var nextWordIndex = nextLine.Words.Count > originalWordIndex
-                                    ? originalWordIndex
-                                    : nextLine.Words.Count - 1;
-                                CursorWord = nextLine.Words[nextWordIndex];
-                            }
-                        }
-                    }
-
-                    break;
+                    return true;
                 default:
-                    throw new InvalidOperationException($"No case for key {keyArgs.Key} in SwitchWordSelection");
-            } */
+                    return false;
+            }
         }
 
         private void StartNextWord(double? positionTotalSeconds)
@@ -1103,6 +892,90 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             word.IsRunning = false;
             word.IsNext = true;
             word.HasFinished = false;
+        }
+
+        [RelayCommand]
+        private async Task NudgeAllTimings(object? parameter)
+        {
+            var result = await DialogHost.Show(new NudgeTimingsViewModel(), dialogHostName);
+            if (result is NudgeTimingsViewModel appliedModel && appliedModel.NudgeBy != 0)
+            {
+                AddUndoSnapshot($"Nudge all timings by {appliedModel.NudgeBy}s");
+                foreach (var line in CurrentProcess.ChosenLines)
+                {
+                    foreach (var word in line.Words)
+                    {
+                        word.StartSecond += appliedModel.NudgeBy;
+                        word.EndSecond += appliedModel.NudgeBy;
+                        line.RaiseTimingChanged();
+                    }
+                }
+            };
+        }
+
+        [RelayCommand]
+        private async Task UpperCaseAllText(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to UPPER CASE");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToUpperInvariant();
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task LowerCaseAllText(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to lower case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task SentenceCaseAllLines(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to Sentence case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+
+                    if (word.Text is { Length: >= 1 } && line.Words.FirstOrDefault() == word)
+                    {
+                        word.Text = word.Text[0].ToString().ToUpperInvariant() 
+                                    + word.Text.Substring(1);
+                    }
+                }
+            }
+        }
+
+        [RelayCommand]
+        private async Task TitleCaseAllWords(object? parameter)
+        {
+            AddUndoSnapshot($"Change all text to Title Case");
+            foreach (var line in CurrentProcess.ChosenLines)
+            {
+                foreach (var word in line.Words)
+                {
+                    word.Text = word.Text?.ToLowerInvariant();
+                    var wordIndex = line.Words.IndexOf(word);
+                    if (word.Text is { Length: >= 1 }
+                        && (wordIndex == 0 || line.Words[wordIndex-1].Text.EndsWith(" ")))
+                    {
+                        word.Text = word.Text[0].ToString().ToUpperInvariant()
+                                    + word.Text.Substring(1);
+                    }
+                }
+            }
         }
 
         protected override void Tick()
@@ -1333,6 +1206,16 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             wordBeingDragged = null;
             modeBeingDragged = WordDraggingMode.None;
+        }
+    }
+
+    public class NudgeTimingsViewModel : ObservableBase
+    {
+        private double nudgeBy;
+        public double NudgeBy
+        {
+            get => nudgeBy;
+            set => SetProperty(ref nudgeBy, value);
         }
     }
 }
