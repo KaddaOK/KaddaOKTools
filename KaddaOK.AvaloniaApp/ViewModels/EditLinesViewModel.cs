@@ -17,7 +17,6 @@ using NAudio.Wave.SampleProviders;
 using Avalonia.Controls;
 using KaddaOK.AvaloniaApp.Controls;
 using KaddaOK.AvaloniaApp.Views;
-using Avalonia.VisualTree;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -50,7 +49,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private IWordMerger WordMerger { get; }
         private CancellationTokenSource AudioPlayingSource { get; }
         private IMinMaxFloatWaveStreamSampler Sampler { get; }
-        public EditLinesView EditLinesView { get; set; } // TODO: are you sure you wanna do this? It's paradigm-breakingly bad practice...
+        public IEditLinesView EditLinesView { get; set; } // TODO: are you sure you wanna do this? It's paradigm-breakingly bad practice...
         public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
         {
             FullLengthVocalsDraw = new WaveformDraw
@@ -802,17 +801,6 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             switch (keyArgs.Key)
             {
-                case Key.Down:
-                case Key.Right:
-                case Key.Left:
-                case Key.Up:
-                    if (!isFromFlyout)
-                    {
-                        SwitchWordSelection(keyArgs);
-                        return true;
-                    }
-
-                    return false;
                 case Key.A:
                     if (CursorWord != null)
                     {
@@ -864,95 +852,6 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 default:
                     return false;
             }
-        }
-
-        private void SwitchWordSelection(KeyEventArgs keyArgs)
-        {
-            // this is just gonna change focus and let the handler in the view set it back... wacky I know, but it makes
-            // sense because of what we can and can't control around tabbing and such.
-            // Also, apparently the order in which it finds these isn't reliable, so we'll have to sort it by the order in
-            // memory...
-            var allWordButtonsByPhrases = EditLinesView.GetVisualDescendants().Where(x => x.Name == "PhraseWordsItemsControl")
-                .Select(s => new
-                {
-                    Buttons = s.GetVisualDescendants().Where(y => y.Name == "LyricWordButton").Select(y => (Button)y).ToList(),
-                    SortOrder = CurrentProcess.ChosenLines.IndexOf(s.DataContext as LyricLine)
-                }).OrderBy(s => s.SortOrder)
-                .Select(s => s.Buttons.OrderBy(x => CurrentProcess.ChosenLines[s.SortOrder].Words.IndexOf(x.CommandParameter as LyricWord)).ToList())
-                .Where(s => s.Count > 0) // I'm not sure why this even happened; virtualization maybe
-                .ToList();
-
-
-            Button? destinationButton = null;
-            if (CursorWord == null)
-            {
-                switch (keyArgs.Key)
-                {
-                    case Key.Down:
-                    case Key.Right:
-                        destinationButton = allWordButtonsByPhrases.FirstOrDefault()?.FirstOrDefault();
-                        break;
-                    case Key.Left:
-                        destinationButton = allWordButtonsByPhrases.FirstOrDefault()?.LastOrDefault();
-                        break;
-                    case Key.Up:
-                        destinationButton = allWordButtonsByPhrases.LastOrDefault()?.FirstOrDefault();
-                        break;
-                }
-            }
-            else
-            {
-                var currentPhrase = allWordButtonsByPhrases.SingleOrDefault(phrase => phrase.Any(word => word.CommandParameter == CursorWord));
-                if (currentPhrase != null)
-                {
-                    var currentPhraseIndex = allWordButtonsByPhrases.IndexOf(currentPhrase);
-                    var currentWordButton = currentPhrase.FirstOrDefault(word => word.CommandParameter == CursorWord);
-                    var currentWordIndex = currentPhrase.IndexOf(currentWordButton);
-                    switch (keyArgs.Key)
-                    {
-                        case Key.Down:
-                            if (allWordButtonsByPhrases.Count > currentPhraseIndex + 1)
-                            {
-                                var nextPhrase = allWordButtonsByPhrases[currentPhraseIndex + 1];
-                                var nextWordIndex = nextPhrase.Count > currentWordIndex
-                                    ? currentWordIndex
-                                    : nextPhrase.Count - 1;
-                                destinationButton = nextPhrase[nextWordIndex];
-                            }
-
-                            break;
-                        case Key.Right:
-                            if (currentWordIndex < currentPhrase.Count - 1)
-                            {
-                                destinationButton = currentPhrase[currentWordIndex + 1];
-                            }
-
-                            break;
-                        case Key.Left:
-                            if (currentWordIndex > 0)
-                            {
-                                destinationButton = currentPhrase[currentWordIndex - 1];
-                            }
-
-                            break;
-                        case Key.Up:
-                            if (currentPhraseIndex > 0)
-                            {
-                                var nextPhrase = allWordButtonsByPhrases[currentPhraseIndex - 1];
-                                var nextWordIndex = nextPhrase.Count > currentWordIndex
-                                    ? currentWordIndex
-                                    : nextPhrase.Count - 1;
-                                destinationButton = nextPhrase[nextWordIndex];
-                            }
-
-                            break;
-                    }
-
-                }
-            }
-
-            destinationButton?.BringIntoView();
-            destinationButton?.Focus();
         }
 
         private void StartNextWord(double? positionTotalSeconds)

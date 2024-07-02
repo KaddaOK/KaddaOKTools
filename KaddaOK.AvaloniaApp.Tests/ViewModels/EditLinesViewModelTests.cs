@@ -1,7 +1,9 @@
 ﻿using System.Collections.ObjectModel;
+using Avalonia.Input;
 using FluentAvalonia.Core;
 using KaddaOK.AvaloniaApp.Models;
 using KaddaOK.AvaloniaApp.ViewModels;
+using KaddaOK.AvaloniaApp.Views;
 using KaddaOK.Library;
 using NAudio.Wave;
 
@@ -26,6 +28,13 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
                 }
             };
 
+        public class DummyEditLinesView : IEditLinesView
+        {
+            public bool Focus(NavigationMethod method = NavigationMethod.Unspecified, KeyModifiers keyModifiers = KeyModifiers.None)
+            {
+                return true;
+            }
+        }
         public class MoveLineToPrevious
         {
             [Fact]
@@ -33,7 +42,8 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
             {
                 var currentProcess = GetNewCurrentProcess();
 
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler());
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
+                    { EditLinesView = new DummyEditLinesView() };
 
                 viewModel.MoveLineToPrevious(currentProcess.ChosenLines!.Last());
 
@@ -47,7 +57,8 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
             {
                 var currentProcess = GetNewCurrentProcess();
 
-                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler());
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler())
+                    { EditLinesView = new DummyEditLinesView()};
 
                 viewModel.MoveLineToPrevious(currentProcess.ChosenLines!.Last());
 
