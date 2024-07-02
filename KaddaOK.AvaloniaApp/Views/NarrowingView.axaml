@@ -60,11 +60,14 @@
         ColumnDefinitions="*, 100">
         <ScrollViewer x:Name="PossibilitiesScrollViewer">
             <StackPanel>
+                <TextBlock Classes="pageTitleHeader">
+                    Narrow
+                </TextBlock>
                 <TextBlock
                     TextWrapping="Wrap"
-                    Margin="10,10,10,0"
+                    Margin="5,0"
                     FontSize="12">
-                    Each phrase detected by the speech-to-text service has a number of possible
+                    Each phrase detected by the Azure speech-to-text service has a number of possible
                     wordings. On this screen, touch the wording for each phrase that is the most
                     correct (or has the most useful timed syllables). If you don't want to use a
                     phrase at all, you can ignore it by clicking its speaker icon. When you have

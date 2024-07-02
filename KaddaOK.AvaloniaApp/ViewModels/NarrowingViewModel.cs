@@ -4,6 +4,7 @@ using System.Linq;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using KaddaOK.AvaloniaApp.Models;
+using KaddaOK.AvaloniaApp.Views;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
@@ -83,7 +84,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         public void GoToNextStep(object? parameter)
         {
             CurrentProcess!.SetChosenLinesToSelectedPossibilities();
-            CurrentProcess!.SelectedTabIndex = 4;
+            CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Edit;
         }
     }
 }

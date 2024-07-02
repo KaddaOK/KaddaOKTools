@@ -25,7 +25,7 @@ public partial class App : Application
 
         KaraokeProcess = new KaraokeProcess
         {
-            KaraokeSource = InitialKaraokeSource.AzureSpeechService
+            KaraokeSource = InitialKaraokeSource.NotSelected
         };
 
         services.AddSingleton(KaraokeProcess);
@@ -37,6 +37,7 @@ public partial class App : Application
         services.AddTransient<IKbpImporter, KbpImporter>();
         services.AddTransient<IKbpSerializer, KbpSerializer>();
         services.AddTransient<ILineSplitter, LineSplitter>();
+        services.AddTransient<IWordMerger, WordMerger>();
         services.AddTransient<IMinMaxFloatWaveStreamSampler, MinMaxFloatWaveStreamSampler>();
         services.AddTransient<IResultRanker, ResultRanker>();
         services.AddTransient<IRzlrcContentsGenerator, RzlrcContentsGenerator>();
@@ -52,6 +53,8 @@ public partial class App : Application
         services.AddTransient<LyricsViewModel>();
         services.AddTransient<NarrowingViewModel>();
         services.AddTransient<RecognizeViewModel>();
+        services.AddTransient<StartViewModel>();
+        services.AddTransient<ManualAlignViewModel>();
 
         // Build the service provider
         ServiceProvider = services.BuildServiceProvider();

@@ -53,14 +53,9 @@ namespace KaddaOK.AvaloniaApp.Models
         public EditingLine(LyricLine line)
         {
             OriginalLine = line;
-            NewTiming = new ObservableCollection<TimingWord>(line
-                .Words?
-                .Select(w => new TimingWord
-                {
-                    Text = w.Text,
-                    EndSecond = Math.Round(w.EndSecond, 2),
-                    StartSecond = Math.Round(w.StartSecond, 2)
-                }) ?? Array.Empty<TimingWord>());
+            NewTiming = new ObservableCollection<TimingWord>(
+                line.Words?.Select(TimingWord.FromLyricWord) 
+                ?? Array.Empty<TimingWord>());
         }
     }
 
@@ -85,6 +80,36 @@ namespace KaddaOK.AvaloniaApp.Models
         {
             get => isNext;
             set => SetProperty(ref isNext, value);
+        }
+
+        private bool startHasBeenManuallySet;
+        public bool StartHasBeenManuallySet
+        {
+            get => startHasBeenManuallySet;
+            set => SetProperty(ref startHasBeenManuallySet, value);
+        }
+
+        private bool endHasBeenManuallySet;
+        public bool EndHasBeenManuallySet
+        {
+            get => endHasBeenManuallySet;
+            set => SetProperty(ref endHasBeenManuallySet, value);
+        }
+
+        public static TimingWord FromLyricWord(LyricWord word)
+        {
+            return new TimingWord
+            {
+                Text = word.Text,
+                EndSecond = Math.Round(word.EndSecond, 2),
+                StartSecond = Math.Round(word.StartSecond, 2)
+            };
+        }
+
+        public static List<TimingWord> GetTimingWordsAcrossTime(string? enteredText, double startTime, double endTime)
+        {
+            var lyricWords = LyricWord.GetLyricWordsAcrossTime(enteredText, startTime, endTime);
+            return lyricWords.Select(TimingWord.FromLyricWord).ToList();
         }
     }
 }

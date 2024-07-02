@@ -11,7 +11,10 @@
              xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="KaddaOK.AvaloniaApp.Controls.Dialogs.EditLineTimingDialog"
-             x:DataType="models:EditingLine">
+             x:DataType="models:EditingLine"
+             Focusable="True"
+			 AttachedToVisualTree="UserControl_AttachedToVisualTree"
+             KeyDown="UserControl_KeyDown">
 	<dialogs:ModalDialogChrome Title="Edit Line Timing">
 		<Grid
 		RowDefinitions="50,85,100,85,90,50"

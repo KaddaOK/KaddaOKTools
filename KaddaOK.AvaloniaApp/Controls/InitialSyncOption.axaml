@@ -1,0 +1,130 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+  xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:local="clr-namespace:KaddaOK.AvaloniaApp.Controls"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="KaddaOK.AvaloniaApp.Controls.InitialSyncOption"
+             x:DataType="local:InitialSyncOption">
+	<UserControl.Styles>
+		<Style Selector="Image.sourceMethodIconImage">
+			<Setter Property="Width" Value="32" />
+		</Style>
+		<Style Selector="ScrollViewer.gettingFile">
+			<Setter
+                Property="Cursor"
+                Value="Wait" />
+		</Style>
+		<Style Selector="ScrollViewer.gettingFile StackPanel">
+			<Setter
+                Property="IsEnabled"
+                Value="False" />
+		</Style>
+		<Style Selector="Label.waveformLabel">
+			<Setter
+                Property="Margin"
+                Value="0,10,0,0" />
+		</Style>
+		<Style Selector="Border.outerWaveformBorder">
+			<Setter
+                Property="Margin"
+                Value="0,2,0,5" />
+			<Setter
+                Property="Background"
+                Value="#FF061424" />
+			<Setter
+                Property="BorderBrush"
+                Value="Gray" />
+			<Setter
+                Property="BorderThickness"
+                Value="1" />
+			<Setter
+                Property="CornerRadius"
+                Value="5" />
+		</Style>
+		<Style Selector="Border.innerWaveformBorder">
+			<Setter
+                Property="Margin"
+                Value="0,5" />
+			<Setter
+                Property="MinHeight"
+                Value="50" />
+		</Style>
+
+		<Style Selector="TextBlock.introText">
+			<Setter
+                Property="Margin"
+                Value="0,0,0,10" />
+			<Setter
+                Property="TextWrapping"
+                Value="Wrap" />
+		</Style>
+		<Style Selector="Border.initialOptionBorder">
+			<Setter Property="Background">
+				<Setter.Value>
+					<LinearGradientBrush StartPoint="50%,0%" EndPoint="50%,100%">
+						<GradientStop Color="#FF385371" Offset="0" />
+						<GradientStop Color="#FF1E3851" Offset="0.5" />
+						<GradientStop Color="#FF112132" Offset="1" />
+					</LinearGradientBrush>
+				</Setter.Value>
+			</Setter>
+			<Setter Property="BorderBrush" Value="#FF5A6A83" />
+			<Setter Property="BorderThickness" Value="0,1,0,0" />
+			<Setter Property="Padding" Value="25, 12" />
+			<Setter Property="CornerRadius" Value="30" />
+			<Setter Property="Margin" Value="0,20,0,0" />
+		</Style>
+		<Style Selector="StackPanel.optionMainLineStackPanel">
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="StackPanel.optionMainLineStackPanel TextBlock">
+			<Setter Property="VerticalAlignment" Value="Center" />
+			<Setter Property="Margin" Value="10,0" />
+		</Style>
+		<Style Selector="StackPanel.optionMainLineStackPanel Button">
+			<Setter Property="Padding" Value="15,10" />
+			<Setter Property="VerticalAlignment" Value="Center" />
+		</Style>
+		<Style Selector="StackPanel.moreInfoStackPanel">
+			<Setter Property="Margin" Value="5" />
+		</Style>
+		<Style Selector="TextBlock.linkButtonText">
+			<Setter Property="FontFamily" Value="Arial" />
+			<Setter Property="FontStyle" Value="Italic" />
+		</Style>
+		<Style Selector="TextBlock.summarySentence">
+			<Setter Property="Margin" Value="5,10,0,5" />
+		</Style>
+	</UserControl.Styles>
+	<Border Classes="initialOptionBorder">
+		<StackPanel>
+			<Grid ColumnDefinitions="50,*,60">
+				<Image VerticalAlignment="Center" Classes="sourceMethodIconImage" Source="{Binding $parent[local:InitialSyncOption].IconDrawing}" />
+				<TextBlock VerticalAlignment="Center" Margin="10,0" FontWeight="Bold" Grid.Column="1" Text="{Binding $parent[local:InitialSyncOption].OptionTitle}" />
+				<Button VerticalAlignment="Center" Content="GO ->"
+                        Command="{Binding $parent[local:InitialSyncOption].ChooseCommand}"
+                        Grid.Column="2" />
+			</Grid>
+			<StackPanel Orientation="Horizontal" Classes="optionMainLineStackPanel">
+				<TextBlock Classes="summarySentence">
+					<Run Text="{Binding $parent[local:InitialSyncOption].OptionSummary}"/> <InlineUIContainer>
+						<Button Margin="0" Padding="0" Background="Transparent"
+							Command="{Binding $parent[local:InitialSyncOption].ShowMoreInfoCommand}"
+							IsVisible="{Binding !$parent[local:InitialSyncOption].MoreInfoVisible}">
+							<TextBlock Classes="linkButtonText">(more info)</TextBlock>
+						</Button>
+					</InlineUIContainer>
+				</TextBlock>
+			</StackPanel>
+			<StackPanel IsVisible="{Binding $parent[local:InitialSyncOption].MoreInfoVisible}"
+				Classes="moreInfoStackPanel">
+				<ItemsControl ItemsSource="{Binding $parent[local:InitialSyncOption].MoreInfoContent}" />
+				<Button Margin="0" Padding="0" Background="Transparent"
+					Command="{Binding $parent[local:InitialSyncOption].HideMoreInfo}">
+					<TextBlock Classes="linkButtonText">(less info)</TextBlock>
+				</Button>
+			</StackPanel>
+		</StackPanel>
+	</Border>
+</UserControl>

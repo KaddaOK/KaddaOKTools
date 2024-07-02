@@ -35,7 +35,7 @@ namespace KaddaOK.AvaloniaApp.Services
             
             var kbpFile = Serializer.Deserialize(originalContents);
 
-            karaokeProcess.ExistingKaraokeImportFilePath = kbpFilePath;
+            karaokeProcess.ImportedKaraokeSourceFilePath = kbpFilePath;
             karaokeProcess.OriginalImportedKbpFile = kbpFile;
             karaokeProcess.ExportToFilePath = kbpFilePath;
             karaokeProcess.KaraokeSource = InitialKaraokeSource.KbpImport;

@@ -90,7 +90,7 @@ namespace KaddaOK.Library
                     eMediaType = 6,
                     eMediaTypeLine = (int)RzLinesSpec.Text0,
                     dxScale = 1,
-                    dyScale = 1, 
+                    dyScale = 1,
                     dzScale = 1,
                     source = rzlrcFileName
                 });
@@ -202,12 +202,12 @@ namespace KaddaOK.Library
         }
 
         public void InsertProgressBars(
-                                            RzProject project, 
-                                            List<LyricLine> lyrics, 
+                                            RzProject project,
+                                            List<LyricLine> lyrics,
                                             decimal minimumGapLength,
-                                            int width, 
-                                            int height, 
-                                            int yPosition,  
+                                            int width,
+                                            int height,
+                                            int yPosition,
                                             SKColor fill,
                                             SKColor outline,
                                             int screenWidth = 1920)
@@ -238,13 +238,13 @@ namespace KaddaOK.Library
         }
 
         public RzLineItem GenerateProgressBar(
-                                                decimal startTime, 
-                                                decimal endTime, 
-                                                int width, 
-                                                int height, 
-                                                int yPosition, 
-                                                SKColor fill, 
-                                                SKColor outline, 
+                                                decimal startTime,
+                                                decimal endTime,
+                                                int width,
+                                                int height,
+                                                int yPosition,
+                                                SKColor fill,
+                                                SKColor outline,
                                                 int screenWidth = 1920)
         {
             var barMargin = (screenWidth - width) / 2;
@@ -273,7 +273,7 @@ namespace KaddaOK.Library
                             nShapeType=1,
                             nOutlineWidth=4,
                             nOutlineType=0,
-                            bSmooth=1,
+                            bSmooth=0,
                             Points = new List<GraffitiPoint>
                             {
                                 new()
@@ -302,7 +302,7 @@ namespace KaddaOK.Library
                             nShapeType=1,
                             nOutlineWidth=4,
                             nOutlineType=2,
-                            bSmooth=1,
+                            bSmooth=0,
                             Points = new List<GraffitiPoint>
                             {
                                 new()

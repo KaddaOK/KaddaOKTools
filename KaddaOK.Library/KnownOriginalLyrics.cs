@@ -4,16 +4,29 @@ namespace KaddaOK.Library
 {
     public class KnownOriginalLyrics
     {
-        public List<string>? Lyrics { get; }
+        private static readonly string unguardedDashRegex = "(?<=[0-9A-Za-z])(?<!\\|)-(?!\\|)(?=[0-9A-Za-z])";
+        private static readonly string unguardedDashReplacement = "/-";
+
+        public List<string>? SeparatorCleansedLines { get; }
+        public List<string>? UncleansedLines { get; }
 
         private KnownOriginalLyrics(string? lyrics)
         {
-            Lyrics = lyrics?.Split(Environment.NewLine).Where(l => !string.IsNullOrWhiteSpace(l)).Select(l => l.Trim()).ToList() ?? new List<string>();
+            UncleansedLines = lyrics?
+                .Split(new[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries)
+                .Select(s => AdjustSeparators(s.Trim()))
+                .ToList()
+                ?? new List<string>();
+            SeparatorCleansedLines = UncleansedLines.Select(s => s.Replace("|", "").Replace("/", "")).ToList();
+        }
+
+        private string AdjustSeparators(string input)
+        {
+            return Regex.Replace(input, unguardedDashRegex, unguardedDashReplacement);
         }
         public static KnownOriginalLyrics FromText(string? text)
         {
-            var lyrics = Regex.Replace(text?.Replace("/", "") ?? "", @"\r\n|\n\r|\n|\r", "\r\n");
-            return new KnownOriginalLyrics(lyrics);
+            return new KnownOriginalLyrics(text);
         }
         public static KnownOriginalLyrics FromFilePath(string? filePath)
         {
@@ -30,7 +43,7 @@ namespace KaddaOK.Library
             return KnownOriginalLyrics.FromText(lyrics);
         }
 
-        public List<string>? DistinctLines => Lyrics?.Distinct().ToList();
+        public List<string>? DistinctLines => SeparatorCleansedLines?.Distinct().ToList();
 
         public string? DistinctLinesAsText => DistinctLines != null ? string.Join(Environment.NewLine, DistinctLines) : null;
 

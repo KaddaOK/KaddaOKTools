@@ -5,11 +5,11 @@ using DialogHostAvalonia;
 
 namespace KaddaOK.AvaloniaApp.Controls.Dialogs
 {
-    public partial class EditSyllableTextDialog : UserControl
+    public partial class NudgeTimingsDialog : UserControl
     {
         private DialogHost? dialogHost;
 
-        public EditSyllableTextDialog()
+        public NudgeTimingsDialog()
         {
             InitializeComponent();
         }

@@ -66,7 +66,7 @@ namespace KaddaOK.AvaloniaApp.Services
 
         public async Task LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath)
         {
-            karaokeProcess.ExistingKaraokeImportFilePath = originalPath;
+            karaokeProcess.ImportedKaraokeSourceFilePath = originalPath;
             karaokeProcess.ExportToFilePath = originalPath;
             karaokeProcess.KaraokeSource = InitialKaraokeSource.RzlrcImport;
             karaokeProcess.BackgroundColor = GetFromBGRUint(rzlrcPageToLoad.BKColor);
@@ -89,7 +89,7 @@ namespace KaddaOK.AvaloniaApp.Services
         {
             var instructionArray = rzlrcItem.text.Split('<', '>');
 
-            var timeWithDelayRegex = new Regex(@"^(?'time'[0-9\.]+)(?:\+(?'delay'[0-9\.]+))?$");
+            var timeWithDelayRegex = new Regex(@"^(?'time'[0-9]+.?[0-9]*)(?:\+(?'delay'[0-9\.]+))?$");
             var lyricLine = new LyricLine(rzlrcItem)
             {
                 IsSelected = true,

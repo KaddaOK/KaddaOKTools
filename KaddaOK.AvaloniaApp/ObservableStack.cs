@@ -1,77 +1,37 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Linq;
 
 namespace KaddaOK.AvaloniaApp
 {
-    /// <summary>
-    /// Per https://stackoverflow.com/a/56177896/
-    /// </summary>
-    public class ObservableStack<T> : Stack<T>, INotifyCollectionChanged, INotifyPropertyChanged
+    public class ObservableStack<T> : ObservableCollection<T>
     {
-        #region Constructors
+        public T? Peek => Items.LastOrDefault();
 
-        public ObservableStack() : base() { }
-
-        public ObservableStack(IEnumerable<T> collection) : base(collection) { }
-
-        public ObservableStack(int capacity) : base(capacity) { }
-
-        #endregion
-
-        #region Overrides
-
-        public new virtual T? Pop()
+        public T? Pop()
         {
-            var item = base.Pop();
-            OnCollectionChanged(NotifyCollectionChangedAction.Remove, item);
-
-            return item;
-        }
-
-        public new virtual void Push(T? item)
-        {
-            if (item != null)
+            var popIndex = Items.Count - 1;
+            var itemToPop = Items[popIndex];
+            if (itemToPop != null)
             {
-                base.Push(item);
-                OnCollectionChanged(NotifyCollectionChangedAction.Add, item);
+                RemoveAt(popIndex);
             }
+
+            return itemToPop;
         }
 
-        public new virtual void Clear()
+        public void Push(T? item)
         {
-            base.Clear();
-            OnCollectionChanged(NotifyCollectionChangedAction.Reset, default);
+            Add(item);
         }
 
-        #endregion
-
-        #region CollectionChanged
-
-        public event NotifyCollectionChangedEventHandler? CollectionChanged;
-
-        protected virtual void OnCollectionChanged(NotifyCollectionChangedAction action, T? item)
+        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
         {
-            CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(
-                action
-                , item
-                , item == null ? -1 : 0)
-            );
-
-            OnPropertyChanged(nameof(Count));
+            base.OnCollectionChanged(e);
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Count)));
+            OnPropertyChanged(new PropertyChangedEventArgs(nameof(Peek)));
         }
-
-        #endregion
-
-        #region PropertyChanged
-
-        public event PropertyChangedEventHandler? PropertyChanged;
-
-        protected virtual void OnPropertyChanged(string proertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(proertyName));
-        }
-
-        #endregion
     }
 }

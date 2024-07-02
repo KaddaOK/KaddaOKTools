@@ -123,10 +123,20 @@
 			<Setter Property="DialogMargin" Value="0" />
 			<Setter Property="dialogHost:DialogHostStyle.CornerRadius" Value="10" />
 		</Style>
+        <Style Selector="TextBlock.pageTitleHeader">
+            <Setter Property="FontSize" Value="28" />
+            <Setter Property="Margin" Value="0,0,0,10" />
+            <Setter Property="Foreground" Value="{DynamicResource SystemBaseMediumColor}" />
+        </Style>
     </Application.Styles>
 	<Application.Resources>
         <local:WaveformToPointConverter x:Key="WaveformToPointConverter" />
         <local:WaveformToLengthConverter x:Key="WaveformToLengthConverter" />
+        <local:ObjectEqualityBooleanConverter x:Key="ObjectEqualityBooleanConverter" />
+        <local:EnumEqualityBooleanConverter x:Key="EnumEqualityBooleanConverter" />
         <local:RoundingConverter x:Key="RoundingConverter" />
+        <local:TimingWordIsPlayingConverter x:Key="TimingWordIsPlayingConverter" />
+        <local:TimingWordStartHasBeenSetConverter x:Key="TimingWordStartHasBeenSetConverter" />
+        <local:TimingWordEndHasBeenSetConverter x:Key="TimingWordEndHasBeenSetConverter" />
     </Application.Resources>
 </Application>
