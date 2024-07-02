@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Drawing;
+using System.Globalization;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using Avalonia;
 using Avalonia.Svg.Skia;
@@ -15,6 +17,10 @@ class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        CultureInfo culture = (CultureInfo)CultureInfo.CurrentCulture.Clone();
+        culture.NumberFormat.NumberDecimalSeparator = "."; //Force use . for regions that use ,
+        Thread.CurrentThread.CurrentCulture = culture;
+
         try
         {
             BuildAvaloniaApp()
