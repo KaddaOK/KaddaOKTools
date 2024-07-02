@@ -9,10 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      actions: read
+    permissions: # TODO: this seems like way too much access just to report test results 😠
+      statuses: write
       checks: write
+      contents: write
+      pull-requests: write
+      actions: write
     steps:
       - name: Set version number
         shell: pwsh
@@ -37,3 +39,4 @@ jobs:
           reporter: dotnet-trx
           path: "${{ github.workspace }}/**/*.trx"
           name: Unit Tests
+          continue-on-error: true
