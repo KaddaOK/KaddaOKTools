@@ -28,15 +28,22 @@ namespace KaddaOK.AvaloniaApp.Models
             set
             {
                 SetProperty(ref _karaokeSource, value);
+
                 RaisePropertyChanged(nameof(KaraokeSourceIsSet));
+
                 RaisePropertyChanged(nameof(RecognizeTabVisible));
                 RaisePropertyChanged(nameof(NarrowTabVisible));
                 RaisePropertyChanged(nameof(ManualAlignTabVisible));
                 RaisePropertyChanged(nameof(LyricsTabVisible));
-                RaisePropertyChanged(nameof(ManualAlignIsEnabled));
+
                 RaisePropertyChanged(nameof(ReasonManualAlignIsDisabled));
-                RaisePropertyChanged(nameof(EditTabIsEnabled));
+                RaisePropertyChanged(nameof(ManualAlignIsEnabled));
+
                 RaisePropertyChanged(nameof(ReasonEditTabIsDisabled));
+                RaisePropertyChanged(nameof(EditTabIsEnabled));
+
+                RaisePropertyChanged(nameof(ReasonLyricsStepIsIncomplete));
+                RaisePropertyChanged(nameof(LyricsStepIsComplete));
             }
         }
 
@@ -251,7 +258,8 @@ namespace KaddaOK.AvaloniaApp.Models
         {
             get
             {
-                if (!KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true)
+                if (KaraokeSource != InitialKaraokeSource.CtmImport // Which has the lyrics anyway; inserting them just gives line breaks
+                    && (!KnownOriginalLyrics?.SeparatorCleansedLines?.Any() ?? true))
                 {
                     return "Lyrics are required for this project type.";
                 }
@@ -480,9 +488,16 @@ namespace KaddaOK.AvaloniaApp.Models
             get
             {
                 if (KaraokeSource == InitialKaraokeSource.RzlrcImport
-                    || KaraokeSource == InitialKaraokeSource.KbpImport
-                    || KaraokeSource == InitialKaraokeSource.CtmImport)
+                    || KaraokeSource == InitialKaraokeSource.KbpImport)
                 {
+                    return null;
+                }
+                if (KaraokeSource == InitialKaraokeSource.CtmImport)
+                {
+                    if (!ChosenLines?.Any() ?? true)
+                    {
+                        return "No lines to edit.";
+                    }
                     return null;
                 }
                 if (KaraokeSource == InitialKaraokeSource.ManualSync)

@@ -105,7 +105,6 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             switch (CurrentProcess.KaraokeSource)
             {
-                case InitialKaraokeSource.CtmImport:
                 case InitialKaraokeSource.KbpImport:
                 case InitialKaraokeSource.RzlrcImport:
                     CurrentProcess.SelectedTabIndex = (int)TabIndexes.Edit;
