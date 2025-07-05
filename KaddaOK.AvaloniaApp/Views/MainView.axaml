@@ -128,7 +128,7 @@
                 ToolTip.Tip="{Binding CurrentProcess.ReasonLyricsStepIsIncomplete}"
                 avalonia:ShowDisabledTooltipExtension.ShowOnDisabled="true"
                 IsEnabled="{Binding CurrentProcess.LyricsStepIsComplete}">
-                <views:ManualAlignView />
+                <views:RecognizeView />
             </TabItem>
             <TabItem DockPanel.Dock="Top"
                 x:Name="NarrowTab"
