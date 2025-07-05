@@ -13,7 +13,7 @@ jobs:
         shell: pwsh
         run: |
           $versionNumber = "2.0.0"
-          $versionSuffix = "beta.1"
+          $versionSuffix = "beta.2"
           $infoVersion = "$versionNumber-$versionSuffix"
           echo $infoVersion
           echo "VERSION_NUMBER=$versionNumber" | Out-File -FilePath $Env:GITHUB_ENV -Encoding utf-8 -Append
