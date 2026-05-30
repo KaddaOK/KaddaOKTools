@@ -38,6 +38,7 @@ namespace KaddaOK.Library
                     if (newLine is LyricLine newLyricLine && originalLine is LyricLine oldLyricLine)
                     {
                         newLyricLine.IsSelected = oldLyricLine.IsSelected;
+                        newLyricLine.PageIndex = oldLyricLine.PageIndex;
                     }
 
                     originalLine.Words = new ObservableCollection<TItem>(originalLine.Words.Take(splitBefore ? originalWordIndex : originalWordIndex + 1));

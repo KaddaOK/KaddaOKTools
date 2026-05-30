@@ -45,6 +45,7 @@ public partial class App : Application
         services.AddTransient<IRzProjectGenerator, RzProjectGenerator>();
         services.AddTransient<IRzProjectSerializer, RzProjectSerializer>();
         services.AddTransient<INfaCtmImporter, NfaCtmImporter>();
+        services.AddTransient<IAutoSubsJsonContentsGenerator, AutoSubsJsonContentsGenerator>();
 
         services.AddTransient<AboutViewModel>();
         services.AddTransient<AudioViewModel>();

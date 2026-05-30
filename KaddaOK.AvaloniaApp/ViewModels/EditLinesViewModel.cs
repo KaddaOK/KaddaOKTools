@@ -69,6 +69,12 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             }
             AudioPlayingSource = new CancellationTokenSource();
             LineClipWaveform = new WaveformDraw();
+            RefreshPageBreakIndicators();
+            CurrentProcess.PropertyChanged += (_, e) =>
+            {
+                if (e.PropertyName == nameof(KaraokeProcess.ChosenLines))
+                    RefreshPageBreakIndicators();
+            };
         }
 
         private WaveStream? lineClipWaveStream;
@@ -281,6 +287,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 {
                     AddRedoSnapshot(lastCommand.ChangeLabel);
                     CurrentProcess!.ChosenLines = new ObservableCollection<LyricLine>(restoredChosenLines);
+                    RefreshPageBreakIndicators();
                 }
             }
 
@@ -302,6 +309,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 {
                     AddUndoSnapshot(nextCommand.ChangeLabel, true);
                     CurrentProcess!.ChosenLines = new ObservableCollection<LyricLine>(redoChosenLines);
+                    RefreshPageBreakIndicators();
                 }
             }
 
@@ -788,8 +796,15 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 var listOfNewWords = LyricWord.GetLyricWordsAcrossTime(enteredText, startTime, endTime);
                 newLine.Words = new ObservableCollection<LyricWord>(listOfNewWords);
 
+                if (CurrentProcess.ChosenLines.Any(l => l.PageIndex.HasValue))
+                {
+                    newLine.PageIndex = addLineAfter?.PageIndex
+                                        ?? CurrentProcess.ChosenLines.FirstOrDefault()?.PageIndex;
+                }
+
                 AddUndoSnapshot($"Added new line \"{newLine.Text}\"");
                 CurrentProcess.ChosenLines.Insert(addLineAfterIndex + 1, newLine);
+                RefreshPageBreakIndicators();
 
                 // go straight to the edit dialog for it
                 await EditLine(newLine);
@@ -801,6 +816,24 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         {
             switch (keyArgs.Key)
             {
+                case Key.Left when keyArgs.KeyModifiers == KeyModifiers.Alt:
+                    if (CursorWord != null && CanStartNewPageWithThisLine(CursorWord))
+                    {
+                        StartNewPageWithThisLine(CursorWord);
+                    }
+                    return true;
+                case Key.Up when keyArgs.KeyModifiers == KeyModifiers.Alt:
+                    if (CursorWord != null && CanMoveLineToPreviousPage(CursorWord))
+                    {
+                        MoveLineToPreviousPage(CursorWord);
+                    }
+                    return true;
+                case Key.Down when keyArgs.KeyModifiers == KeyModifiers.Alt:
+                    if (CursorWord != null && CanMoveLineToNextPage(CursorWord))
+                    {
+                        MoveLineToNextPage(CursorWord);
+                    }
+                    return true;
                 case Key.A:
                     if (CursorWord != null)
                     {
@@ -976,6 +1009,156 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                     }
                 }
             }
+        }
+
+        private LyricLine? GetLineForParameter(object? parameter)
+        {
+            if (parameter is LyricWord word)
+                return CurrentProcess?.ChosenLines?.SingleOrDefault(l => l.Words != null && l.Words.Contains(word));
+            if (parameter is LyricLine line)
+                return line;
+            return null;
+        }
+
+        private void RefreshPageBreakIndicators()
+        {
+            var lines = CurrentProcess?.ChosenLines;
+            if (lines == null) return;
+            bool hasPageIndexes = lines.Any(l => l.PageIndex.HasValue);
+            for (int i = 0; i < lines.Count; i++)
+            {
+                lines[i].IsFirstLineOfPage = hasPageIndexes && i > 0 && lines[i].PageIndex != lines[i - 1].PageIndex;
+            }
+            NotifyPageCommandsCanExecuteChanged();
+        }
+
+        private void NotifyPageCommandsCanExecuteChanged()
+        {
+            StartNewPageWithThisLineCommand.NotifyCanExecuteChanged();
+            MoveLineToPreviousPageCommand.NotifyCanExecuteChanged();
+            MoveLineToNextPageCommand.NotifyCanExecuteChanged();
+        }
+
+        private bool CanStartNewPageWithThisLine(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return false;
+            var lines = CurrentProcess.ChosenLines;
+            bool hasPageIndexes = lines.Any(l => l.PageIndex.HasValue);
+            if (!hasPageIndexes) return true;
+            var index = lines.IndexOf(line);
+            if (index <= 0) return false;
+            return lines[index].PageIndex == lines[index - 1].PageIndex;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanStartNewPageWithThisLine))]
+        private void StartNewPageWithThisLine(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return;
+            var lines = CurrentProcess.ChosenLines;
+            var index = lines.IndexOf(line);
+            bool hasPageIndexes = lines.Any(l => l.PageIndex.HasValue);
+
+            AddUndoSnapshot($"Start new page with \"{line.Text}\"");
+
+            if (hasPageIndexes)
+            {
+                for (int i = index; i < lines.Count; i++)
+                    lines[i].PageIndex++;
+            }
+            else if (index == 0)
+            {
+                foreach (var l in lines)
+                    l.PageIndex = 0;
+            }
+            else
+            {
+                for (int i = 0; i < index; i++)
+                    lines[i].PageIndex = 0;
+                for (int i = index; i < lines.Count; i++)
+                    lines[i].PageIndex = 1;
+            }
+
+            RefreshPageBreakIndicators();
+            EditLinesView.Focus();
+        }
+
+        private bool CanMoveLineToPreviousPage(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return false;
+            var lines = CurrentProcess.ChosenLines;
+            bool hasPageIndexes = lines.Any(l => l.PageIndex.HasValue);
+            if (!hasPageIndexes) return false;
+            if (!(line.PageIndex > 0)) return false;
+            var index = lines.IndexOf(line);
+            return index == 0 || lines[index - 1].PageIndex != line.PageIndex;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanMoveLineToPreviousPage))]
+        private void MoveLineToPreviousPage(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return;
+            var lines = CurrentProcess.ChosenLines;
+            var index = lines.IndexOf(line);
+            var currentPageIndex = line.PageIndex!.Value;
+
+            AddUndoSnapshot($"Move \"{line.Text}\" to previous page");
+
+            bool isOnlyLineOnPage = !lines.Any(l => l != line && l.PageIndex == currentPageIndex);
+            line.PageIndex--;
+            if (isOnlyLineOnPage)
+            {
+                for (int i = index + 1; i < lines.Count; i++)
+                    lines[i].PageIndex--;
+            }
+
+            RefreshPageBreakIndicators();
+            EditLinesView.Focus();
+        }
+
+        private bool CanMoveLineToNextPage(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return false;
+            var lines = CurrentProcess.ChosenLines;
+            bool hasPageIndexes = lines.Any(l => l.PageIndex.HasValue);
+            if (!hasPageIndexes) return false;
+            if (line.PageIndex == null) return false;
+            var maxPageIndex = lines.Max(l => l.PageIndex ?? 0);
+            if (line.PageIndex >= maxPageIndex) return false;
+            var index = lines.IndexOf(line);
+            return index == lines.Count - 1 || lines[index + 1].PageIndex != line.PageIndex;
+        }
+
+        [RelayCommand(CanExecute = nameof(CanMoveLineToNextPage))]
+        private void MoveLineToNextPage(object? parameter)
+        {
+            var line = GetLineForParameter(parameter);
+            if (line == null || CurrentProcess?.ChosenLines == null) return;
+            var lines = CurrentProcess.ChosenLines;
+
+            AddUndoSnapshot($"Move \"{line.Text}\" to next page");
+
+            var index = lines.IndexOf(line);
+            var currentPageIndex = line.PageIndex!.Value;
+            bool isOnlyLineOnPage = !lines.Any(l => l != line && l.PageIndex == currentPageIndex);
+
+            if (isOnlyLineOnPage)
+            {
+                // Page would become empty: absorb the gap by decrementing everything after instead
+                for (int i = index + 1; i < lines.Count; i++)
+                    lines[i].PageIndex--;
+            }
+            else
+            {
+                line.PageIndex++;
+            }
+
+            RefreshPageBreakIndicators();
+            EditLinesView.Focus();
         }
 
         protected override void Tick()

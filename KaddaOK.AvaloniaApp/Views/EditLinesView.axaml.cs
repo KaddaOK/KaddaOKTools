@@ -104,6 +104,10 @@ namespace KaddaOK.AvaloniaApp.Views
                 case Key.Right:
                 case Key.Left:
                 case Key.Up:
+                    if (keyArgs.KeyModifiers == KeyModifiers.Alt)
+                    {
+                        return _viewModel.HandleWordEditKeys(keyArgs, isFromFlyout);
+                    }
                     if (!isFromFlyout)
                     {
                         SwitchWordSelection(keyArgs);

@@ -11,7 +11,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
     public class DesignTimeExportViewModel : ExportViewModel
     {
         public DesignTimeExportViewModel() 
-            : base(DesignTimeKaraokeProcess.Get(), null!, null!, null!, null!, null!)
+            : base(DesignTimeKaraokeProcess.Get(), null!, null!, null!, null!, null!, null!)
         {
         }
     }

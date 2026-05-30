@@ -15,6 +15,14 @@ namespace KaddaOK.Library
     {
         public string? Text => string.Concat(Words.Select(w => w.Text));
 
+        // Computed by the ViewModel; indicates this line begins a new screen page
+        private bool isFirstLineOfPage;
+        public bool IsFirstLineOfPage
+        {
+            get => isFirstLineOfPage;
+            set => SetProperty(ref isFirstLineOfPage, value);
+        }
+
         #region persistence from KBP import only
 
         private int? pageIndex;

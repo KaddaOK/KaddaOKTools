@@ -702,5 +702,81 @@ namespace KaddaOK.AvaloniaApp.Models
             get => launchResult;
             set => SetProperty(ref launchResult, value);
         }
+
+        #region AutoSubs / DaVinci Resolve export options
+
+        private PaddingStrategy autoSubsPaddingStrategy = PaddingStrategy.PrioritizeStartPadding;
+        public PaddingStrategy AutoSubsPaddingStrategy
+        {
+            get => autoSubsPaddingStrategy;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategy, value))
+                {
+                    if (value == PaddingStrategy.PrioritizeEndPadding)
+                    {
+                        AutoSubsStartPaddingSeconds = 0;
+                        AutoSubsEndPaddingSeconds = 3;
+                    }
+                    else
+                    {
+                        AutoSubsStartPaddingSeconds = 2;
+                        AutoSubsEndPaddingSeconds = 2;
+                    }
+                    SetProperty(ref autoSubsPaddingStrategyIsEqually, value == PaddingStrategy.Equally, nameof(AutoSubsPaddingStrategyIsEqually));
+                    SetProperty(ref autoSubsPaddingStrategyIsPrioritizeStart, value == PaddingStrategy.PrioritizeStartPadding, nameof(AutoSubsPaddingStrategyIsPrioritizeStart));
+                    SetProperty(ref autoSubsPaddingStrategyIsPrioritizeEnd, value == PaddingStrategy.PrioritizeEndPadding, nameof(AutoSubsPaddingStrategyIsPrioritizeEnd));
+                }
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsEqually = false;
+        public bool AutoSubsPaddingStrategyIsEqually
+        {
+            get => autoSubsPaddingStrategyIsEqually;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsEqually, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.Equally;
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsPrioritizeStart = true;
+        public bool AutoSubsPaddingStrategyIsPrioritizeStart
+        {
+            get => autoSubsPaddingStrategyIsPrioritizeStart;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsPrioritizeStart, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.PrioritizeStartPadding;
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsPrioritizeEnd = false;
+        public bool AutoSubsPaddingStrategyIsPrioritizeEnd
+        {
+            get => autoSubsPaddingStrategyIsPrioritizeEnd;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsPrioritizeEnd, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.PrioritizeEndPadding;
+            }
+        }
+
+        private decimal autoSubsStartPaddingSeconds = 2;
+        public decimal AutoSubsStartPaddingSeconds
+        {
+            get => autoSubsStartPaddingSeconds;
+            set => SetProperty(ref autoSubsStartPaddingSeconds, value);
+        }
+
+        private decimal autoSubsEndPaddingSeconds = 2;
+        public decimal AutoSubsEndPaddingSeconds
+        {
+            get => autoSubsEndPaddingSeconds;
+            set => SetProperty(ref autoSubsEndPaddingSeconds, value);
+        }
+
+        #endregion
     }
 }
