@@ -2,7 +2,16 @@
 
 A desktop application to speed up, streamline, and simplify the process of creating custom karaoke videos.
 
- - **_Automatically_** create karaoke word timing from a vocal-isolated audio file and the text of the lyrics, using the magic of free cloud-powered speech recognition.
+ - **Create precise per-syllable timing** using the method that works best for you:
+
+   - **(Recommended) Tap to time manually** - tap the right-arrow key ➡ as you listen to mark the start of each syllable in your prepared list of lyrics.  
+   An advantage over other karaoke timing software is that you can seek to any point in both the recording and the syllable list, so you can repeat something you're not happy with without losing anything before or after it.  
+   You can also tap the down-arrow key to stop a syllable wherever you want without automatically starting the next one.  
+   (The one current disadvantage over other karaoke timing software is no speed control - recording speed is 100% only. Personally, with seek forward and back and easy lossless re-do of any point, I don't find that I need to change the speed.)
+
+   - **Import a `.ctm` file from [NeMo Forced Aligner](https://github.com/NVIDIA/NeMo/blob/main/tools/nemo_forced_aligner/README.md)** - NFA is pretty great at timing known lyrics onto vocal stems, tending to give better results than speech recognition that only takes the "known" lyrics under advisement as possible phrases.  (Works best with a clean vocal stem; results may be imperfect if the separation is noisy or the singer is difficult to understand.)
+
+   - **Automatic Azure Speech recognition** - create timing automatically from a vocal-isolated audio file and the text of the lyrics, using free cloud-powered speech recognition.  (The original but least accurate option, still available for anyone for whom it's useful.)
     
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/e2580711-a1f0-4bed-ab7f-6c50bbfa17cb" width="170"/>
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/3f1aeb61-17e6-46a0-9b79-251bd83c21ff" width="170"/>
@@ -20,7 +29,7 @@ A desktop application to speed up, streamline, and simplify the process of creat
 
 
 
- - Export to YTMM or KBS to generate the final product, accelerating your karaoke creation workflow with templates and project generation features like automatic progress bars.
+ - Export to YTMM or KBS to generate the final product, accelerating your karaoke creation workflow with templates and project generation features like automatic progress bars.  Or export to a `.json` file for [AutoSubs](https://autosubs.app/), the free [DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve) plugin — ideal for making lyric videos where words pop in one-by-one as they're sung.  (AutoSubs highlights one whole word at a time rather than a progress-bar-style highlight, so it's not currently well-suited for traditional karaoke, but it's a great fit for word-by-word lyric videos that would otherwise be very tedious to make manually.)
 
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/7dc0a69c-8961-496d-bd70-e3d2ae2d79fa" width="170"/> ➤➤➤
     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/65ade6d6-af49-4fda-af8c-201dd410266d" width="170"/>
@@ -36,7 +45,7 @@ A desktop application to speed up, streamline, and simplify the process of creat
 
 ## Get Started
 
-Kadda OK Tools currently targets YTMM and KBS, which are both Windows-only apps, and as such is only available for win-x64.  (Support for Mac OSX, and import/export to MidiCo and/or Kanto Syncro, are possible future features.)
+Kadda OK Tools currently mainly targets YTMM and KBS, which are both Windows-only apps, and as such is only available for win-x64.  (Support for Mac OSX, and import/export to MidiCo and/or Kanto Syncro, are possible future features.)
 
 Please find the latest win-x64 release [in the releases section](https://github.com/KaddaOK/KaddaOKTools/releases).  No installation should be required, just unzip and run.
 
@@ -46,7 +55,7 @@ Please find the latest win-x64 release [in the releases section](https://github.
    
  - When importing from then re-exporting to KBS, the following information will currently be **_lost_**:
    
-   - Page display and removal (Line by Line vs Clear Screen vs Fade vs etc.)
+   - Page display and removal modes (Line by Line vs Clear Screen vs Fade vs etc.)
    - Style settings (shadow, bold, etc.)
    - Palette indexes other than the default (0 is screen and border, 1-4 for style 01, 5-8 for style 02, 9-12 for style 03, 4/8/12/14 for style 04)
    - If you split any lines, the page breaks will be reset to ignorant 4-line pages, and you will need to hit the "Reset" button to correct line and page display/removal times.
@@ -60,7 +69,7 @@ Please find the latest win-x64 release [in the releases section](https://github.
  
 ## Some Major Roadmap Items (not necessarily in any order):
  - Design/UX cleanup
- - Cleaning up and opening source code
+ - Ability to access the new tap-to-time editing experience after completing it or with any other type of start
  - Narrowing and Edit tabs:
    - Allow toggle of which audio track to show in waveform map
    - Hover highlighting and/or click-to-scroll connection between waveform map and phrase content
@@ -73,9 +82,6 @@ Please find the latest win-x64 release [in the releases section](https://github.
    - Ability to check/reselect audio files
  - Misc.:
      - Audition the phrase timespan on the Narrow tab
-     - Option to transform text to all-caps
-     - Page/paragraph grouping and options
-     - Full manual timing process from scratch (basically the Edit Line Timing Dialog continuously for the whole song)
      - Mac OSX, MidiCo and Kanto Syncro support, eventually, maybe?
 
 ## Need Help?
@@ -86,4 +92,4 @@ Otherwise, for questions or comments, give me a shout in the [#kadda-ok](https:/
   
 ## Contribute
 
-Once the code has stabilized and gone through a cleanup pass (think, like, tidying up your house because guests are coming over), the source will be open in this repository, and pull requests will be welcome.  Thank you for your patience!
+Pull requests are welcome.
