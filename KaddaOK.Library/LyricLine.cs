@@ -1,4 +1,5 @@
 ﻿using Microsoft.CognitiveServices.Speech;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using KaddaOK.Library.Kbs;
@@ -106,6 +107,7 @@ namespace KaddaOK.Library
         }
 
         private LinePossibilities? inPossibilities;
+        [JsonIgnore]
         public LinePossibilities? InPossibilities
         {
             get => inPossibilities;

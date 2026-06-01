@@ -27,13 +27,16 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
         public WindowNotificationManager? NotificationManager { get; set; }
 
+        private IKoktProjectService KoktProjectService { get; }
+
         public ExportViewModel(KaraokeProcess karaokeProcess,
             IRzlrcContentsGenerator rzlrcContentsGenerator,
             IKbpContentsGenerator kbpContentsGenerator,
             IRzProjectGenerator rzProjectGenerator,
             IAutoSubsJsonContentsGenerator autoSubsJsonContentsGenerator,
             IRzProjectSerializer rzProjectSerializer,
-            IAudioFileLengthChecker lengthChecker) : base(karaokeProcess)
+            IAudioFileLengthChecker lengthChecker,
+            IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             RzlrcContentsGenerator = rzlrcContentsGenerator;
             KbpContentsGenerator = kbpContentsGenerator;
@@ -41,6 +44,52 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             AutoSubsJsonContentsGenerator = autoSubsJsonContentsGenerator;
             RzProjectSerializer = rzProjectSerializer;
             LengthChecker = lengthChecker;
+            KoktProjectService = koktProjectService;
+        }
+
+        [RelayCommand]
+        protected void SaveProject()
+        {
+            KoktProjectService.AutoSave(CurrentProcess);
+            var filePath = CurrentProcess.ProjectFilePath;
+            if (!string.IsNullOrWhiteSpace(filePath))
+            {
+                NotificationManager?.Show(new Notification("Saved", $"Project saved to {filePath}", NotificationType.Success));
+            }
+        }
+
+        [RelayCommand]
+        protected async Task SaveProjectAs()
+        {
+            if (App.MainWindow == null)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't find the reference to MainWindow in order to show a dialog");
+            }
+
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Save Kadda OK Tools project as",
+                DefaultExtension = "koktpj",
+                FileTypeChoices = new FilePickerFileType[] { new ("Kadda OK Tools Project (.koktpj)")
+                {
+                    Patterns = new[] { "*.koktpj" }
+                } },
+                SuggestedFileName = !string.IsNullOrWhiteSpace(CurrentProcess.ProjectFilePath)
+                    ? System.IO.Path.GetFileName(CurrentProcess.ProjectFilePath)
+                    : null
+            };
+
+            var result = await App.MainWindow.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                var filePath = result.TryGetLocalPath();
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    KoktProjectService.Save(CurrentProcess, filePath);
+                    NotificationManager?.Show(new Notification("Saved", $"Project saved to {filePath}", NotificationType.Success));
+                }
+            }
         }
 
         [RelayCommand]

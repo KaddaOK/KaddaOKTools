@@ -8,12 +8,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using KaddaOK.AvaloniaApp.Models;
 using Avalonia.Controls.Notifications;
+using KaddaOK.AvaloniaApp.Services;
 using KaddaOK.AvaloniaApp.Views;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
     public partial class LyricsViewModel : ViewModelBase
     {
+        private IKoktProjectService KoktProjectService { get; }
         private string? _lyricEditorText;
         public string? LyricEditorText
         {
@@ -87,6 +89,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
+            KoktProjectService.AutoSave(CurrentProcess);
             switch (CurrentProcess.KaraokeSource)
             {
                 case InitialKaraokeSource.ManualSync:
@@ -145,9 +148,10 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         }
 
         private readonly INfaCtmImporter NfaCtmImporter;
-        public LyricsViewModel(KaraokeProcess karaokeProcess, INfaCtmImporter nfaCtmImporter) : base(karaokeProcess)
+        public LyricsViewModel(KaraokeProcess karaokeProcess, INfaCtmImporter nfaCtmImporter, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             NfaCtmImporter = nfaCtmImporter;
+            KoktProjectService = koktProjectService;
         }
     }
 }

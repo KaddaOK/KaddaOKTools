@@ -50,13 +50,15 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         public IAzureRecognizer AzureRecognizer { get; }
         private IKaddaOKSettingsPersistor SettingsPersistor { get; }
         private INfaCtmImporter NfaCtmImporter { get; }
+        private IKoktProjectService KoktProjectService { get; }
         public WindowNotificationManager? NotificationManager { get; set; }
-        public RecognizeViewModel(IAzureRecognizer recognizer, IKaddaOKSettingsPersistor settingsPersistor, INfaCtmImporter cfmImporter, KaraokeProcess karaokeProcess) : base(karaokeProcess)
+        public RecognizeViewModel(IAzureRecognizer recognizer, IKaddaOKSettingsPersistor settingsPersistor, INfaCtmImporter cfmImporter, KaraokeProcess karaokeProcess, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             LogContents = new ObservableCollection<string>();
             AzureRecognizer = recognizer;
             SettingsPersistor = settingsPersistor;
             NfaCtmImporter = cfmImporter;
+            KoktProjectService = koktProjectService;
             FullLengthVocalsDraw = new WaveformDraw
             {
                 DesiredPeakHeight = 200
@@ -155,6 +157,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
+            KoktProjectService.AutoSave(CurrentProcess);
             CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Narrow;
         }
 

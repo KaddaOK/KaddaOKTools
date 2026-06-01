@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using KaddaOK.Library;
+using Newtonsoft.Json;
 
 namespace KaddaOK.AvaloniaApp.Models
 {
@@ -62,6 +63,7 @@ namespace KaddaOK.AvaloniaApp.Models
     public class TimingWord : LyricWord
     {
         private bool hasFinished;
+        [JsonIgnore]
         public bool HasFinished
         {
             get => hasFinished;
@@ -69,6 +71,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool _isRunning;
+        [JsonIgnore]
         public bool IsRunning
         {
             get => _isRunning;
@@ -76,6 +79,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool isNext;
+        [JsonIgnore]
         public bool IsNext
         {
             get => isNext;

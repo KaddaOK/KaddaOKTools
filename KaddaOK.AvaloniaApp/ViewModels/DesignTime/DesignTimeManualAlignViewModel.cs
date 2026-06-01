@@ -15,7 +15,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
 {
     public class DesignTimeManualAlignViewModel : ManualAlignViewModel
     {
-        public DesignTimeManualAlignViewModel() : base(DesignTimeKaraokeProcess.Get(), new LineSplitter(), new WordMerger())
+        public DesignTimeManualAlignViewModel() : base(DesignTimeKaraokeProcess.Get(), new LineSplitter(), new WordMerger(), null!)
         {
         }
     }

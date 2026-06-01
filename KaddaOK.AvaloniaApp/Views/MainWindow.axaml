@@ -10,7 +10,7 @@
     d:DesignHeight="860"
     x:Class="KaddaOK.AvaloniaApp.Views.MainWindow"
     Icon="/Assets/KaddaOKIcon.png"
-    Title="KaddaOK Tools"
+    Title="{Binding WindowTitle}"
     Background="Transparent"
     SystemDecorations="Full"
     Position="0,0"

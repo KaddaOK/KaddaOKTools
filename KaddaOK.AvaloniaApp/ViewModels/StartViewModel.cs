@@ -28,13 +28,15 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
         private IRzlrcImporter RzlrcImporter { get; }
         private IKbpImporter KbpImporter { get; }
+        private IKoktProjectService KoktProjectService { get; }
 
         public WindowNotificationManager? NotificationManager { get; set; }
 
-        public StartViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter) : base(karaokeProcess)
+        public StartViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             RzlrcImporter = rzlrcImporter;
             KbpImporter = kbpImporter;
+            KoktProjectService = koktProjectService;
         }
 
         [RelayCommand]
@@ -55,6 +57,52 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private void LinkToForcedAligner()
         {
             UrlOpener.OpenUrl("https://github.com/KaddaOK/Forced-Aligner-for-Karaoke");
+        }
+
+        [RelayCommand]
+        protected async Task LoadProject()
+        {
+            if (App.MainWindow == null)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't find the reference to MainWindow in order to show a dialog");
+            }
+
+            var options = new FilePickerOpenOptions
+            {
+                AllowMultiple = false,
+                Title = "Open a Kadda OK Tools project",
+                FileTypeFilter = new FilePickerFileType[] { new ("Kadda OK Tools Project (.koktpj)")
+                {
+                    Patterns = new[] { "*.koktpj" }
+                } }
+            };
+
+            try
+            {
+                Dispatcher.UIThread.Invoke(() => { GettingFile = true; });
+                var results = await App.MainWindow.StorageProvider.OpenFilePickerAsync(options);
+                var result = results?.FirstOrDefault();
+                if (result != null)
+                {
+                    var projectFilePath = result.TryGetLocalPath();
+                    if (!string.IsNullOrWhiteSpace(projectFilePath))
+                    {
+                        CurrentProcess.ClearAudioAndDownstream();
+                        KoktProjectService.Load(CurrentProcess, projectFilePath);
+                    }
+                }
+                GettingFile = false;
+            }
+            catch (Exception e)
+            {
+                if (NotificationManager != null)
+                {
+                    NotificationManager.Position = NotificationPosition.BottomRight;
+                    NotificationManager.Show(new Notification("Error", $"An error occurred loading the project: {e.Message}", NotificationType.Error, TimeSpan.Zero));
+                }
+                GettingFile = false;
+            }
         }
 
         [RelayCommand]

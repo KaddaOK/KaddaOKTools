@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Avalonia.Media;
 using KaddaOK.Library;
 using KaddaOK.Library.Kbs;
 using KaddaOK.Library.Ytmm;
 using NAudio.Wave;
+using Newtonsoft.Json;
 
 namespace KaddaOK.AvaloniaApp.Models
 {
@@ -21,6 +23,56 @@ namespace KaddaOK.AvaloniaApp.Models
 
     public partial class KaraokeProcess : ObservableBase
     {
+        private static readonly HashSet<string> NonDirtyingProperties = new()
+        {
+            nameof(ProjectFilePath),
+            nameof(HasUnsavedChanges),
+            nameof(SelectedTabIndex),
+            nameof(RecognitionIsRunning),
+            nameof(ManualTimingQueue),
+        };
+
+        protected new bool SetProperty<T>(ref T property, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(property, value))
+            {
+                return false;
+            }
+
+            property = value;
+            RaisePropertyChanged(propertyName);
+
+            if (propertyName != null && !NonDirtyingProperties.Contains(propertyName))
+            {
+                HasUnsavedChanges = true;
+            }
+
+            return true;
+        }
+
+        private bool _hasUnsavedChanges;
+        [JsonIgnore]
+        public bool HasUnsavedChanges
+        {
+            get => _hasUnsavedChanges;
+            set
+            {
+                if (_hasUnsavedChanges != value)
+                {
+                    _hasUnsavedChanges = value;
+                    RaisePropertyChanged(nameof(HasUnsavedChanges));
+                }
+            }
+        }
+
+        private string? _projectFilePath;
+        [JsonIgnore]
+        public string? ProjectFilePath
+        {
+            get => _projectFilePath;
+            set => SetProperty(ref _projectFilePath, value);
+        }
+
         private InitialKaraokeSource _karaokeSource;
         public InitialKaraokeSource KaraokeSource
         {
@@ -143,6 +195,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _vocalsAudioStream;
+        [JsonIgnore]
         public WaveStream? VocalsAudioStream
         {
             get => _vocalsAudioStream;
@@ -150,6 +203,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _vocalsAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? VocalsAudioFloats
         {
             get => _vocalsAudioFloats;
@@ -164,6 +218,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _unseparatedAudioStream;
+        [JsonIgnore]
         public WaveStream? UnseparatedAudioStream
         {
             get => _unseparatedAudioStream;
@@ -171,6 +226,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _unseparatedAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? UnseparatedAudioFloats
         {
             get => _unseparatedAudioFloats;
@@ -185,6 +241,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _instrumentalAudioStream;
+        [JsonIgnore]
         public WaveStream? InstrumentalAudioStream
         {
             get => _instrumentalAudioStream;
@@ -192,6 +249,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _instrumentalAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? InstrumentalAudioFloats
         {
             get => _instrumentalAudioFloats;
@@ -296,6 +354,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool recognitionIsRunning;
+        [JsonIgnore]
         public bool RecognitionIsRunning
         {
             get => recognitionIsRunning;
@@ -378,6 +437,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private ObservableQueue<TimingWord>? manualTimingQueue;
+        [JsonIgnore]
         public ObservableQueue<TimingWord>? ManualTimingQueue
         {
             get => manualTimingQueue;
@@ -731,6 +791,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool autoSubsPaddingStrategyIsEqually = false;
+        [JsonIgnore]
         public bool AutoSubsPaddingStrategyIsEqually
         {
             get => autoSubsPaddingStrategyIsEqually;
@@ -742,6 +803,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool autoSubsPaddingStrategyIsPrioritizeStart = true;
+        [JsonIgnore]
         public bool AutoSubsPaddingStrategyIsPrioritizeStart
         {
             get => autoSubsPaddingStrategyIsPrioritizeStart;
@@ -753,6 +815,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool autoSubsPaddingStrategyIsPrioritizeEnd = false;
+        [JsonIgnore]
         public bool AutoSubsPaddingStrategyIsPrioritizeEnd
         {
             get => autoSubsPaddingStrategyIsPrioritizeEnd;

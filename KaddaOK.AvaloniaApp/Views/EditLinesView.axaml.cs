@@ -63,6 +63,13 @@ namespace KaddaOK.AvaloniaApp.Views
 
         private void EditLinesView_OnKeyDown(object? sender, KeyEventArgs e)
         {
+            if (e.Key == Key.S && e.KeyModifiers == KeyModifiers.Control)
+            {
+                _viewModel.SaveProjectCommand.Execute(null);
+                e.Handled = true;
+                return;
+            }
+
             if (!this.FindDescendantOfType<DialogHost>()?.IsOpen ?? false) // leave it alone if dialogs are open
             {
                 HandleWordEditKeys(e, false);

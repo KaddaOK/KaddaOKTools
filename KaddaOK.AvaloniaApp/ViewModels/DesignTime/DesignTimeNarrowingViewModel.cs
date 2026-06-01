@@ -15,7 +15,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels.DesignTime
 {
     public class DesignTimeNarrowingViewModel : NarrowingViewModel
     {
-        public DesignTimeNarrowingViewModel() : base(DesignTimeKaraokeProcess.Get())
+        public DesignTimeNarrowingViewModel() : base(DesignTimeKaraokeProcess.Get(), null!)
         {
         }
     }

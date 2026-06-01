@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using Avalonia.Input;
 using DialogHostAvalonia;
 using KaddaOK.AvaloniaApp.Models;
+using KaddaOK.AvaloniaApp.Services;
 using NAudio.Utils;
 using NAudio.Wave.SampleProviders;
 using Avalonia.Controls;
@@ -47,10 +48,11 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
         private ILineSplitter Splitter { get; }
         private IWordMerger WordMerger { get; }
+        private IKoktProjectService KoktProjectService { get; }
         private CancellationTokenSource AudioPlayingSource { get; }
         private IMinMaxFloatWaveStreamSampler Sampler { get; }
         public IEditLinesView EditLinesView { get; set; } // TODO: are you sure you wanna do this? It's paradigm-breakingly bad practice...
-        public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
+        public EditLinesViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IMinMaxFloatWaveStreamSampler sampler, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             FullLengthVocalsDraw = new WaveformDraw
             {
@@ -60,6 +62,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             Splitter = splitter;
             WordMerger = merger;
             Sampler = sampler;
+            KoktProjectService = koktProjectService;
             UndoStack = new ObservableStack<ChosenLinesAction>();
             RedoStack = new ObservableStack<ChosenLinesAction>();
             if ((CurrentProcess!.DetectedLinePossibilities?.Any(lp => lp.HasSelected) ?? false)
@@ -75,6 +78,12 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 if (e.PropertyName == nameof(KaraokeProcess.ChosenLines))
                     RefreshPageBreakIndicators();
             };
+        }
+
+        [RelayCommand]
+        public void SaveProject()
+        {
+            KoktProjectService.AutoSave(CurrentProcess);
         }
 
         private WaveStream? lineClipWaveStream;
@@ -241,6 +250,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 {
                     RedoStack.Clear();
                 }
+
+                CurrentProcess.HasUnsavedChanges = true;
             }
         }
 

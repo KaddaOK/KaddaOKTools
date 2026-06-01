@@ -2,7 +2,7 @@
 {
     public class DesignTimeStartViewModel : StartViewModel
     {
-        public DesignTimeStartViewModel() : base(DesignTimeKaraokeProcess.Get(), null!, null!)
+        public DesignTimeStartViewModel() : base(DesignTimeKaraokeProcess.Get(), null!, null!, null!)
         {
         }
     }

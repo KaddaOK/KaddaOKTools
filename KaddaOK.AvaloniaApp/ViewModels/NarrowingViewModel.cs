@@ -4,14 +4,18 @@ using System.Linq;
 using Avalonia.Controls;
 using CommunityToolkit.Mvvm.Input;
 using KaddaOK.AvaloniaApp.Models;
+using KaddaOK.AvaloniaApp.Services;
 using KaddaOK.AvaloniaApp.Views;
 
 namespace KaddaOK.AvaloniaApp.ViewModels
 {
     public partial class NarrowingViewModel : DrawsFullLengthVocalsBase
     {
-        public NarrowingViewModel(KaraokeProcess karaokeProcess) : base(karaokeProcess)
+        private IKoktProjectService KoktProjectService { get; }
+
+        public NarrowingViewModel(KaraokeProcess karaokeProcess, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
+            KoktProjectService = koktProjectService;
             FullLengthVocalsDraw = new WaveformDraw
             {
                 DesiredPeakHeight = 100,
@@ -84,6 +88,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         public void GoToNextStep(object? parameter)
         {
             CurrentProcess!.SetChosenLinesToSelectedPossibilities();
+            KoktProjectService.AutoSave(CurrentProcess);
             CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Edit;
         }
     }
