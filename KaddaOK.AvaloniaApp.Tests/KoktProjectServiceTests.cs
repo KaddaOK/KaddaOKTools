@@ -3,12 +3,28 @@ using Avalonia.Media;
 using KaddaOK.AvaloniaApp.Models;
 using KaddaOK.AvaloniaApp.Services;
 using KaddaOK.Library;
+using NAudio.Wave;
 
 namespace KaddaOK.AvaloniaApp.Tests;
 
 public class KoktProjectServiceTests
 {
-    private KoktProjectService CreateService() => new KoktProjectService();
+    private MockSampler CreateMockSampler() => new();
+
+    private MockAudioFromFile CreateMockAudioReader() => new();
+
+    private KoktProjectService CreateService() => new(CreateMockAudioReader(), CreateMockSampler());
+
+    public class MockAudioFromFile : IAudioFromFile
+    {
+        public WaveStream? GetAudioFromFile(string filePath) => null!;
+    }
+
+    public class MockSampler : IMinMaxFloatWaveStreamSampler
+    {
+        public Task<(float min, float max)[]?> GetAllFloatsAsync(WaveStream? waveStream, int dataSamplingFactor)
+            => Task.FromResult<(float min, float max)[]?>(Array.Empty<(float min, float max)>());
+    }
 
     private KaraokeProcess CreateProcessWithBasicState()
     {
