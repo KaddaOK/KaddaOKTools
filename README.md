@@ -2,43 +2,45 @@
 
 A desktop application to speed up, streamline, and simplify the process of creating custom karaoke videos.
 
- - **Create precise per-syllable timing** using the method that works best for you:
+ - **Create precise per-syllable timing**, manually or automatically, using the method that works best for you:  
+   
+     <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/3de9b823-3abc-4e11-83c2-5d99e7189554" width="500"/>
 
-   - **(Recommended) Tap to time manually** - tap the right-arrow key ➡ as you listen to mark the start of each syllable in your prepared list of lyrics.  
+   - **(Recommended) Tap to time manually** - tap the right-arrow key [`→`] on your keyboard as you listen to mark the start of each syllable in your prepared list of lyrics.  
+   <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/81bddf39-478f-4380-9cd7-c4cee142e55d" width="600" />  
    An advantage over other karaoke timing software is that you can seek to any point in both the recording and the syllable list, so you can repeat something you're not happy with without losing anything before or after it.  
-   You can also tap the down-arrow key to stop a syllable wherever you want without automatically starting the next one.  
+   <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/3c4b5823-4a04-412d-ab69-b8b76d4df131" width="600" />  
+   You can also tap the down-arrow key [`↓`] while recording to stop the current syllable wherever you want without automatically starting the next one.  
    (The one current disadvantage over other karaoke timing software is no speed control - recording speed is 100% only. Personally, with seek forward and back and easy lossless re-do of any point, I don't find that I need to change the speed.)
 
    - **Import a `.ctm` file from [NeMo Forced Aligner](https://github.com/NVIDIA/NeMo/blob/main/tools/nemo_forced_aligner/README.md)** - NFA is pretty great at timing known lyrics onto vocal stems, tending to give better results than speech recognition that only takes the "known" lyrics under advisement as possible phrases.  (Works best with a clean vocal stem; results may be imperfect if the separation is noisy or the singer is difficult to understand.)
 
-   - **Automatic Azure Speech recognition** - create timing automatically from a vocal-isolated audio file and the text of the lyrics, using free cloud-powered speech recognition.  (The original but least accurate option, still available for anyone for whom it's useful.)
-    
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/e2580711-a1f0-4bed-ab7f-6c50bbfa17cb" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/3f1aeb61-17e6-46a0-9b79-251bd83c21ff" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8b1e0c15-c267-43a3-b8b6-a25d7f8ebfdf" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8ab3548d-ac7e-47c6-b833-4c17c5a79904" width="170"/>
+   - **Automatic Azure Speech recognition** - create timing automatically from a vocal-isolated audio file and the text of the lyrics, using free cloud-powered speech recognition.  (The original but least accurate option, still available for anyone for whom it's useful.)     
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8b1e0c15-c267-43a3-b8b6-a25d7f8ebfdf" width="350"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/8ab3548d-ac7e-47c6-b833-4c17c5a79904" width="350"/>
 
 
 
- - Add, edit, and delete lines and syllables with easy-to-use controls, or even import a YouTube Movie Maker or Karaoke Builder Studio file to take advantage of time- or tedium-saving editing features not available in those apps.
+ - Add, edit, and delete lines and syllables with easy-to-use controls, or even import a YouTube Movie Maker or Karaoke Builder Studio file to take advantage of time- or tedium-saving editing features not available in those apps.  
+<img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/eedf4b4f-b434-4598-b8b8-3ad8eb87b338" width="700" />   
+<img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/b295bf49-8aa5-4d94-9bb3-eb121320f17c" width="400" />  
 
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/2df82625-4008-435c-9530-2c660eddf9a0" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/9546f8e9-3261-41a3-8b50-14ec31975f8e" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/32004c0d-c9da-404f-88ca-ae403cd9511f" width="170"/>
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/5a7213e1-0508-4f2e-a553-60af9767e861" width="170"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/9546f8e9-3261-41a3-8b50-14ec31975f8e" width="250"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/32004c0d-c9da-404f-88ca-ae403cd9511f" width="250"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/5a7213e1-0508-4f2e-a553-60af9767e861" width="250"/>
 
 
 
  - Export to YTMM or KBS to generate the final product, accelerating your karaoke creation workflow with templates and project generation features like automatic progress bars.  Or export to a `.json` file for [AutoSubs](https://autosubs.app/), the free [DaVinci Resolve](https://www.blackmagicdesign.com/products/davinciresolve) plugin — ideal for making lyric videos where words pop in one-by-one as they're sung.  (AutoSubs highlights one whole word at a time rather than a progress-bar-style highlight, so it's not currently well-suited for traditional karaoke, but it's a great fit for word-by-word lyric videos that would otherwise be very tedious to make manually.)
 
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/7dc0a69c-8961-496d-bd70-e3d2ae2d79fa" width="170"/> ➤➤➤
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/65ade6d6-af49-4fda-af8c-201dd410266d" width="170"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/7dc0a69c-8961-496d-bd70-e3d2ae2d79fa" width="350"/> ➤➤➤
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/65ade6d6-af49-4fda-af8c-201dd410266d" width="400"/>
     
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/9cf54209-0a2f-4264-8ba9-21cd30c41f79" width="170"/> ➤➤➤
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/ac56d509-3547-4627-8046-5da9675384c0" width="170"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/9cf54209-0a2f-4264-8ba9-21cd30c41f79" width="350"/> ➤➤➤
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/ac56d509-3547-4627-8046-5da9675384c0" width="400"/>
 
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/6d912e1a-1c73-43fa-9ea2-42de87ce37c0" width="170"/> ➤➤➤
-    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/1d42f310-81f0-4de7-9bcc-aca4a7b690b3" width="170"/>
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/6d912e1a-1c73-43fa-9ea2-42de87ce37c0" width="350"/> ➤➤➤
+    <img src="https://github.com/KaddaOK/KaddaOKTools/assets/151568451/1d42f310-81f0-4de7-9bcc-aca4a7b690b3" width="350"/>
 
 
     
