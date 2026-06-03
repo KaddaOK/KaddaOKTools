@@ -29,14 +29,18 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private IRzlrcImporter RzlrcImporter { get; }
         private IKbpImporter KbpImporter { get; }
         private IKoktProjectService KoktProjectService { get; }
+        private IAudioFromFile AudioFileReader { get; }
+        private IMinMaxFloatWaveStreamSampler Sampler { get; }
 
         public WindowNotificationManager? NotificationManager { get; set; }
 
-        public StartViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter, IKoktProjectService koktProjectService) : base(karaokeProcess)
+        public StartViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter, IKoktProjectService koktProjectService, IAudioFromFile audioFileReader, IMinMaxFloatWaveStreamSampler sampler) : base(karaokeProcess)
         {
             RzlrcImporter = rzlrcImporter;
             KbpImporter = kbpImporter;
             KoktProjectService = koktProjectService;
+            AudioFileReader = audioFileReader;
+            Sampler = sampler;
         }
 
         [RelayCommand]
@@ -57,6 +61,61 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private void LinkToForcedAligner()
         {
             UrlOpener.OpenUrl("https://github.com/KaddaOK/Forced-Aligner-for-Karaoke");
+        }
+
+        [RelayCommand]
+        public void SaveProject()
+        {
+            KoktProjectService.AutoSave(CurrentProcess);
+        }
+
+        [RelayCommand]
+        public async Task SaveProjectAs()
+        {
+            if (App.MainWindow == null)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't find the reference to MainWindow in order to show a dialog");
+            }
+
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Save Kadda OK Tools project as",
+                DefaultExtension = "koktpj",
+                FileTypeChoices = new FilePickerFileType[] { new ("Kadda OK Tools Project (.koktpj)")
+                {
+                    Patterns = new[] { "*.koktpj" }
+                } },
+                SuggestedFileName = Path.GetFileNameWithoutExtension(
+                    CurrentProcess.ProjectFilePath
+                    ?? CurrentProcess.ImportedKaraokeSourceFilePath
+                    ?? CurrentProcess.UnseparatedAudioFilePath
+                    ?? "project")
+            };
+
+            var result = await App.MainWindow.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                var filePath = result.TryGetLocalPath();
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    KoktProjectService.Save(CurrentProcess, filePath);
+                }
+            }
+        }
+
+        [RelayCommand]
+        public async Task CloseProject()
+        {
+            if (CurrentProcess.HasUnsavedChanges)
+            {
+                var result = await DialogHost.Show(new UnsavedChangesPrompt(), dialogHostName);
+                if (result is not true)
+                {
+                    return;
+                }
+            }
+            CurrentProcess.ResetToNew();
         }
 
         [RelayCommand]
@@ -89,7 +148,14 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                     if (!string.IsNullOrWhiteSpace(projectFilePath))
                     {
                         CurrentProcess.ClearAudioAndDownstream();
-                        KoktProjectService.Load(CurrentProcess, projectFilePath);
+                        var audioResult = await KoktProjectService.Load(CurrentProcess, projectFilePath);
+                        // TODO: show find for any that failed!
+
+                        Dispatcher.UIThread.Invoke(() =>
+                        {
+                            // Jump to Edit tab after loading a koktpj project
+                            CurrentProcess.SelectedTabIndex = (int)TabIndexes.Edit;
+                        });
                     }
                 }
                 GettingFile = false;
@@ -108,8 +174,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         protected void ClearAll()
         {
-            // TODO: show confirm
-            CurrentProcess?.ClearAudioAndDownstream();
+            CurrentProcess?.ResetToNew();
         }
 
         [RelayCommand]
@@ -158,11 +223,17 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                                 CurrentProcess.ClearAudioAndDownstream();
                                 CurrentProcess.OriginalImportedRzlrcFile = imported;
                                 CurrentProcess.OriginalImportedRzlrcPage = selectedLayer ?? imported.First();
-                                await RzlrcImporter.LoadRzlrcPageIntoKaraokeProcessAsync(CurrentProcess, CurrentProcess.OriginalImportedRzlrcPage, existingKaraokeImportFilePath);
+                                await ImportWithAudioRetry(() =>
+                                    RzlrcImporter.LoadRzlrcPageIntoKaraokeProcessAsync(CurrentProcess, CurrentProcess.OriginalImportedRzlrcPage, existingKaraokeImportFilePath),
+                                    (correctedFileName) => RzlrcImporter.LoadAudioIntoProcess(CurrentProcess, correctedFileName)
+                                    );
                                 break;
                             case ".kbp":
                                 CurrentProcess.ClearAudioAndDownstream();
-                                await KbpImporter.ImportKbpAsync(CurrentProcess, existingKaraokeImportFilePath);
+                                await ImportWithAudioRetry(() =>
+                                    KbpImporter.ImportKbpAsync(CurrentProcess, existingKaraokeImportFilePath),
+                                    (correctedFileName) => KbpImporter.LoadAudioIntoProcess(CurrentProcess, correctedFileName)
+                                    );
                                 break;
                             default:
                                 // TODO: inform better!
@@ -184,6 +255,27 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                 GettingFile = false;
             }
         }
+
+        private async Task ImportWithAudioRetry(Func<Task<SingleAudioFilePathResult>> initialImportAction, Func<string, Task> loadLocatedAudioAction)
+        {
+            var result = await initialImportAction();
+            if (!result.AudioLoaded)
+            {
+                var dialogResult = await DialogHost.Show(new AudioFileNotFoundPrompt(result.AudioFilePath), dialogHostName);
+                if (dialogResult is string locatedPath && !string.IsNullOrWhiteSpace(locatedPath))
+                {
+                    await loadLocatedAudioAction(locatedPath);
+                }
+            }
+        }
+
+        /*private async Task LoadLocatedAudio(string audioFilePath)
+        {
+            const int dataSamplingFactor = 20;
+            CurrentProcess.UnseparatedAudioFilePath = audioFilePath;
+            CurrentProcess.UnseparatedAudioStream = AudioFileReader.GetAudioFromFile(audioFilePath);
+            CurrentProcess.UnseparatedAudioFloats = await Sampler.GetAllFloatsAsync(CurrentProcess.UnseparatedAudioStream, dataSamplingFactor);
+        }*/
 
         [RelayCommand]
         public async Task SelectCtm()

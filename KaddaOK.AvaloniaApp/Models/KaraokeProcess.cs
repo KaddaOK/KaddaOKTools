@@ -3,6 +3,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Avalonia.Media;
+using KaddaOK.AvaloniaApp.Views;
 using KaddaOK.Library;
 using KaddaOK.Library.Kbs;
 using KaddaOK.Library.Ytmm;
@@ -82,6 +83,7 @@ namespace KaddaOK.AvaloniaApp.Models
                 SetProperty(ref _karaokeSource, value);
 
                 RaisePropertyChanged(nameof(KaraokeSourceIsSet));
+                RaisePropertyChanged(nameof(KaraokeSourceDisplayName));
 
                 RaisePropertyChanged(nameof(RecognizeTabVisible));
                 RaisePropertyChanged(nameof(NarrowTabVisible));
@@ -141,6 +143,26 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         public bool KaraokeSourceIsSet => KaraokeSource != InitialKaraokeSource.NotSelected;
+
+        public string KaraokeSourceDisplayName => KaraokeSource switch
+        {
+            InitialKaraokeSource.ManualSync => "Manual Timing",
+            InitialKaraokeSource.AzureSpeechService => "Azure Speech Service",
+            InitialKaraokeSource.RzlrcImport => "YTMM Import",
+            InitialKaraokeSource.KbpImport => "KBS Import",
+            InitialKaraokeSource.CtmImport => "Forced Aligner Import",
+            _ => "Not Selected"
+        };
+
+        public void ResetToNew()
+        {
+            ClearAudioAndDownstream();
+            KaraokeSource = InitialKaraokeSource.NotSelected;
+            SelectedTabIndex = (int)TabIndexes.Start;
+            ProjectFilePath = null;
+            ExportToFilePath = null;
+            HasUnsavedChanges = false;
+        }
 
         #region Audio Step
 

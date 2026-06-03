@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Avalonia.Media;
 using KaddaOK.AvaloniaApp.Models;
 using KaddaOK.Library;
@@ -11,13 +12,24 @@ namespace KaddaOK.AvaloniaApp.Services
     public interface IKoktProjectService
     {
         void Save(KaraokeProcess process, string filePath);
-        void Load(KaraokeProcess process, string filePath);
+        Task<AllAudioFilePathsResult> Load(KaraokeProcess process, string projectFilePath, string? correctedOriginalAudioFilePath = null, string? correctedVocalAudioFilePath = null, string? correctedInstrumentalAudioFilePath = null);
         string? GetAutoSaveFilePath(KaraokeProcess process);
         void AutoSave(KaraokeProcess process);
     }
 
     public class KoktProjectService : IKoktProjectService
     {
+        private readonly int dataSamplingFactor = 20;
+
+        protected IAudioFromFile AudioFileReader { get; }
+        protected IMinMaxFloatWaveStreamSampler Sampler { get; }
+
+        public KoktProjectService(IAudioFromFile audioFileReader, IMinMaxFloatWaveStreamSampler sampler)
+        {
+            AudioFileReader = audioFileReader;
+            Sampler = sampler;
+        }
+
         private static readonly JsonSerializer Serializer = JsonSerializer.Create(new JsonSerializerSettings
         {
             Formatting = Formatting.Indented,
@@ -39,9 +51,9 @@ namespace KaddaOK.AvaloniaApp.Services
             process.HasUnsavedChanges = false;
         }
 
-        public void Load(KaraokeProcess process, string filePath)
+        public async Task<AllAudioFilePathsResult> Load(KaraokeProcess process, string projectFilePath, string? correctedOriginalAudioFilePath = null, string? correctedVocalAudioFilePath = null, string? correctedInstrumentalAudioFilePath = null)
         {
-            var json = File.ReadAllText(filePath);
+            var json = File.ReadAllText(projectFilePath);
             var envelope = JObject.Parse(json);
             var processToken = envelope["Process"];
             if (processToken == null)
@@ -51,7 +63,7 @@ namespace KaddaOK.AvaloniaApp.Services
 
             using var reader = processToken.CreateReader();
             Serializer.Populate(reader, process);
-            process.ProjectFilePath = filePath;
+            process.ProjectFilePath = projectFilePath;
 
             // Fix up InPossibilities back-references (not serialized to avoid circular refs)
             if (process.DetectedLinePossibilities != null)
@@ -66,6 +78,73 @@ namespace KaddaOK.AvaloniaApp.Services
             }
 
             process.HasUnsavedChanges = false;
+
+            // Try to load the Stream and Floats for each type of audio file present;
+            // return the result of doing so to the client so we can make them find the file if it's missing.
+            return await LoadAudio(process, correctedOriginalAudioFilePath, correctedVocalAudioFilePath, correctedInstrumentalAudioFilePath);
+        }
+
+        public async Task<AllAudioFilePathsResult> LoadAudio(KaraokeProcess process, string? correctUnseparatedAudioFilePath = null, string? correctVocalAudioFilePath = null, string? correctInstrumentalAudioFilePath = null)
+        {
+            var result = new AllAudioFilePathsResult();
+
+            var unseparatedAudioPath = correctUnseparatedAudioFilePath ?? process.UnseparatedAudioFilePath;
+
+
+            try 
+            {
+                if (!string.IsNullOrWhiteSpace(unseparatedAudioPath) && File.Exists(unseparatedAudioPath))
+                {
+                    process.UnseparatedAudioFilePath = unseparatedAudioPath;
+                    result.UnseparatedAudioFilePath = unseparatedAudioPath;
+                    process.UnseparatedAudioStream = AudioFileReader.GetAudioFromFile(unseparatedAudioPath);
+                    process.UnseparatedAudioFloats = await Sampler.GetAllFloatsAsync(process.UnseparatedAudioStream, dataSamplingFactor);
+                    result.UnseparatedAudioLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.UnseparatedAudioLoaded = false;
+                result.Errors.Add(new Exception($"Failed to load unseparated audio from path '{unseparatedAudioPath}'.", ex));
+            }
+
+            var vocalAudioPath = correctVocalAudioFilePath ?? process.VocalsAudioFilePath;
+            try
+            {
+                if (!string.IsNullOrWhiteSpace(vocalAudioPath) && File.Exists(vocalAudioPath))
+                {
+                    process.VocalsAudioFilePath = vocalAudioPath;
+                    result.VocalsAudioFilePath = vocalAudioPath;
+                    process.VocalsAudioStream = AudioFileReader.GetAudioFromFile(vocalAudioPath);
+                    process.VocalsAudioFloats = await Sampler.GetAllFloatsAsync(process.VocalsAudioStream, dataSamplingFactor);
+                    result.VocalsAudioLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.VocalsAudioLoaded = false;
+                result.Errors.Add(new Exception($"Failed to load vocal audio from path '{vocalAudioPath}'.", ex));
+            }
+
+            var instrumentalAudioPath = correctInstrumentalAudioFilePath ?? process.InstrumentalAudioFilePath;
+            try 
+            {
+                 if (!string.IsNullOrWhiteSpace(instrumentalAudioPath) && File.Exists(instrumentalAudioPath))
+                {
+                    process.InstrumentalAudioFilePath = instrumentalAudioPath;
+                    result.InstrumentalAudioFilePath = instrumentalAudioPath;
+                    process.InstrumentalAudioStream = AudioFileReader.GetAudioFromFile(instrumentalAudioPath);
+                    process.InstrumentalAudioFloats = await Sampler.GetAllFloatsAsync(process.InstrumentalAudioStream, dataSamplingFactor);
+                    result.InstrumentalAudioLoaded = true;
+                }
+            }
+            catch (Exception ex)
+            {
+                result.InstrumentalAudioLoaded = false;
+                result.Errors.Add(new Exception($"Failed to load instrumental audio from path '{instrumentalAudioPath}'.", ex));
+            }
+
+            return result;
         }
 
         public void AutoSave(KaraokeProcess process)

@@ -16,7 +16,9 @@ namespace KaddaOK.AvaloniaApp.Services
     public interface IRzlrcImporter
     {
         RzlrcLyrics ImportRzlrc(string rzlrcPath);
-        Task LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath);
+        Task<SingleAudioFilePathResult> LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath);
+        Task<SingleAudioFilePathResult> LoadAudioIntoProcess(KaraokeProcess karaokeProcess, string singleAudioFilePathOfUnknownType);
+
     }
 
     public class RzlrcImporter : Importer, IRzlrcImporter
@@ -64,7 +66,7 @@ namespace KaddaOK.AvaloniaApp.Services
             return rzlrcLyrics;
         }
 
-        public async Task LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath)
+        public async Task<SingleAudioFilePathResult> LoadRzlrcPageIntoKaraokeProcessAsync(KaraokeProcess karaokeProcess, RzlrcLyric rzlrcPageToLoad, string originalPath)
         {
             karaokeProcess.ImportedKaraokeSourceFilePath = originalPath;
             karaokeProcess.ExportToFilePath = originalPath;
@@ -79,10 +81,12 @@ namespace KaddaOK.AvaloniaApp.Services
                 new ObservableCollection<LyricLine>(rzlrcPageToLoad.item?.Select(GetFromRzlrcItem) ??
                                                     Array.Empty<LyricLine>());
 
-            await LoadAudioIntoProcess(karaokeProcess, rzlrcPageToLoad.mediafile);
+            var audioResult = await LoadAudioIntoProcess(karaokeProcess, rzlrcPageToLoad.mediafile);
 
             karaokeProcess.RaiseChosenLinesChanged();
             karaokeProcess.CanExportFactorsChanged();
+
+            return audioResult;
         }
 
         private LyricLine GetFromRzlrcItem(LyricItem rzlrcItem)
