@@ -130,7 +130,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
         private ILineSplitter Splitter { get; }
         private IWordMerger WordMerger { get; }
-        public ManualAlignViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger) : base(karaokeProcess)
+        private IKoktProjectService KoktProjectService { get; }
+        public ManualAlignViewModel(KaraokeProcess karaokeProcess, ILineSplitter splitter, IWordMerger merger, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             CurrentPlaybackPositionText = "0:00.00";
             FullLengthVocalsDraw = new WaveformDraw
@@ -139,6 +140,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
             };
             Splitter = splitter;
             WordMerger = merger;
+            KoktProjectService = koktProjectService;
             Dispatcher.UIThread.Invoke(() => FullLengthVocalsDraw.RedrawWaveform(CurrentProcess!.VocalsAudioStream));
             AudioPlayingSource = new CancellationTokenSource();
         }
@@ -224,6 +226,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         public void GoToNextStep(object? parameter)
         {
             CurrentProcess.ChosenLines = new ObservableCollection<LyricLine>(CurrentProcess.ManualTimingLines.Select(ManualTimingLine.ToLyricLine));
+            KoktProjectService.AutoSave(CurrentProcess);
             CurrentProcess!.SelectedTabIndex = (int)TabIndexes.Edit;
             CurrentProcess.CanExportFactorsChanged();
         }

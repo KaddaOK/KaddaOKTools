@@ -1,4 +1,5 @@
 ﻿using Microsoft.CognitiveServices.Speech;
+using Newtonsoft.Json;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using KaddaOK.Library.Kbs;
@@ -14,6 +15,14 @@ namespace KaddaOK.Library
     public class LyricLine : ObservableBase, IAudioSpan, ILyricLine<LyricWord>
     {
         public string? Text => string.Concat(Words.Select(w => w.Text));
+
+        // Computed by the ViewModel; indicates this line begins a new screen page
+        private bool isFirstLineOfPage;
+        public bool IsFirstLineOfPage
+        {
+            get => isFirstLineOfPage;
+            set => SetProperty(ref isFirstLineOfPage, value);
+        }
 
         #region persistence from KBP import only
 
@@ -98,6 +107,7 @@ namespace KaddaOK.Library
         }
 
         private LinePossibilities? inPossibilities;
+        [JsonIgnore]
         public LinePossibilities? InPossibilities
         {
             get => inPossibilities;

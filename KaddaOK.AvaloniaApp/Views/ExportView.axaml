@@ -32,6 +32,14 @@
             <TextBlock Classes="pageTitleHeader">
                 Export
             </TextBlock>
+			<StackPanel Orientation="Horizontal" Margin="10,0,0,10" Spacing="8">
+				<Button
+					Command="{Binding SaveProjectCommand}"
+					Content="Save Project" />
+				<Button
+					Command="{Binding SaveProjectAsCommand}"
+					Content="Save Project As..." />
+			</StackPanel>
             <Label Content="Colors for Output" />
             <Grid
                 x:Name="FullColorGrid"
@@ -681,6 +689,178 @@
                                 Classes="accent"
                                 HorizontalAlignment="Center"
                                 Command="{Binding ExportToKbpCommand}">
+                                <StackPanel VerticalAlignment="Center">
+                                    <TextBlock
+                                        FontSize="18"
+                                        HorizontalAlignment="Center">
+                                        Export
+                                    </TextBlock>
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </TabItem>
+                    <TabItem Header="DaVinci Resolve via AutoSubs">
+						<StackPanel Margin="5,10">
+
+                            <Expander Header="About DaVinci Resolve and AutoSubs"
+                                      Background="Transparent"
+                                      HorizontalAlignment="Center">
+                                <Grid
+                                    ColumnDefinitions="*,*"
+                                    RowDefinitions="*, *,*">
+                                    <Grid.Styles>
+                                        <Style Selector="TextBlock">
+                                            <Setter
+                                                Property="FontSize"
+                                                Value="12" />
+                                        </Style>
+                                    </Grid.Styles>
+                                    <StackPanel>
+                                        <Label Content="Pros:" />
+                                        <Grid
+                                            x:Name="drasProsGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock Grid.Column="1">
+                                                Modern sharp visual quality
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1">
+                                                Full industry-standard non-linear editor: do whatever you like!
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="1">
+                                                Free version is extremely fully featured with almost no limitations
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel Grid.Column="1">
+                                        <Label Content="Cons:" />
+                                        <Grid
+                                            x:Name="drasConsGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock Grid.Column="1">
+                                                Highest difficulty of use
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1">
+                                                Can't burn karaoke CDs
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="2"
+                                                Grid.Column="1">
+                                                Larger file output size (full video file)
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                    <StackPanel
+                                        Grid.Column="0"
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3">
+                                        <Label
+                                            Content="Notes:"
+                                            Margin="0,5,0,0" />
+                                        <Grid
+                                            x:Name="drasNotesGrid"
+                                            ColumnDefinitions="20,*"
+                                            RowDefinitions="*,*">
+                                            <TextBlock HorizontalAlignment="Center">•</TextBlock>
+                                            <TextBlock
+                                                Grid.Column="1"
+                                                TextWrapping="Wrap">
+                                                You should already have installed AutoSubs.  
+                                            </TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                HorizontalAlignment="Center">
+                                                •</TextBlock>
+                                            <TextBlock
+                                                Grid.Row="1"
+                                                Grid.Column="1"
+                                                TextWrapping="Wrap">
+                                                If you save into the path that AutoSubs stores previous transcripts, 
+                                                it should detect the new transcript and show it in the previous transcripts 
+                                                menu (upper left, looks like a filing cabinet).  I've attempted to default 
+                                                the export path to where this was for me on Windows, but Your Mileage May Vary.
+                                            </TextBlock>
+                                        </Grid>
+                                    </StackPanel>
+                                </Grid>
+                            </Expander>
+
+                            <Label
+                                Content="Options"
+                                Margin="5,10,0,0" />
+                            <StackPanel
+                                Classes="exportTypeTabOptions"
+                                Margin="15,0,0,10">
+                                <Label Content="Padding strategy:" />
+                                <RadioButton
+                                    GroupName="AutoSubsPaddingStrategy"
+                                    IsChecked="{Binding CurrentProcess.AutoSubsPaddingStrategyIsPrioritizeStart}">
+                                    Prioritize Start Padding (recommended for karaoke — gives the singer time to react to incoming words)
+                                </RadioButton>
+                                <RadioButton
+                                    GroupName="AutoSubsPaddingStrategy"
+                                    IsChecked="{Binding CurrentProcess.AutoSubsPaddingStrategyIsEqually}">
+                                    Equally
+                                </RadioButton>
+                                <RadioButton
+                                    GroupName="AutoSubsPaddingStrategy"
+                                    IsChecked="{Binding CurrentProcess.AutoSubsPaddingStrategyIsPrioritizeEnd}">
+                                    Prioritize End Padding (better for backing video for comedy — audience can still read words after the performer says them)
+                                </RadioButton>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Margin="0,10,0,0">
+                                    <Label
+                                        VerticalAlignment="Center"
+                                        Content="Start padding (seconds):" />
+                                    <NumericUpDown
+                                        Increment="1"
+                                        Minimum="0"
+                                        Maximum="10"
+                                        Margin="5,0,20,0"
+                                        Value="{Binding CurrentProcess.AutoSubsStartPaddingSeconds}" />
+                                    <Label
+                                        VerticalAlignment="Center"
+                                        Content="End padding (seconds):" />
+                                    <NumericUpDown
+                                        Increment="1"
+                                        Minimum="0"
+                                        Maximum="10"
+                                        Margin="5,0,0,0"
+                                        Value="{Binding CurrentProcess.AutoSubsEndPaddingSeconds}" />
+                                </StackPanel>
+                            </StackPanel>
+
+                            <Button
+                                Margin="0,20,0,0"
+                                Classes="accent"
+                                HorizontalAlignment="Center"
+                                Command="{Binding ExportToAutoSubsCommand}">
                                 <StackPanel VerticalAlignment="Center">
                                     <TextBlock
                                         FontSize="18"

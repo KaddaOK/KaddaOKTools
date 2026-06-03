@@ -15,6 +15,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 {
     public partial class AudioViewModel : DrawsFullLengthVocalsBase
     {
+        private IKoktProjectService KoktProjectService { get; }
         private bool _gettingFile;
         public bool GettingFile
         {
@@ -41,11 +42,12 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
         public WindowNotificationManager? NotificationManager { get; set; }
 
-        public AudioViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter) : base(karaokeProcess)
+        public AudioViewModel(KaraokeProcess karaokeProcess, IRzlrcImporter rzlrcImporter, IKbpImporter kbpImporter, IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             //ClearVocalsOnlyAudio();
             RzlrcImporter = rzlrcImporter;
             KbpImporter = kbpImporter;
+            KoktProjectService = koktProjectService;
             //ClearUnseparatedAudio();
         }
 
@@ -103,6 +105,7 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         [RelayCommand]
         public void GoToNextStep(object? parameter)
         {
+            KoktProjectService.AutoSave(CurrentProcess);
             switch (CurrentProcess.KaraokeSource)
             {
                 case InitialKaraokeSource.KbpImport:

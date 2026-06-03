@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -23,21 +24,27 @@ namespace KaddaOK.AvaloniaApp.Services
 
         protected readonly string vocalSearchPattern = "(Vocals).";
         protected readonly string instrumentalSearchPattern = "(Instrumental).";
-        protected async Task LoadAudioIntoProcess(KaraokeProcess karaokeProcess, string audioFilePath)
+        public async Task<SingleAudioFilePathResult> LoadAudioIntoProcess(KaraokeProcess karaokeProcess, string singleAudioFilePathOfUnknownType)
         {
             string? originalAudioPath = null;
             string? vocalsOnlyAudioPath = null;
             string? instrumentalAudioPath = null;
+
             // first test the path and if it can't be reached, throw out
-            if (!Path.Exists(audioFilePath))
+            if (!Path.Exists(singleAudioFilePathOfUnknownType))
             {
-                throw new InvalidOperationException($"Could not access path '{audioFilePath}'");
+                return new SingleAudioFilePathResult
+                {
+                    AudioFilePath = singleAudioFilePathOfUnknownType,
+                    AudioLoaded = false,
+                    Errors = new List<Exception> { new FileNotFoundException($"Couldn't find the audio file at {singleAudioFilePathOfUnknownType}") }
+                };
             }
 
-            var pathFolder = Path.GetDirectoryName(audioFilePath);
+            var pathFolder = Path.GetDirectoryName(singleAudioFilePathOfUnknownType);
             var otherFilesInFolder = Directory.EnumerateFiles(pathFolder ?? "", "*.flac")
                 .Union(Directory.EnumerateFiles(pathFolder ?? "", "*.wav"))
-                .Where(p => p.ToLowerInvariant() != audioFilePath.ToLowerInvariant())
+                .Where(p => p.ToLowerInvariant() != singleAudioFilePathOfUnknownType.ToLowerInvariant())
                 .OrderBy(Path.GetExtension).ThenBy(p => p)
                 .ToList();
 
@@ -59,7 +66,7 @@ namespace KaddaOK.AvaloniaApp.Services
                 var possibleOriginals = otherFilesInFolder.Where(f =>
                         !f.Contains(instrumentalSearchPattern, StringComparison.InvariantCultureIgnoreCase)
                         && !f.Contains(vocalSearchPattern, StringComparison.InvariantCultureIgnoreCase)
-                        && audioFilePath.Contains(Path.GetFileNameWithoutExtension(f), StringComparison.InvariantCultureIgnoreCase))
+                        && singleAudioFilePathOfUnknownType.Contains(Path.GetFileNameWithoutExtension(f), StringComparison.InvariantCultureIgnoreCase))
                     .ToList();
                 if (possibleOriginals.Count > 1)
                 {
@@ -70,46 +77,110 @@ namespace KaddaOK.AvaloniaApp.Services
             }
 
             // if it has "(Vocals)." in it, assume it's the vocal-only and look for instrumental and none
-            if (audioFilePath.Contains(vocalSearchPattern, StringComparison.InvariantCultureIgnoreCase))
+            if (singleAudioFilePathOfUnknownType.Contains(vocalSearchPattern, StringComparison.InvariantCultureIgnoreCase))
             {
-                vocalsOnlyAudioPath = audioFilePath;
+                vocalsOnlyAudioPath = singleAudioFilePathOfUnknownType;
                 instrumentalAudioPath = findBestMatchPart(instrumentalSearchPattern);
                 originalAudioPath = findOriginalAudio();
             }
             // if it has "(Instrumental)." in it, assume it's the instrumental-only and look for vocals and none
-            else if (audioFilePath.Contains(instrumentalSearchPattern, StringComparison.InvariantCultureIgnoreCase))
+            else if (singleAudioFilePathOfUnknownType.Contains(instrumentalSearchPattern, StringComparison.InvariantCultureIgnoreCase))
             {
-                instrumentalAudioPath = audioFilePath;
+                instrumentalAudioPath = singleAudioFilePathOfUnknownType;
                 vocalsOnlyAudioPath = findBestMatchPart(vocalSearchPattern);
                 originalAudioPath = findOriginalAudio();
             }
             // otherwise, assume it's the original and look for vocals and instrumental
             else
             {
-                originalAudioPath = audioFilePath;
+                originalAudioPath = singleAudioFilePathOfUnknownType;
                 instrumentalAudioPath = findBestMatchPart(instrumentalSearchPattern);
                 vocalsOnlyAudioPath = findBestMatchPart(vocalSearchPattern);
             }
+
+            var allPathsResult = await LoadAudioIntoProcess(karaokeProcess, originalAudioPath, vocalsOnlyAudioPath, instrumentalAudioPath);
+            var singlePathResult = new SingleAudioFilePathResult
+            {
+                Errors = allPathsResult.Errors
+            };
+            if (allPathsResult.InstrumentalAudioLoaded)
+            {
+                singlePathResult.AudioFilePath = allPathsResult.InstrumentalAudioFilePath;
+                singlePathResult.AudioLoaded = true;
+            }
+            else if (allPathsResult.VocalsAudioLoaded)
+            {
+                singlePathResult.AudioFilePath = allPathsResult.VocalsAudioFilePath;
+                singlePathResult.AudioLoaded = true;
+            }
+            else if (allPathsResult.UnseparatedAudioLoaded)
+            {
+                singlePathResult.AudioFilePath = allPathsResult.UnseparatedAudioFilePath;
+                singlePathResult.AudioLoaded = true;
+            }
+            else
+            {
+                singlePathResult.AudioFilePath = null;
+                singlePathResult.AudioLoaded = false;
+            }
+            return singlePathResult;
+        }
+
+        protected async Task<AllAudioFilePathsResult> LoadAudioIntoProcess(KaraokeProcess karaokeProcess, string? originalAudioPath, string? vocalsOnlyAudioPath, string? instrumentalAudioPath)
+        {
+            var result = new AllAudioFilePathsResult();
 
             // fill in any that we found
             if (!string.IsNullOrWhiteSpace(originalAudioPath))
             {
                 karaokeProcess.UnseparatedAudioFilePath = originalAudioPath;
-                karaokeProcess.UnseparatedAudioStream = AudioFileReader.GetAudioFromFile(originalAudioPath);
-                karaokeProcess.UnseparatedAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.UnseparatedAudioStream, dataSamplingFactor);
+                result.UnseparatedAudioFilePath = originalAudioPath;
+                try
+                {
+                    karaokeProcess.UnseparatedAudioStream = AudioFileReader.GetAudioFromFile(originalAudioPath);
+                    karaokeProcess.UnseparatedAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.UnseparatedAudioStream, dataSamplingFactor);
+                    result.UnseparatedAudioLoaded = true;
+                }
+                catch (Exception ex)
+                {
+                    result.UnseparatedAudioLoaded = false;
+                    result.Errors.Add(new Exception($"Failed to load original audio from {originalAudioPath}: {ex.Message}", ex));
+                }
             }
             if (!string.IsNullOrWhiteSpace(vocalsOnlyAudioPath))
             {
                 karaokeProcess.VocalsAudioFilePath = vocalsOnlyAudioPath;
-                karaokeProcess.VocalsAudioStream = AudioFileReader.GetAudioFromFile(vocalsOnlyAudioPath);
-                karaokeProcess.VocalsAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.VocalsAudioStream, dataSamplingFactor);
+                result.VocalsAudioFilePath = vocalsOnlyAudioPath;
+                try
+                {
+                    karaokeProcess.VocalsAudioStream = AudioFileReader.GetAudioFromFile(vocalsOnlyAudioPath);
+                    karaokeProcess.VocalsAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.VocalsAudioStream, dataSamplingFactor);
+                    result.VocalsAudioLoaded = true;
+                }
+                catch (Exception ex)
+                {
+                    result.VocalsAudioLoaded = false;
+                    result.Errors.Add(new Exception($"Failed to load vocals-only audio from {vocalsOnlyAudioPath}: {ex.Message}", ex));
+                }
             }
             if (!string.IsNullOrWhiteSpace(instrumentalAudioPath))
             {
                 karaokeProcess.InstrumentalAudioFilePath = instrumentalAudioPath;
-                karaokeProcess.InstrumentalAudioStream = AudioFileReader.GetAudioFromFile(instrumentalAudioPath);
-                karaokeProcess.InstrumentalAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.InstrumentalAudioStream, dataSamplingFactor);
+                result.InstrumentalAudioFilePath = instrumentalAudioPath;
+                try
+                {
+                    karaokeProcess.InstrumentalAudioStream = AudioFileReader.GetAudioFromFile(instrumentalAudioPath);
+                    karaokeProcess.InstrumentalAudioFloats = await Sampler.GetAllFloatsAsync(karaokeProcess.InstrumentalAudioStream, dataSamplingFactor);
+                    result.InstrumentalAudioLoaded = true;
+                }
+                catch (Exception ex)
+                {
+                    result.InstrumentalAudioLoaded = false;
+                    result.Errors.Add(new Exception($"Failed to load instrumental audio from {instrumentalAudioPath}: {ex.Message}", ex));
+                }
             }
+            return result;
         }
+
     }
 }

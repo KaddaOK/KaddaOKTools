@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using Avalonia.Media;
+using KaddaOK.AvaloniaApp.Views;
 using KaddaOK.Library;
 using KaddaOK.Library.Kbs;
 using KaddaOK.Library.Ytmm;
 using NAudio.Wave;
+using Newtonsoft.Json;
 
 namespace KaddaOK.AvaloniaApp.Models
 {
@@ -21,6 +24,56 @@ namespace KaddaOK.AvaloniaApp.Models
 
     public partial class KaraokeProcess : ObservableBase
     {
+        private static readonly HashSet<string> NonDirtyingProperties = new()
+        {
+            nameof(ProjectFilePath),
+            nameof(HasUnsavedChanges),
+            nameof(SelectedTabIndex),
+            nameof(RecognitionIsRunning),
+            nameof(ManualTimingQueue),
+        };
+
+        protected new bool SetProperty<T>(ref T property, T value, [CallerMemberName] string? propertyName = null)
+        {
+            if (EqualityComparer<T>.Default.Equals(property, value))
+            {
+                return false;
+            }
+
+            property = value;
+            RaisePropertyChanged(propertyName);
+
+            if (propertyName != null && !NonDirtyingProperties.Contains(propertyName))
+            {
+                HasUnsavedChanges = true;
+            }
+
+            return true;
+        }
+
+        private bool _hasUnsavedChanges;
+        [JsonIgnore]
+        public bool HasUnsavedChanges
+        {
+            get => _hasUnsavedChanges;
+            set
+            {
+                if (_hasUnsavedChanges != value)
+                {
+                    _hasUnsavedChanges = value;
+                    RaisePropertyChanged(nameof(HasUnsavedChanges));
+                }
+            }
+        }
+
+        private string? _projectFilePath;
+        [JsonIgnore]
+        public string? ProjectFilePath
+        {
+            get => _projectFilePath;
+            set => SetProperty(ref _projectFilePath, value);
+        }
+
         private InitialKaraokeSource _karaokeSource;
         public InitialKaraokeSource KaraokeSource
         {
@@ -30,6 +83,7 @@ namespace KaddaOK.AvaloniaApp.Models
                 SetProperty(ref _karaokeSource, value);
 
                 RaisePropertyChanged(nameof(KaraokeSourceIsSet));
+                RaisePropertyChanged(nameof(KaraokeSourceDisplayName));
 
                 RaisePropertyChanged(nameof(RecognizeTabVisible));
                 RaisePropertyChanged(nameof(NarrowTabVisible));
@@ -90,6 +144,26 @@ namespace KaddaOK.AvaloniaApp.Models
 
         public bool KaraokeSourceIsSet => KaraokeSource != InitialKaraokeSource.NotSelected;
 
+        public string KaraokeSourceDisplayName => KaraokeSource switch
+        {
+            InitialKaraokeSource.ManualSync => "Manual Timing",
+            InitialKaraokeSource.AzureSpeechService => "Azure Speech Service",
+            InitialKaraokeSource.RzlrcImport => "YTMM Import",
+            InitialKaraokeSource.KbpImport => "KBS Import",
+            InitialKaraokeSource.CtmImport => "Forced Aligner Import",
+            _ => "Not Selected"
+        };
+
+        public void ResetToNew()
+        {
+            ClearAudioAndDownstream();
+            KaraokeSource = InitialKaraokeSource.NotSelected;
+            SelectedTabIndex = (int)TabIndexes.Start;
+            ProjectFilePath = null;
+            ExportToFilePath = null;
+            HasUnsavedChanges = false;
+        }
+
         #region Audio Step
 
         public void AudioStepCompletenessChanged()
@@ -143,6 +217,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _vocalsAudioStream;
+        [JsonIgnore]
         public WaveStream? VocalsAudioStream
         {
             get => _vocalsAudioStream;
@@ -150,6 +225,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _vocalsAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? VocalsAudioFloats
         {
             get => _vocalsAudioFloats;
@@ -164,6 +240,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _unseparatedAudioStream;
+        [JsonIgnore]
         public WaveStream? UnseparatedAudioStream
         {
             get => _unseparatedAudioStream;
@@ -171,6 +248,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _unseparatedAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? UnseparatedAudioFloats
         {
             get => _unseparatedAudioFloats;
@@ -185,6 +263,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private WaveStream? _instrumentalAudioStream;
+        [JsonIgnore]
         public WaveStream? InstrumentalAudioStream
         {
             get => _instrumentalAudioStream;
@@ -192,6 +271,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private (float min, float max)[]? _instrumentalAudioFloats;
+        [JsonIgnore]
         public (float min, float max)[]? InstrumentalAudioFloats
         {
             get => _instrumentalAudioFloats;
@@ -296,6 +376,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private bool recognitionIsRunning;
+        [JsonIgnore]
         public bool RecognitionIsRunning
         {
             get => recognitionIsRunning;
@@ -378,6 +459,7 @@ namespace KaddaOK.AvaloniaApp.Models
         }
 
         private ObservableQueue<TimingWord>? manualTimingQueue;
+        [JsonIgnore]
         public ObservableQueue<TimingWord>? ManualTimingQueue
         {
             get => manualTimingQueue;
@@ -702,5 +784,84 @@ namespace KaddaOK.AvaloniaApp.Models
             get => launchResult;
             set => SetProperty(ref launchResult, value);
         }
+
+        #region AutoSubs / DaVinci Resolve export options
+
+        private PaddingStrategy autoSubsPaddingStrategy = PaddingStrategy.PrioritizeStartPadding;
+        public PaddingStrategy AutoSubsPaddingStrategy
+        {
+            get => autoSubsPaddingStrategy;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategy, value))
+                {
+                    if (value == PaddingStrategy.PrioritizeEndPadding)
+                    {
+                        AutoSubsStartPaddingSeconds = 0;
+                        AutoSubsEndPaddingSeconds = 3;
+                    }
+                    else
+                    {
+                        AutoSubsStartPaddingSeconds = 2;
+                        AutoSubsEndPaddingSeconds = 2;
+                    }
+                    SetProperty(ref autoSubsPaddingStrategyIsEqually, value == PaddingStrategy.Equally, nameof(AutoSubsPaddingStrategyIsEqually));
+                    SetProperty(ref autoSubsPaddingStrategyIsPrioritizeStart, value == PaddingStrategy.PrioritizeStartPadding, nameof(AutoSubsPaddingStrategyIsPrioritizeStart));
+                    SetProperty(ref autoSubsPaddingStrategyIsPrioritizeEnd, value == PaddingStrategy.PrioritizeEndPadding, nameof(AutoSubsPaddingStrategyIsPrioritizeEnd));
+                }
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsEqually = false;
+        [JsonIgnore]
+        public bool AutoSubsPaddingStrategyIsEqually
+        {
+            get => autoSubsPaddingStrategyIsEqually;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsEqually, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.Equally;
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsPrioritizeStart = true;
+        [JsonIgnore]
+        public bool AutoSubsPaddingStrategyIsPrioritizeStart
+        {
+            get => autoSubsPaddingStrategyIsPrioritizeStart;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsPrioritizeStart, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.PrioritizeStartPadding;
+            }
+        }
+
+        private bool autoSubsPaddingStrategyIsPrioritizeEnd = false;
+        [JsonIgnore]
+        public bool AutoSubsPaddingStrategyIsPrioritizeEnd
+        {
+            get => autoSubsPaddingStrategyIsPrioritizeEnd;
+            set
+            {
+                if (SetProperty(ref autoSubsPaddingStrategyIsPrioritizeEnd, value) && value)
+                    AutoSubsPaddingStrategy = PaddingStrategy.PrioritizeEndPadding;
+            }
+        }
+
+        private decimal autoSubsStartPaddingSeconds = 2;
+        public decimal AutoSubsStartPaddingSeconds
+        {
+            get => autoSubsStartPaddingSeconds;
+            set => SetProperty(ref autoSubsStartPaddingSeconds, value);
+        }
+
+        private decimal autoSubsEndPaddingSeconds = 2;
+        public decimal AutoSubsEndPaddingSeconds
+        {
+            get => autoSubsEndPaddingSeconds;
+            set => SetProperty(ref autoSubsEndPaddingSeconds, value);
+        }
+
+        #endregion
     }
 }

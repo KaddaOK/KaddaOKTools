@@ -120,6 +120,25 @@
                 KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
                 Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToPreviousCommand}"
                 CommandParameter="{Binding}" />
+            <Separator />
+            <MenuItem
+                Header="Start New Page With This Line"
+                InputGesture="Alt+Left"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).StartNewPageWithThisLineCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Move Line to Previous Page"
+                InputGesture="Alt+Up"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToPreviousPageCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Move Line to Next Page"
+                InputGesture="Alt+Down"
+                KeyDown="LyricWordButtonFlyoutMenuItem_KeyDown"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToNextPageCommand}"
+                CommandParameter="{Binding}" />
         </MenuFlyout>
     </UserControl.Resources>
     <dialogHost:DialogHost
@@ -218,6 +237,13 @@
 												<Setter Property="Background" Value="#FF002628" />
                                             </Style>
                                         </StackPanel.Styles>
+                                        <Border
+                                            IsVisible="{Binding IsFirstLineOfPage}"
+                                            Height="2"
+                                            Margin="13,6,0,0"
+                                            Background="#80AA8800"
+                                            CornerRadius="1"
+                                            ToolTip.Tip="New page starts here" />
                                         <Border x:Name="PhrasesRepeaterPhraseBorder"
                                                 ZIndex="5"
                                                 BorderBrush="{DynamicResource ListMediumColor}"
@@ -245,6 +271,12 @@
 												<Label
 													Classes="startSecond"
 													Content="{Binding StartSecond}"
+													Grid.Column="1" />
+                                                <Label
+													Classes="pageIndex"
+													Content="{Binding PageIndex}"
+                                                    Margin="0,12,0,0"
+                                                    ToolTip.Tip="Page number (for reference)"
 													Grid.Column="1" />
 												<ItemsControl x:Name="PhraseWordsItemsControl"
 													KeyboardNavigation.TabNavigation="Continue"

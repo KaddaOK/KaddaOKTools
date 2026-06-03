@@ -10,6 +10,7 @@
     xmlns:ytmm="clr-namespace:KaddaOK.Library.Ytmm;assembly=KaddaOK.Library"
     xmlns:dialogs="clr-namespace:KaddaOK.AvaloniaApp.Controls.Dialogs"
     xmlns:designTime="clr-namespace:KaddaOK.AvaloniaApp.ViewModels.DesignTime"
+    xmlns:models="clr-namespace:KaddaOK.AvaloniaApp.Models"
     mc:Ignorable="d"
     d:DesignWidth="1000"
     d:DesignHeight="800"
@@ -39,6 +40,47 @@
             <DataTemplate DataType="ytmm:RzlrcLyrics">
                 <dialogs:ChooseImportedLayerDialog DataContext="{Binding}" />
             </DataTemplate>
+            <DataTemplate DataType="models:UnsavedChangesPrompt">
+                <dialogs:ModalDialogChrome Title="Unsaved Changes">
+                    <StackPanel Margin="10" MaxWidth="400">
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,15">
+                            You have unsaved changes. Are you sure you want to close this project?
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                            <Button Content="Cancel"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                                    CommandParameter="{x:False}" />
+                            <Button Content="Close Without Saving"
+                                    Classes="accent"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                                    CommandParameter="{x:True}" />
+                        </StackPanel>
+                    </StackPanel>
+                </dialogs:ModalDialogChrome>
+            </DataTemplate>
+            <DataTemplate DataType="models:AudioFileNotFoundPrompt">
+                <dialogs:ModalDialogChrome Title="Audio File Not Found">
+                    <StackPanel Margin="10" MaxWidth="500">
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,10">
+                            The imported file references an audio file that could not be found at:
+                        </TextBlock>
+                        <TextBlock TextWrapping="Wrap" FontWeight="SemiBold" Margin="0,0,0,15"
+                                   Text="{Binding AttemptedPath}" />
+                        <TextBlock TextWrapping="Wrap" Margin="0,0,0,15">
+                            Would you like to locate the audio file manually?
+                        </TextBlock>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="10">
+                            <Button Content="Skip Audio"
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType=dialogHost:DialogHost}, Path=CloseDialogCommand}"
+                                    CommandParameter="{x:Null}" />
+                            <Button Content="Locate File..."
+                                    Classes="accent"
+                                    x:Name="LocateAudioButton"
+                                    Click="LocateAudioButton_Click" />
+                        </StackPanel>
+                    </StackPanel>
+                </dialogs:ModalDialogChrome>
+            </DataTemplate>
         </dialogHost:DialogHost.DataTemplates>
         <ScrollViewer
             x:Name="StartViewScrollViewer"
@@ -49,9 +91,12 @@
 				<TextBlock Classes="pageTitleHeader">
                     Start
                 </TextBlock>
-                <TextBlock Margin="5,0">
-                    Choose the initial lyrics sync method for this project:
-                </TextBlock>
+
+                <!-- Initial options panel - visible when no source is set -->
+                <StackPanel IsVisible="{Binding !CurrentProcess.KaraokeSourceIsSet}">
+                    <TextBlock Margin="5,0">
+                        Choose the initial lyrics sync method for this project:
+                    </TextBlock>
 				<controls:InitialSyncOption
                     OptionTitle="Manual Timing in Kadda OK Tools"
                     OptionSummary="Input lyric timing by tapping a key while the song plays."
@@ -274,6 +319,57 @@
                         </TextBlock>
                     </controls:InitialSyncOption.MoreInfoContent>
                 </controls:InitialSyncOption>
+
+				<Separator Margin="5,20,5,10" />
+
+				<controls:InitialSyncOption
+                    OptionTitle="Open Existing Project"
+                    OptionSummary="Load a previously saved Kadda OK Tools project (.koktpj) file."
+                    ChooseCommand="{Binding LoadProjectCommand}">
+					<controls:InitialSyncOption.IconDrawing>
+						<DrawingImage>
+							<DrawingGroup>
+								<DrawingGroup.Transform>
+									<MatrixTransform Matrix="4,0,0,4,0,0" />
+								</DrawingGroup.Transform>
+								<GeometryDrawing Pen="{DynamicResource sourceMethodIconPen}" Geometry="M3 7v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-6l-2-2H5a2 2 0 0 0-2 2z" />
+							</DrawingGroup>
+						</DrawingImage>
+					</controls:InitialSyncOption.IconDrawing>
+				</controls:InitialSyncOption>
+                </StackPanel>
+
+                <!-- Active project panel - visible when source is set -->
+                <StackPanel IsVisible="{Binding CurrentProcess.KaraokeSourceIsSet}" Spacing="15">
+                    <Border
+                        CornerRadius="15"
+                        Padding="25,20"
+                        Margin="0,10">
+                        <StackPanel Spacing="12">
+                            <TextBlock FontSize="16" FontWeight="SemiBold">
+                                Current Project
+                            </TextBlock>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock VerticalAlignment="Center" Opacity="0.7">Source method:</TextBlock>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding CurrentProcess.KaraokeSourceDisplayName}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <TextBlock VerticalAlignment="Center" Opacity="0.7">Project file:</TextBlock>
+                                <TextBlock VerticalAlignment="Center" FontWeight="SemiBold"
+                                           Text="{Binding CurrentProcess.ProjectFilePath, FallbackValue='(not yet saved)'}" />
+                            </StackPanel>
+                            <StackPanel Orientation="Horizontal" Spacing="10" Margin="0,10,0,0">
+                                <Button Content="Save" Classes="accent"
+                                        Command="{Binding SaveProjectCommand}" />
+                                <Button Content="Save As..."
+                                        Command="{Binding SaveProjectAsCommand}" />
+                                <Button Content="Close Project"
+                                        Command="{Binding CloseProjectCommand}" />
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
             </StackPanel>
         </ScrollViewer>
     </dialogHost:DialogHost>

@@ -21,23 +21,75 @@ namespace KaddaOK.AvaloniaApp.ViewModels
         private IRzlrcContentsGenerator RzlrcContentsGenerator { get; }
         private IKbpContentsGenerator KbpContentsGenerator { get; }
         private IRzProjectGenerator RzProjectGenerator { get; }
+        private IAutoSubsJsonContentsGenerator AutoSubsJsonContentsGenerator { get; }
         private IRzProjectSerializer RzProjectSerializer { get; }
         private IAudioFileLengthChecker LengthChecker { get; }
 
         public WindowNotificationManager? NotificationManager { get; set; }
 
+        private IKoktProjectService KoktProjectService { get; }
+
         public ExportViewModel(KaraokeProcess karaokeProcess,
             IRzlrcContentsGenerator rzlrcContentsGenerator,
             IKbpContentsGenerator kbpContentsGenerator,
             IRzProjectGenerator rzProjectGenerator,
+            IAutoSubsJsonContentsGenerator autoSubsJsonContentsGenerator,
             IRzProjectSerializer rzProjectSerializer,
-            IAudioFileLengthChecker lengthChecker) : base(karaokeProcess)
+            IAudioFileLengthChecker lengthChecker,
+            IKoktProjectService koktProjectService) : base(karaokeProcess)
         {
             RzlrcContentsGenerator = rzlrcContentsGenerator;
             KbpContentsGenerator = kbpContentsGenerator;
             RzProjectGenerator = rzProjectGenerator;
+            AutoSubsJsonContentsGenerator = autoSubsJsonContentsGenerator;
             RzProjectSerializer = rzProjectSerializer;
             LengthChecker = lengthChecker;
+            KoktProjectService = koktProjectService;
+        }
+
+        [RelayCommand]
+        protected void SaveProject()
+        {
+            KoktProjectService.AutoSave(CurrentProcess);
+            var filePath = CurrentProcess.ProjectFilePath;
+            if (!string.IsNullOrWhiteSpace(filePath))
+            {
+                NotificationManager?.Show(new Notification("Saved", $"Project saved to {filePath}", NotificationType.Success));
+            }
+        }
+
+        [RelayCommand]
+        protected async Task SaveProjectAs()
+        {
+            if (App.MainWindow == null)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't find the reference to MainWindow in order to show a dialog");
+            }
+
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Save Kadda OK Tools project as",
+                DefaultExtension = "koktpj",
+                FileTypeChoices = new FilePickerFileType[] { new ("Kadda OK Tools Project (.koktpj)")
+                {
+                    Patterns = new[] { "*.koktpj" }
+                } },
+                SuggestedFileName = !string.IsNullOrWhiteSpace(CurrentProcess.ProjectFilePath)
+                    ? System.IO.Path.GetFileName(CurrentProcess.ProjectFilePath)
+                    : null
+            };
+
+            var result = await App.MainWindow.StorageProvider.SaveFilePickerAsync(options);
+            if (result != null)
+            {
+                var filePath = result.TryGetLocalPath();
+                if (!string.IsNullOrWhiteSpace(filePath))
+                {
+                    KoktProjectService.Save(CurrentProcess, filePath);
+                    NotificationManager?.Show(new Notification("Saved", $"Project saved to {filePath}", NotificationType.Success));
+                }
+            }
         }
 
         [RelayCommand]
@@ -268,6 +320,69 @@ namespace KaddaOK.AvaloniaApp.ViewModels
                         using var proc = new Process { StartInfo = { UseShellExecute = true, FileName = file.Path.ToString() } };
                         proc.Start();
                     }
+                }
+            }
+            catch (Exception e)
+            {
+                // The user canceled or something went wrong
+                if (NotificationManager != null)
+                {
+                    NotificationManager.Position = NotificationPosition.BottomRight;
+                    NotificationManager.Show(new Notification("Error", $"An error occurred: {e.Message}", NotificationType.Error, TimeSpan.Zero));
+                }
+            }
+        }
+
+        [RelayCommand]
+        protected async Task ExportToAutoSubs()
+        {
+            if (App.MainWindow == null)
+            {
+                throw new InvalidOperationException(
+                    "Couldn't find the reference to MainWindow in order to show a dialog");
+            }
+            // On Windows, AutoSubs installed for me into %localappdata%\com.autosubs
+            // TODO: check out the cross-platform behavior of this and adjust the suggested start location accordingly
+            var probablePathToAutoSubs = Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "com.autosubs",
+                "Transcripts");
+            var SuggestedStartLocation = await App.MainWindow.StorageProvider.TryGetFolderFromPathAsync(probablePathToAutoSubs);
+            var suggestedFileName = CurrentProcess.UnseparatedAudioFilePath != null
+                ? Path.GetFileNameWithoutExtension(CurrentProcess.UnseparatedAudioFilePath) + ".json"
+                : $"{DateTime.Now:yyyyMMddHHmmss}.json";
+            var options = new FilePickerSaveOptions
+            {
+                Title = "Export to AutoSubs",
+                DefaultExtension = ".json",
+                SuggestedStartLocation = SuggestedStartLocation,
+                SuggestedFileName = suggestedFileName,
+                FileTypeChoices = new FilePickerFileType[] { new ("AutoSubs JSON file")
+                {
+                    Patterns = new[] { "*.json" }, MimeTypes = new[] { "application/json" }
+                } }
+            };
+            try
+            {
+                var file = await App.MainWindow.StorageProvider.SaveFilePickerAsync(options);
+                if (file != null)
+                {
+                    var contents = AutoSubsJsonContentsGenerator.GenerateAutoSubsJsonContents(
+                        file.Name,
+                        CurrentProcess.ChosenLines!,
+                        (int)CurrentProcess.AutoSubsStartPaddingSeconds,
+                        (int)CurrentProcess.AutoSubsEndPaddingSeconds,
+                        CurrentProcess.AutoSubsPaddingStrategy
+                        );
+
+                    await using var stream = await file.OpenWriteAsync();
+                    using var streamWriter = new StreamWriter(stream)
+                    {
+                        AutoFlush = true
+                    };
+                    await streamWriter.WriteAsync(new StringBuilder(contents));
+
+                    // TODO: feedback to the user
                 }
             }
             catch (Exception e)

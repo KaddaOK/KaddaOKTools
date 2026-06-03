@@ -13,7 +13,8 @@ namespace KaddaOK.AvaloniaApp.Services
 {
     public interface IKbpImporter
     {
-        Task ImportKbpAsync(KaraokeProcess karaokeProcess, string kbpFilePath);
+        Task<SingleAudioFilePathResult> ImportKbpAsync(KaraokeProcess karaokeProcess, string kbpFilePath);
+        Task<SingleAudioFilePathResult> LoadAudioIntoProcess(KaraokeProcess karaokeProcess, string singleAudioFilePathOfUnknownType);
     }
 
     public class KbpImporter : Importer, IKbpImporter
@@ -29,7 +30,7 @@ namespace KaddaOK.AvaloniaApp.Services
             return new Color(255, from.Red, from.Green, from.Blue);
         }
 
-        public async Task ImportKbpAsync(KaraokeProcess karaokeProcess, string kbpFilePath)
+        public async Task<SingleAudioFilePathResult> ImportKbpAsync(KaraokeProcess karaokeProcess, string kbpFilePath)
         {
             var originalContents = File.ReadAllText(kbpFilePath);
             
@@ -68,10 +69,12 @@ namespace KaddaOK.AvaloniaApp.Services
                 ? kbpFile.Header.Audio
                 : Path.Combine(Path.GetDirectoryName(kbpFilePath)!, kbpFile.Header?.Audio ?? "");
 
-            await LoadAudioIntoProcess(karaokeProcess, audioPath);
+            var result = await LoadAudioIntoProcess(karaokeProcess, audioPath);
 
             karaokeProcess.RaiseChosenLinesChanged();
             karaokeProcess.CanExportFactorsChanged();
+
+            return result;
         }
 
         private List<LyricLine> GetFromKbpPage(List<PageV2> pages, int pageIndex)

@@ -2,7 +2,7 @@
 {
     public class DesignTimeAudioViewModel : AudioViewModel
     {
-        public DesignTimeAudioViewModel() : base(DesignTimeKaraokeProcess.Get(), null!, null!)
+        public DesignTimeAudioViewModel() : base(DesignTimeKaraokeProcess.Get(), null!, null!, null!)
         {
         }
     }
