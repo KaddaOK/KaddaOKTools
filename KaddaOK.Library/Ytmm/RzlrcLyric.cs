@@ -91,40 +91,40 @@ namespace KaddaOK.Library.Ytmm
         public uint clrOverlayShine { get; set; }
         
         [XmlAttribute]
-        public short iocs00 { get; set; }
+        public uint iocs00 { get; set; }
         
         [XmlAttribute]
-        public short iocs01 { get; set; }
+        public uint iocs01 { get; set; }
         
         [XmlAttribute]
-        public short iocs02 { get; set; }
+        public uint iocs02 { get; set; }
         
         [XmlAttribute]
-        public short iocs03 { get; set; }
+        public uint iocs03 { get; set; }
         
         [XmlAttribute]
-        public short iocs04 { get; set; }
+        public uint iocs04 { get; set; }
         
         [XmlAttribute]
-        public short iocs05 { get; set; }
+        public uint iocs05 { get; set; }
         
         [XmlAttribute]
-        public short iocs06 { get; set; }
+        public uint iocs06 { get; set; }
         
         [XmlAttribute]
-        public short iocs07 { get; set; }
+        public uint iocs07 { get; set; }
         
         [XmlAttribute]
-        public short iocs08 { get; set; }
+        public uint iocs08 { get; set; }
         
         [XmlAttribute]
-        public short iocs09 { get; set; }
+        public uint iocs09 { get; set; }
         
         [XmlAttribute]
-        public short clrOverlayGradient { get; set; }
+        public uint clrOverlayGradient { get; set; }
         
         [XmlAttribute]
-        public short clrOverlayHatch { get; set; }
+        public uint clrOverlayHatch { get; set; }
         
         [XmlAttribute]
         public short eAlignType { get; set; }
