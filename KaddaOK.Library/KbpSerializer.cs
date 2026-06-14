@@ -51,7 +51,7 @@ namespace KaddaOK.Library
                 pages.AddRange(kbpFile.Pages.Select(p => p.ToString()));
             }
             
-            return string.Join(PageBreak + Environment.NewLine, pages);
+            return string.Join(PageBreak + Environment.NewLine, pages) + PageBreak + Environment.NewLine;
         }
 
         private List<PageV2> ParsePages(List<string> pageTexts)
