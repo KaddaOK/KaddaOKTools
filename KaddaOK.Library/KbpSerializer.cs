@@ -78,7 +78,7 @@ namespace KaddaOK.Library
         {
             var page = new PageV2();
 
-            var pageLines = pageText.Split(Environment.NewLine).Select(s => s.Trim()).Where(h => !string.IsNullOrWhiteSpace(h) && !h.StartsWith("'")).ToList();
+            var pageLines = pageText.Split(Environment.NewLine).Select(s => s.Trim()).Where(h => !string.IsNullOrWhiteSpace(h)).ToList();
 
             var lineIndex = 0;
             // sanity check
