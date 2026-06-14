@@ -220,9 +220,16 @@ namespace KaddaOK.Library.Kbs
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{Alignment}/{GetStyleCode(StyleIndex, IsFixedText)}/{DisplayStartTicks}/{DisplayEndTicks}/{Across}/{Down}/{Rotation}");
-            foreach (var word in Words)
+            if (!Words.Any())
             {
-                sb.AppendLine(word.ToString());
+                sb.AppendLine("/              0/0/0");
+            }
+            else
+            {
+                foreach (var word in Words)
+                {
+                    sb.AppendLine(word.ToString());
+                }
             }
             
             return sb.ToString();

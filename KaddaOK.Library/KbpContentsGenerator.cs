@@ -261,7 +261,9 @@ Comments  Created with Karaoke Builder Studio
             {
                 if (i > 0)
                 {
-                    var startSecond = pages[i].Min(m => m.StartSecond);
+                    var startSecond = pages[i]
+                        .Where(i => i.EndSecond > 0) // ignore "Gap" lines
+                        .Min(m => m.StartSecond);
                     var previousEndSecond = pages[i - 1].Max(m => m.EndSecond);
                     if (previousEndSecond > startSecond)
                     {
@@ -272,7 +274,9 @@ Comments  Created with Karaoke Builder Studio
                 if (i < pages.Count - 1)
                 {
                     var endSecond = pages[i].Max(m => m.EndSecond);
-                    var nextStartSecond = pages[i + 1].Min(m => m.StartSecond);
+                    var nextStartSecond = pages[i + 1]
+                        .Where(i => i.EndSecond > 0) // ignore "Gap" lines
+                        .Min(m => m.StartSecond);
                     if (endSecond > nextStartSecond)
                     {
                         return false;
@@ -314,8 +318,20 @@ Comments  Created with Karaoke Builder Studio
             };
 
             // set some sane defaults, which we may have to mess with
-            kbpLine.DisplayStartTicks = Math.Max(kbpLine.Words.Min(w => w.StartTicks) - 300, 0);
-            kbpLine.DisplayEndTicks = Math.Max(kbpLine.Words.Max(w => w.EndTicks) + 50, 0);
+            if (kbpLine.Words != null && kbpLine.Words.Any())
+            {
+                kbpLine.DisplayStartTicks = Math.Max(kbpLine.Words.Min(w => w.StartTicks) - 300, 0);
+                kbpLine.DisplayEndTicks = Math.Max(kbpLine.Words.Max(w => w.EndTicks) + 50, 0);
+            }
+            else
+            {
+                // yep, this is actually a thing in KBS; it's "Gap", used to space the other lines on a page down, 
+                // and it does want the line to start and end at time 0 regardless of wherever it is on the page... 
+                // ¯\_(ツ)_/¯
+                kbpLine.DisplayStartTicks = 0;
+                kbpLine.DisplayEndTicks = 0;
+            }
+
 
             return kbpLine;
         }
@@ -383,7 +399,7 @@ Comments  Created with Karaoke Builder Studio
             return kbpPages;
         }
 
-        private List<LyricLine[]> ArrangeIntoPages(IEnumerable<LyricLine> processedResults, int linesPerPage)
+        public List<LyricLine[]> ArrangeIntoPages(IEnumerable<LyricLine> processedResults, int linesPerPage)
         {
             var pages = processedResults.Chunk(linesPerPage).ToList();
             if (processedResults.Any(p => p.PageIndex != null))

@@ -71,6 +71,22 @@ namespace KaddaOK.AvaloniaApp.Tests.ViewModels
                     }
                 }
             }
+
+            [Fact]
+            public void ShouldNotCrashIfPreviousLineHasNoWords()
+            {
+                var currentProcess = GetNewCurrentProcess();
+                currentProcess.ChosenLines!.First().Words = new ObservableCollection<LyricWord>();
+
+                var viewModel = new EditLinesViewModel(currentProcess, new LineSplitter(), new WordMerger(), new MinMaxFloatWaveStreamSampler(), null!)
+                    { EditLinesView = new DummyEditLinesView() };
+
+                viewModel.MoveLineToPrevious(currentProcess.ChosenLines!.Skip(1).First());
+
+                Assert.Single(currentProcess.ChosenLines!);
+                var line = currentProcess.ChosenLines!.First();
+                Assert.Equal(4, line.Words.Count);
+            }
         }
 
         public static LyricLine MakeLinePerSeconds(int startSecond, string sentence)
