@@ -529,6 +529,7 @@ namespace KaddaOK.AvaloniaApp.Models
                 if (SetProperty(ref chosenLines, value))
                 {
                     NarrowingStepCompletenessChanged();
+                    CanExportFactorsChanged();
                 };
             }
         }

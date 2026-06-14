@@ -475,8 +475,8 @@ namespace KaddaOK.AvaloniaApp.ViewModels
 
                 var previousLine = CurrentProcess!.ChosenLines![movingLineIndex - 1];
                 // add a space to the previous last word if it doesn't have one
-                var previousLastWord = previousLine.Words!.Last();
-                if (!previousLastWord.Text?.EndsWith(" ") ?? false)
+                var previousLastWord = previousLine.Words!.LastOrDefault();
+                if (previousLastWord != null && !(previousLastWord.Text?.EndsWith(" ") ?? false))
                 {
                     previousLastWord.Text += " ";
                 }

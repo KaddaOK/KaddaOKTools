@@ -70,6 +70,26 @@
             />
         </MenuFlyout>
         <MenuFlyout
+            x:Key="EmptyLineFlyout">
+            <MenuItem 
+				Header="Delete Line"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).DeleteEntireLineCommand}"
+                CommandParameter="{Binding}"
+				/>
+            <MenuItem
+                Header="Start New Page With This Line"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).StartNewPageWithThisLineCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Move Line to Previous Page"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToPreviousPageCommand}"
+                CommandParameter="{Binding}" />
+            <MenuItem
+                Header="Move Line to Next Page"
+                Command="{Binding $parent[views:EditLinesView].((vm:EditLinesViewModel)DataContext).MoveLineToNextPageCommand}"
+                CommandParameter="{Binding}" />
+        </MenuFlyout>
+        <MenuFlyout
             x:Key="WordButtonFlyout"
             x:DataType="library:LyricWord">
             <MenuItem
@@ -251,7 +271,8 @@
                                                 BorderThickness="0,0,1,1"
                                                 Margin="13,3,0,0"
                                                 Padding="0,0,0,3"
-                                                CornerRadius="3">
+                                                CornerRadius="3"
+                                                ContextFlyout="{StaticResource EmptyLineFlyout}">
                                             <Classes.isCursor>
                                                 <MultiBinding Converter="{StaticResource ObjectEqualityBooleanConverter}">
                                                     <Binding Path="." />

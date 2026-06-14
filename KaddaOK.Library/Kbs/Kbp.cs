@@ -53,18 +53,39 @@ namespace KaddaOK.Library.Kbs
         public override string ToString()
         {
             var sb = new StringBuilder();
+            sb.AppendLine("-----------------------------");
+            sb.AppendLine("KARAOKE BUILDER STUDIO");
+            sb.AppendLine("www.KaraokeBuilder.com");
+            sb.AppendLine();
+            sb.AppendLine("-----------------------------");
             sb.AppendLine("HEADERV2");
+            sb.AppendLine();
+            sb.AppendLine("'--- Template Information ---");
+            sb.AppendLine();
+            sb.AppendLine("'Palette Colours (0-15)");
             sb.AppendLine($"  {string.Join(",", PaletteColors.Select(s => s.ToString()))}");
-
+            sb.AppendLine();
+            sb.AppendLine("'Styles (00-19)");
+            sb.AppendLine("'  Number,Name");
+            sb.AppendLine("'  Colour: Text,Outline,Text Wipe,Outline Wipe");
+            sb.AppendLine("'  Font  : Name,Size,Style,Charset");
+            sb.AppendLine("'  Other : Outline*4,Shadow*2,Wiping,Uppercase");
+            sb.AppendLine();
             foreach (var style in Styles)
             {
                 sb.AppendLine(style.ToString());
+                sb.AppendLine();
             }
-
             sb.AppendLine("  StyleEnd");
+            sb.AppendLine();
+            sb.AppendLine("'Margins : L,R,T,Line Spacing");
             sb.AppendLine($"  {MarginLeft},{MarginRight},{MarginTop},{LineSpacing}");
+            sb.AppendLine();
+            sb.AppendLine("'Other: Border Colour,Detail Level");
             sb.AppendLine($"  {BorderColorPaletteIndex},{(int)Detail}");
-
+            sb.AppendLine();
+            sb.AppendLine("'--- Track Information ---");
+            sb.AppendLine();
             sb.AppendLine("Status    1"); // I still don't know what this means
             sb.AppendLine($"Title     {Title}");
             sb.AppendLine($"Artist    {Artist}");
@@ -72,6 +93,7 @@ namespace KaddaOK.Library.Kbs
             sb.AppendLine($"BuildFile {BuildFile}");
             sb.AppendLine($"Intro     {Intro}");
             sb.AppendLine($"Outro     {Outro}");
+            sb.AppendLine();
             if (!string.IsNullOrWhiteSpace(Comments))
             {
                 var commentLines = Comments.Split(Environment.NewLine);
@@ -85,7 +107,7 @@ namespace KaddaOK.Library.Kbs
                 }
                 sb.AppendLine($"Comments  {string.Join(Environment.NewLine, commentLines)}");
             }
-
+            sb.AppendLine();
             return sb.ToString();
         }
     }
@@ -220,9 +242,16 @@ namespace KaddaOK.Library.Kbs
         {
             var sb = new StringBuilder();
             sb.AppendLine($"{Alignment}/{GetStyleCode(StyleIndex, IsFixedText)}/{DisplayStartTicks}/{DisplayEndTicks}/{Across}/{Down}/{Rotation}");
-            foreach (var word in Words)
+            if (!Words.Any())
             {
-                sb.AppendLine(word.ToString());
+                sb.AppendLine("/              0/0/0");
+            }
+            else
+            {
+                foreach (var word in Words)
+                {
+                    sb.AppendLine(word.ToString());
+                }
             }
             
             return sb.ToString();
